@@ -8,12 +8,15 @@ output:
 ---
 
 ```{r globaloptions, include = FALSE}
-knitr::opts_chunk$set(message = FALSE, warning = FALSE, comment = NA)
+knitr::opts_chunk$set(
+  message = FALSE,
+  warning = FALSE,
+  comment = NA
+)
 ```
-
 <hr>
 
-&#10132; Click on the course title to more fully explore the course contents on DataCamp.
+&#10132; Click on the course title to explore the course contents on DataCamp.
 
 ### **[Bayesian Modeling with RJAGS](https://app.datacamp.com/learn/courses/bayesian-modeling-with-rjags)**
 
@@ -59,7 +62,6 @@ Introduction to R
 In this course you'll learn how to work with tree-based models in R. This course covers everything from using a single tree for regression or classification to more advanced ensemble methods. You'll learn to implement bagged trees, Random Forests, and boosted trees using the Gradient Boosting Machine, or GBM. These powerful techinques will allow you to create high performance regression and classification models for your data.
 
 <hr>
-
-&#10132; If you find any errors on this page, please contact Dr. Thomley via your Private Forum on AsULearn.
-
+&#10132; If you find any errors on this page, please contact Dr. Thomley via your Private Forum on [AsULearn](https://asulearn.appstate.edu/).
 <hr>
+

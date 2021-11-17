@@ -8,12 +8,15 @@ output:
 ---
 
 ```{r globaloptions, include = FALSE}
-knitr::opts_chunk$set(message = FALSE, warning = FALSE, comment = NA)
+knitr::opts_chunk$set(
+  message = FALSE,
+  warning = FALSE,
+  comment = NA
+)
 ```
-
 <hr>
 
-&#10132; Click on the course title to more fully explore the course contents on DataCamp.
+&#10132; Click on the course title to explore the course contents on DataCamp.
 
 ### **[Intermediate R](https://learn.datacamp.com/courses/intermediate-r)**
 
@@ -57,7 +60,6 @@ Foundations of Probability in R
 Do you want to take your probability skills to the next level? This course will help get you there, using problem-based learning with probability puzzles as the framework. As you are guided through their solutions, you will gain coding tools and general strategies for solving probability problems that you might encounter in many other situations. Organized by theme, the course begins with classic problems like the Birthday Problem and Monty Hall, and ends with puzzles that involve poker like Texas Hold'em and the World Series of Poker!
 
 <hr>
-
-&#10132; If you find any errors on this page, please contact Dr. Thomley via your Private Forum on AsULearn.
-
+&#10132; If you find any errors on this page, please contact Dr. Thomley via your Private Forum on [AsULearn](https://asulearn.appstate.edu/).
 <hr>
+

@@ -8,12 +8,15 @@ output:
 ---
 
 ```{r globaloptions, include = FALSE}
-knitr::opts_chunk$set(message = FALSE, warning = FALSE, comment = NA)
+knitr::opts_chunk$set(
+  message = FALSE,
+  warning = FALSE,
+  comment = NA
+)
 ```
-
 <hr>
 
-&#10132; Click on the course title to more fully explore the course contents on DataCamp.
+&#10132; Click on the course title to explore the course contents on DataCamp.
 
 ### **[Data Manipulation with dplyr](https://learn.datacamp.com/courses/data-manipulation-with-dplyr)**
 
@@ -56,8 +59,6 @@ Introduction to the Tidyverse
 Get ready to have some fun with maps! Interactive Maps with leaflet in R will give you the tools to make attractive and interactive web maps using spatial data and the tidyverse. In this course, you will create maps using the IPEDS dataset, which contains data on U.S. colleges and universities. Along the way, you will customize our maps using labels, popups, and custom markers, and add layers to enhance interactivity. Following the course, you will be able to create and customize your own interactive web maps to reveal patterns in your data.
 
 <hr>
-
-&#10132; If you find any errors on this page, please contact Dr. Thomley via your Private Forum on AsULearn.
-
+&#10132; If you find any errors on this page, please contact Dr. Thomley via your Private Forum on [AsULearn](https://asulearn.appstate.edu/).
 <hr>
 
