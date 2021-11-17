@@ -1,0 +1,63 @@
+---
+title: "Course Descriptions for Depth Assignment #2"
+date: 'Last Updated:  `r format(Sys.time(), "%A, %B %d, %Y @ %I:%M %p")`'
+output: 
+  html_document: 
+    theme: cosmo
+    highlight: textmate
+---
+
+```{r globaloptions, include = FALSE}
+knitr::opts_chunk$set(message = FALSE, warning = FALSE, comment = NA)
+```
+
+<hr>
+
+&#10132; Click on the course title to more fully explore the course contents on DataCamp.
+
+### **[Intermediate R](https://learn.datacamp.com/courses/intermediate-r)**
+
+#### **Suggested Prerequisite**
+
+Introduction to R
+
+#### **Brief Course Description**
+
+Intermediate R is the next stop on your journey in mastering the R programming language. In this R training, you will learn about conditional statements, loops, and functions to power your own R scripts. Next, make your R code more efficient and readable using the apply functions. Finally, the utilities chapter gets you up to speed with regular expressions in R, data structure manipulations, and times and dates. This course will allow you to take the next step in advancing your overall knowledge and capabilities while programming in R.
+
+### **[Introduction to Data in R](https://learn.datacamp.com/courses/introduction-to-data-in-r)**
+
+#### **Suggested Prerequisite**
+
+Introduction to the Tidyverse
+
+#### **Brief Course Description**
+
+Scientists seek to answer questions using rigorous methods and careful observations. These observations—collected from the likes of field notes, surveys, and experiments—form the backbone of a statistical investigation and are called data. Statistics is the study of how best to collect, analyze, and draw conclusions from data. It is helpful to put statistics in the context of a general process of investigation: 1) identify a question or problem; 2) collect relevant data on the topic; 3) analyze the data; and 4) form a conclusion. In this course, you'll focus on the first two steps of the process.
+
+### **[Linear Algebra for Data Science in R](https://learn.datacamp.com/courses/linear-algebra-for-data-science-in-r)**
+
+#### **Suggested Prerequisite**
+
+Introduction to R
+
+#### **Brief Course Description**
+
+Linear algebra is one of the most important set of tools in applied mathematics and data science. In this course, you’ll learn how to work with vectors and matrices, solve matrix-vector equations, perform eigenvalue/eigenvector analyses and use principal component analysis to do dimension reduction on real-world datasets. All analyses will be performed in R, one of the world’s most-popular programming languages.
+
+### **[Probability Puzzles in R](https://learn.datacamp.com/courses/probability-puzzles-in-r)**
+
+#### **Suggested Prerequisites**
+
+Intermediate R (loops and functions)    
+Foundations of Probability in R
+
+#### **Brief Course Description**
+
+Do you want to take your probability skills to the next level? This course will help get you there, using problem-based learning with probability puzzles as the framework. As you are guided through their solutions, you will gain coding tools and general strategies for solving probability problems that you might encounter in many other situations. Organized by theme, the course begins with classic problems like the Birthday Problem and Monty Hall, and ends with puzzles that involve poker like Texas Hold'em and the World Series of Poker!
+
+<hr>
+
+&#10132; If you find any errors on this page, please contact Dr. Thomley via your Private Forum on AsULearn.
+
+<hr>

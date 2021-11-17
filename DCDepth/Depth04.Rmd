@@ -1,0 +1,65 @@
+---
+title: "Course Descriptions for Depth Assignment #4"
+date: 'Last Updated: `r format(Sys.time(), "%A, %B %d, %Y @ %I:%M %p")`'
+output: 
+  html_document: 
+    theme: cosmo
+    highlight: textmate
+---
+
+```{r globaloptions, include = FALSE}
+knitr::opts_chunk$set(message = FALSE, warning = FALSE, comment = NA)
+```
+
+<hr>
+
+&#10132; Click on the course title to more fully explore the course contents on DataCamp.
+
+### **[Bayesian Modeling with RJAGS](https://app.datacamp.com/learn/courses/bayesian-modeling-with-rjags)**
+
+#### **Suggested Prerequisite(s)**
+
+Introduction to the Tidyverse  
+Fundamentals of Bayesian Data Analysis in R
+
+#### **Brief Course Description**
+
+The Bayesian approach to statistics and machine learning is logical, flexible, and intuitive. In this course, you will engineer and analyze a family of foundational, generalizable Bayesian models. These range in scope from fundamental one-parameter models to intermediate multivariate & generalized linear regression models. The popularity of such Bayesian models has grown along with the availability of computing resources required for their implementation. You will utilize one of these resources - the rjags package in R. Combining the power of R with the JAGS (Just Another Gibbs Sampler) engine, rjags provides a framework for Bayesian modeling, inference, and prediction.
+
+### **[Introduction to Statistical Modeling in R](https://app.datacamp.com/learn/courses/introduction-to-statistical-modeling-in-r)**
+
+#### **Suggested Prerequisite(s)**
+
+Introduction to R  
+Introduction to the Tidyverse  
+
+#### **Brief Course Description**
+
+Introduction Statistical Modeling in R is a multi-part course designed to get you up to speed with the most important and powerful methodologies in statistical modeling in R. In this introduction, we'll take a look at what statistical modeling is and what it's used for, R tools for model building, using models for prediction (and using prediction to test models), and how to account for the combined influences of multiple variables.This course has been written from scratch, specifically for DataCamp users. As you'll see, by using computing and concepts from machine learning, we'll be able to leapfrog many of the marginal and esoteric topics encountered in traditional 'regression' courses.
+
+### **[Machine Learning in the Tidyverse](https://app.datacamp.com/learn/courses/machine-learning-in-the-tidyverse)**
+
+#### **Suggested Prerequisite(s)**
+
+Modeling with Data in the Tidyverse
+
+#### **Brief Course Description**
+
+This course will teach you to leverage the tools in the "tidyverse" to generate, explore, and evaluate machine learning models. Using a combination of tidyr and purrr packages, you will build a foundation for how to work with complex model objects in a "tidy" way. You will also learn how to leverage the broom package to explore your resulting models. You will then be introduced to the tools in the test-train-validate workflow, which will empower you evaluate the performance of both classification and regression models as well as provide the necessary information to optimize model performance via hyperparameter tuning.
+
+
+### **[Tree-Based Models in R](https://app.datacamp.com/learn/courses/tree-based-models-in-r)**
+
+#### **Suggested Prerequisite(s)**
+
+Introduction to R
+
+#### **Brief Course Description**
+
+In this course you'll learn how to work with tree-based models in R. This course covers everything from using a single tree for regression or classification to more advanced ensemble methods. You'll learn to implement bagged trees, Random Forests, and boosted trees using the Gradient Boosting Machine, or GBM. These powerful techinques will allow you to create high performance regression and classification models for your data.
+
+<hr>
+
+&#10132; If you find any errors on this page, please contact Dr. Thomley via your Private Forum on AsULearn.
+
+<hr>

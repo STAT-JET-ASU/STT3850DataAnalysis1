@@ -1,0 +1,63 @@
+---
+title: "Course Descriptions for Depth Assignment #3"
+date: 'Last Updated: `r format(Sys.time(), "%A, %B %d, %Y @ %I:%M %p")`'
+output: 
+  html_document: 
+    theme: cosmo
+    highlight: textmate
+---
+
+```{r globaloptions, include = FALSE}
+knitr::opts_chunk$set(message = FALSE, warning = FALSE, comment = NA)
+```
+
+<hr>
+
+&#10132; Click on the course title to more fully explore the course contents on DataCamp.
+
+### **[Fundamentals of Bayesian Data Analysis in R](https://app.datacamp.com/learn/courses/fundamentals-of-bayesian-data-analysis-in-r)**
+
+#### **Suggested Prerequisite(s)**
+
+Introduction to the Tidyverse
+
+#### **Brief Course Description**
+
+Bayesian data analysis is an approach to statistical modeling and machine learning that is becoming more and more popular. It provides a uniform framework to build problem specific models that can be used for both statistical inference and for prediction. This course will introduce you to Bayesian data analysis: What it is, how it works, and why it is a useful tool to have in your data science toolbox.
+
+### **[Inference for Categorical Data in R](https://app.datacamp.com/learn/courses/inference-for-categorical-data-in-r)**
+
+#### **Suggested Prerequisite(s)**
+
+Foundations of Inference
+
+#### **Course Description**
+
+Categorical data is all around us. It's in the latest opinion polling numbers, in the data that lead to new breakthroughs in genomics, and in the troves of data that internet companies collect to sell products to you. In this course you'll learn techniques for parsing the signal from the noise; tools for identifying when structure in this data represents interesting phenomena and when it is just random noise.
+
+### **[Inference for Numerical Data in R](https://app.datacamp.com/learn/courses/inference-for-numerical-data-in-r)**
+
+#### **Suggested Prerequisite(s)**
+
+Foundations of Inference
+
+#### **Brief Course Description**
+
+In this course, you'll learn how to use statistical techniques to make inferences and estimations using numerical data. This course uses two approaches to these common tasks. The first makes use of bootstrapping and permutation to create resample based tests and confidence intervals. The second uses theoretical results and the t-distribution to achieve the same result. You'll learn how (and when) to perform a t-test, create a confidence interval, and do an ANOVA!
+
+### **[Introduction to Writing Functions in R](https://app.datacamp.com/learn/courses/introduction-to-writing-functions-in-r)**
+
+#### **Suggested Prerequisite(s)**
+
+Introduction to the Tidyverse  
+Intermediate R (loops and functions)
+
+#### **Brief Course Description**
+
+Being able to write your own functions makes your analyses more readable, with fewer errors, and more reusable from project to project. Function writing will increase your productivity more than any other skill! In this course you'll learn the basics of function writing, focusing on the arguments going into the function and the return values. You'll be writing useful data science functions, and using real-world data on Wyoming tourism, stock price/earnings ratios, and grain yields.
+
+<hr>
+
+&#10132; If you find any errors on this page, please contact Dr. Thomley via your Private Forum on AsULearn.
+
+<hr>
