@@ -9,7 +9,6 @@ output:
     highlight: textmate
     toc: TRUE
     toc_depth: 5
-    self_contained: false
 ---
 
 ```{r globaloptions, include = FALSE}
@@ -20,19 +19,9 @@ knitr::opts_chunk$set(
 )
 ```
 
-***
-```{r, echo = FALSE}
-vembedr::embed_youtube(
-  id = "zC3GaPBJ4c4",
-  width = NULL,
-  height = 400,
-  ratio = c("16by9", "4by3"),
-  frameborder = 0,
-  allowfullscreen = TRUE,
-  query = NULL
-)
-```
-***
+▶ [GO TO VIDEO](https://youtu.be/zC3GaPBJ4c4)
+
+<hr>
 
 ## Packages Used
 
@@ -178,6 +167,24 @@ ggplot(smartphones, aes(x = age)) +
   scale_x_continuous(breaks = seq(0, 100, 5))
 ```
 
+### Density Plots
+
+A density plot smooths a frequency polygon (using a weighted moving average) to estimate a continuous curve from discrete data. The area under the density curve is always 1. We can rescale a histogram or polygon to match using `aes(y = ..density..)`. 
+
+```{r}
+ggplot(smartphones, aes(x = age)) +
+  geom_histogram(aes(y = ..density..), fill = "gray", bins = 12) +
+  geom_freqpoly(aes(y = ..density..), color = "darkgray", bins = 12) +
+  geom_density(color = "#2961EB") +
+  scale_x_continuous(breaks = seq(0, 100, 5))
+```
+
+```{r}
+ggplot(smartphones, aes(x = age)) +
+  geom_density(color = "black", fill = "#2961EB") +
+  scale_x_continuous(breaks = seq(0, 100, 5))
+```
+
 ### Adding Better Labels
 
 For presentation, add a title and better x- and y-axis labels. Include units for quantitative data.
@@ -197,7 +204,13 @@ ggplot(smartphones, aes(x = age)) +
   )
 ```
 
-***
+### References
+
+Tidyverse: [Histograms and Frequency Polygons](https://ggplot2.tidyverse.org/reference/geom_histogram.html)
+
+Tidyverse: [Smoothed Density Estimates](https://ggplot2.tidyverse.org/reference/geom_density.html)
+
+<hr>
 ```{r}
 sessionInfo()
 ```
