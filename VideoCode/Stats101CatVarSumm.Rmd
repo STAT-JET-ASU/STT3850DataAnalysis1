@@ -128,8 +128,8 @@ ggplot(smartphones, aes(x = brand)) +
   geom_bar(fill = "darkorange", width = 0.5) +
   scale_y_continuous(breaks = seq(0, 50, by = 5)) +
   labs(
-    title = "Sample Distribution of Smartphone Ownership",
-    x = "Brand of Cell Phone",
+    title = "Distribution of Smartphone Ownership",
+    x = "Brand of Phone",
     y = "Frequency"
   ) +
   theme(
@@ -193,8 +193,8 @@ ggplot(smartphones, aes(x = brand)) +
   ) +
   scale_y_continuous(breaks = seq(0, 0.5, by = 0.1)) +
   labs(
-    title = "Sample Distribution of Smartphone Ownership",
-    x = "Brand of Cell Phone",
+    title = "Distribution of Smartphone Ownership",
+    x = "Brand of Phone",
     y = "Relative Frequency"
   ) +
   theme(

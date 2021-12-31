@@ -168,7 +168,7 @@ pre code {
 <h1 class="title toc-ignore">Histograms</h1>
 <h3 class="subtitle">Companion <code>R</code> Code for Stats 101 Video Lesson</h3>
 <h4 class="author">Created by Jill E. Thomley</h4>
-<h4 class="date">Thursday, December 30, 2021 @ 08:00 PM</h4>
+<h4 class="date">Friday, December 31, 2021 @ 01:52 PM</h4>
 
 </div>
 
@@ -187,6 +187,8 @@ pre code {
 <li><a href="#histogram-with-six-bins">Histogram with Six Bins</a></li>
 <li><a href="#histogram-with-twelve-bins">Histogram with Twelve Bins</a></li>
 </ul></li>
+<li><a href="#frequency-polygons">Frequency Polygons</a></li>
+<li><a href="#adding-better-labels">Adding Better Labels</a></li>
 </ul></li>
 </ul>
 </div>
@@ -323,6 +325,37 @@ ggplot(smartphones, aes(x = age)) +
   geom_histogram(color = &quot;black&quot;, fill = &quot;#2961EB&quot;, breaks = seq(15, 75, 5)) +
   scale_x_continuous(breaks = seq(0, 100, 5))</code></pre>
 <p><img src="Stats101Histograms_files/figure-html/unnamed-chunk-7-3.png" width="672" /></p>
+</div>
+</div>
+<div id="frequency-polygons" class="section level3">
+<h3>Frequency Polygons</h3>
+<p>A frequency polygon is an alternative to a histogram. It also uses bins to count data frequencies; however, rather than drawing a bar for each bin, the polygon connects the midpoints of the histogram bars with a line.</p>
+<pre class="r"><code>ggplot(smartphones, aes(x = age)) +
+  geom_histogram(fill = &quot;gray&quot;, bins = 12) +
+  geom_freqpoly(color = &quot;#2961EB&quot;, bins = 12) +
+  scale_x_continuous(breaks = seq(0, 100, 5))</code></pre>
+<p><img src="Stats101Histograms_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<pre class="r"><code>ggplot(smartphones, aes(x = age)) +
+  geom_freqpoly(color = &quot;#2961EB&quot;, bins = 12) +
+  scale_x_continuous(breaks = seq(0, 100, 5))</code></pre>
+<p><img src="Stats101Histograms_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+</div>
+<div id="adding-better-labels" class="section level3">
+<h3>Adding Better Labels</h3>
+<p>For presentation, add a title and better x- and y-axis labels. Include units for quantitative data.</p>
+<pre class="r"><code>ggplot(smartphones, aes(x = age)) +
+  geom_histogram(
+    color = &quot;black&quot;,
+    fill = &quot;#2961EB&quot;,
+    bins = 9
+  ) +
+  scale_x_continuous(breaks = seq(0, 100, 5)) +
+  labs(
+    title = &quot;Distribution of Smartphone User Ages&quot;,
+    x = &quot;Age (years)&quot;,
+    y = &quot;Frequency&quot;
+  )</code></pre>
+<p><img src="Stats101Histograms_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
 <hr />
 <pre class="r"><code>sessionInfo()</code></pre>
 <pre><code>R version 3.6.0 (2019-04-26)
@@ -365,7 +398,6 @@ loaded via a namespace (and not attached):
 [53] tools_3.6.0      bit64_4.0.5      glue_1.6.0       hms_1.1.1       
 [57] parallel_3.6.0   fastmap_1.1.0    yaml_2.2.1       colorspace_2.0-2
 [61] rvest_1.0.2      knitr_1.37       haven_2.4.3      sass_0.4.0      </code></pre>
-</div>
 </div>
 </div>
 
