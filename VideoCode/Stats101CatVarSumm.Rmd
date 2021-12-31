@@ -79,14 +79,14 @@ categories
 smartphones <- smartphones %>%
   mutate(brand = factor(brand, levels = categories))
 
-# check structure, now brand is <fct> versus <chr>
+# check structure, now brand is a <fct> versus <chr>
 
 glimpse(smartphones)
 ```
 
 ### Frequency Distribution
 
-Most methods for creating frequency distributions in `R` do not automatically add the totals, since we may want to use the "table" in further operations. We can use other methods to calculate totals. Because we are using the dplyr package function `count()` the output will be a tibble. This is useful because we can easily perform other operations on it.
+Most methods for creating frequency distributions in `R` do not automatically add the totals, since we may want to use the "table" in further operations. We can use other methods to calculate totals. Because we are using the **dplyr** package function `count()`, the output will be a tibble. This is useful because we can easily perform other operations on it.
 
 ```{r}
 smartphones %>%
@@ -112,7 +112,7 @@ phonedist1 %>%
 
 #### Bare-Bones Bar Plot
 
-If you are exploring your data, you can make a quick plot like the one below.
+If you are exploring your data, you can make a quick and simple plot like the one below.
 
 ```{r}
 ggplot(smartphones, aes(x = brand)) +
@@ -121,7 +121,7 @@ ggplot(smartphones, aes(x = brand)) +
 
 #### Formatted Bar Plot
 
-If you are presenting your data, you should at least add a title and better axis labels. This plot is formatted to resemble the one in the video by changing the colors, bar widths, y-axis numbering, and removing some grid lines.
+If you are presenting your data, you should at least add a title and better axis labels. This plot is formatted to resemble the one in the video by changing the bar colors, bar widths, y-axis scaling/numbering, and removing some grid lines. Colors can be specified using names, hex codes, or RGB codes. The function `colors()` will show you what color names `R` recognizes.
 
 ```{r}
 ggplot(smartphones, aes(x = brand)) +

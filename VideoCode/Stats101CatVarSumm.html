@@ -168,7 +168,7 @@ pre code {
 <h1 class="title toc-ignore">Describing a Categorical Variable</h1>
 <h3 class="subtitle">Companion <code>R</code> Code for Stats 101 Video Lesson</h3>
 <h4 class="author">Created by Jill E. Thomley</h4>
-<h4 class="date">Thursday, December 30, 2021 @ 08:14 PM</h4>
+<h4 class="date">Friday, December 31, 2021 @ 01:01 PM</h4>
 
 </div>
 
@@ -255,7 +255,7 @@ categories</code></pre>
 smartphones &lt;- smartphones %&gt;%
   mutate(brand = factor(brand, levels = categories))
 
-# check structure, now brand is &lt;fct&gt; versus &lt;chr&gt;
+# check structure, now brand is a &lt;fct&gt; versus &lt;chr&gt;
 
 glimpse(smartphones)</code></pre>
 <pre><code>Rows: 100
@@ -265,7 +265,7 @@ $ age   &lt;dbl&gt; 58, 22, 28, 68, 39, 44, 26, 27, 25, 66, 23, 54, 48, 31, 50, 
 </div>
 <div id="frequency-distribution" class="section level3">
 <h3>Frequency Distribution</h3>
-<p>Most methods for creating frequency distributions in <code>R</code> do not automatically add the totals, since we may want to use the “table” in further operations. We can use other methods to calculate totals. Because we are using the dplyr package function <code>count()</code> the output will be a tibble. This is useful because we can easily perform other operations on it.</p>
+<p>Most methods for creating frequency distributions in <code>R</code> do not automatically add the totals, since we may want to use the “table” in further operations. We can use other methods to calculate totals. Because we are using the <strong>dplyr</strong> package function <code>count()</code>, the output will be a tibble. This is useful because we can easily perform other operations on it.</p>
 <pre class="r"><code>smartphones %&gt;%
   count(brand)</code></pre>
 <pre><code># A tibble: 6 × 2
@@ -308,14 +308,14 @@ phonedist1</code></pre>
 <h3>Frequency Bar Plot</h3>
 <div id="bare-bones-bar-plot" class="section level4">
 <h4>Bare-Bones Bar Plot</h4>
-<p>If you are exploring your data, you can make a quick plot like the one below.</p>
+<p>If you are exploring your data, you can make a quick and simple plot like the one below.</p>
 <pre class="r"><code>ggplot(smartphones, aes(x = brand)) +
   geom_bar()</code></pre>
 <p><img src="Stats101CatVarSumm_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
 </div>
 <div id="formatted-bar-plot" class="section level4">
 <h4>Formatted Bar Plot</h4>
-<p>If you are presenting your data, you should at least add a title and better axis labels. This plot is formatted to resemble the one in the video by changing the colors, bar widths, y-axis numbering, and removing some grid lines.</p>
+<p>If you are presenting your data, you should at least add a title and better axis labels. This plot is formatted to resemble the one in the video by changing the bar colors, bar widths, y-axis scaling/numbering, and removing some grid lines. Colors can be specified using names, hex codes, or RGB codes. The function <code>colors()</code> will show you what color names <code>R</code> recognizes.</p>
 <pre class="r"><code>ggplot(smartphones, aes(x = brand)) +
   geom_bar(fill = &quot;darkorange&quot;, width = 0.5) +
   scale_y_continuous(breaks = seq(0, 50, by = 5)) +
