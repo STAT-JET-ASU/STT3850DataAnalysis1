@@ -1,0 +1,130 @@
+---
+title: "Welch t Tests and CIs: An Example"
+subtitle: "Companion `R` Code for JB Statistics Video Lesson"
+author: "Created by Jill E. Thomley"
+date: '`r format(Sys.time(), "%A, %B %d, %Y @ %I:%M %p")`'
+output: 
+  html_document: 
+    theme: yeti
+    highlight: textmate
+    toc: TRUE
+    toc_depth: 4
+---
+
+```{r globaloptions, include = FALSE}
+knitr::opts_chunk$set(message = FALSE, warning = FALSE, comment = NA)
+```
+
+***
+<iframe width="560" height="315" src="https://www.youtube.com/embed/gzrmHpA54Sc" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+***
+
+### Packages Used
+
+```{r loadpackages}
+library(tidyverse)
+library(infer)
+```
+
+### Venom Example
+
+#### Using the `t.test()` Function in `R`
+
+Traditional two-sample t-tests are performed in `R` using the `t.test()` function. However, we need the data values. We do not have the data used in the videos, so here we will use data that was simulated to have means and variances similar to that in the examples. These samples also assume that the null hypothesis is true. The values will vary slightly from the video, but the method is correct. Unpooled variance is the default for the `t.test()` function. You should use `?t.test` to explore the syntax.
+
+$$H_0: \mu_{antivenom} = \mu_{saline}$$
+
+$$H_a: \mu_{antivenom} \neq \mu_{saline}$$
+
+```{r}
+venomdata <- data.frame(group  = c(rep("antivenom", 9), 
+                                   rep("saline", 8)),
+                        volume = c(127.64, 
+                                   154.67, 
+                                   174.16, 
+                                   299.29, 
+                                   202.54, 
+                                   237.23,
+                                   135.22,
+                                   197.94,
+                                   273.30,
+                                   232.94,
+                                   356.82,
+                                   243.65,
+                                   345.52,
+                                   122.21,
+                                   171.22,
+                                   107.52,
+                                   98.24))
+
+venomdata %>% 
+  group_by(group) %>% 
+  summarize(xbar = mean(volume), 
+            s = sd(volume),
+            n = n())
+
+ggplot(venomdata, aes(x = group, y = volume)) +
+ geom_boxplot()
+
+ggplot(venomdata, aes(sample = volume)) +
+  geom_qq() +
+  geom_qq_line() +
+  facet_grid(. ~ group)
+```
+
+The data in each group are close enough to approximately normal that we can use the traditional test based on the Central Limit Theorem, despite the small sample sizes. We get both the test and the confidence interval from the `t.test()` function. Looking at the *p*-value of the test, we would fail to reject $H_o$ because the *p*-value is greater than 0.05.
+
+```{r}
+t.test(volume ~ group, data = venomdata, alternative = "two.sided")
+```
+
+#### Using `infer` for the Hypothesis Test
+
+We can test the same data using the `infer` package. How are the assumptions of this test different than the traditional test? If the assumptions and conditions for the traditional test are met for the data, the p-values for the traditional and permutation tests will be similar. Notice the shape of the simulated null distribution.
+
+```{r}
+null_distribution <- venomdata %>%
+  specify(volume ~ group) %>%
+  hypothesize(null = "independence") %>%
+  generate(reps = 1000, type = "permute") %>%
+  calculate(stat = "diff in means", order = c("antivenom", "saline"))
+
+obs_diff <- venomdata %>% 
+  specify(volume ~ group) %>% 
+  calculate(stat = "diff in means", order = c("antivenom", "saline"))
+obs_diff
+
+visualize(null_distribution, bins = 10) + 
+  shade_p_value(obs_stat = obs_diff, direction = "both")
+
+null_distribution %>% 
+  get_p_value(obs_stat = obs_diff, direction = "both")
+```
+
+#### Using `infer` for a Confidence Interval
+
+We can also use `infer` to find a confidence interval.
+
+```{r}
+bootstrap_distribution <- venomdata %>%
+  specify(volume ~ group) %>%
+  generate(reps = 1000, type = "bootstrap") %>%
+  calculate(stat = "diff in means", order = c("antivenom", "saline"))
+
+obs_diff <- venomdata %>% 
+  specify(volume ~ group) %>% 
+  calculate(stat = "diff in means", order = c("antivenom", "saline"))
+obs_diff
+
+percentile_ci <- bootstrap_distribution %>% 
+  get_confidence_interval(level = 0.95, type = "percentile")
+
+visualize(null_distribution, bins = 10) + 
+  shade_confidence_interval(endpoints = percentile_ci)
+```
+
+
+***
+```{r}
+sessionInfo()
+```

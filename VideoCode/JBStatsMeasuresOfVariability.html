@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Created by Jill E. Thomley" />
+
+
+<title>Measures of Variability</title>
+
+<script src="JBStatsMeasuresOfVariability_files/header-attrs-2.10/header-attrs.js"></script>
+<script src="JBStatsMeasuresOfVariability_files/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="JBStatsMeasuresOfVariability_files/bootstrap-3.3.5/css/yeti.min.css" rel="stylesheet" />
+<script src="JBStatsMeasuresOfVariability_files/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="JBStatsMeasuresOfVariability_files/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="JBStatsMeasuresOfVariability_files/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="JBStatsMeasuresOfVariability_files/navigation-1.1/tabsets.js"></script>
+<link href="JBStatsMeasuresOfVariability_files/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="JBStatsMeasuresOfVariability_files/highlightjs-9.12.0/highlight.js"></script>
+<script src="JBStatsMeasuresOfVariability_files/kePrint-0.0.1/kePrint.js"></script>
+<link href="JBStatsMeasuresOfVariability_files/lightable-0.0.1/lightable.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Measures of Variability</h1>
+<h3 class="subtitle">Companion <code>R</code> Code for JB Statistics Video Lesson</h3>
+<h4 class="author">Created by Jill E. Thomley</h4>
+<h4 class="date">Monday, August 30, 2021 @ 05:10 PM</h4>
+
+</div>
+
+<div id="TOC">
+<ul>
+<li><a href="#packages-used">Packages Used</a></li>
+<li><a href="#datasets-used">Datasets Used</a></li>
+<li><a href="#example-with-4-observations">Example with 4 Observations</a></li>
+<li><a href="#example-with-guinea-pig-data">Example with Guinea Pig Data</a></li>
+</ul>
+</div>
+
+<hr />
+<iframe width="560" height="315" src="https://www.youtube.com/embed/Cx2tGUze60s" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+</iframe>
+<hr />
+<div id="packages-used" class="section level4">
+<h4>Packages Used</h4>
+<pre class="r"><code>library(tidyverse)
+library(knitr)
+library(kableExtra)</code></pre>
+</div>
+<div id="datasets-used" class="section level4">
+<h4>Datasets Used</h4>
+<pre class="r"><code># sample of 4 observations
+sample4 &lt;- tibble(data = c(45, 64, 68, 51))
+glimpse(sample4)</code></pre>
+<pre><code>Rows: 4
+Columns: 1
+$ data &lt;dbl&gt; 45, 64, 68, 51</code></pre>
+<pre class="r"><code># guinea pig survival times
+gp &lt;- read_csv(&quot;https://raw.githubusercontent.com/STAT-JET-ASU/Datasets/master/JBStatistics/jbstatsguineapigs.csv&quot;)
+glimpse(gp)</code></pre>
+<pre><code>Rows: 125
+Columns: 2
+$ group        &lt;chr&gt; &quot;control&quot;, &quot;control&quot;, &quot;control&quot;, &quot;control&quot;, &quot;control&quot;, &quot;c…
+$ survivaldays &lt;dbl&gt; 18, 36, 50, 52, 86, 87, 89, 91, 102, 108, 114, 114, 115, …</code></pre>
+</div>
+<div id="example-with-4-observations" class="section level4">
+<h4>Example with 4 Observations</h4>
+<p>Doing the math the long way</p>
+<pre class="r"><code>(devs &lt;- sample4 %&gt;% 
+   mutate(deviations = data - mean(data),
+          abs_devs   = abs(deviations),
+          sqr_devs   = deviations^2))</code></pre>
+<pre><code># A tibble: 4 × 4
+   data deviations abs_devs sqr_devs
+  &lt;dbl&gt;      &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+1    45        -12       12      144
+2    64          7        7       49
+3    68         11       11      121
+4    51         -6        6       36</code></pre>
+<pre class="r"><code>(sums &lt;- devs %&gt;% 
+    summarize(sum_abs_devs = sum(abs_devs),
+              sum_sqr_devs = sum(sqr_devs),
+              n            = n()))</code></pre>
+<pre><code># A tibble: 1 × 3
+  sum_abs_devs sum_sqr_devs     n
+         &lt;dbl&gt;        &lt;dbl&gt; &lt;int&gt;
+1           36          350     4</code></pre>
+<pre class="r"><code>(stats &lt;- sums %&gt;%
+  summarize(MAD = sum_abs_devs / n,
+            s   = sqrt(sum_sqr_devs / (n - 1))))</code></pre>
+<pre><code># A tibble: 1 × 2
+    MAD     s
+  &lt;dbl&gt; &lt;dbl&gt;
+1     9  10.8</code></pre>
+<p>Using R’s built-in functions</p>
+<pre class="r"><code>sample4 %&gt;% 
+  summarize(n    = n(),
+            xbar = mean(data),
+            s    = sd(data),
+            rng  = diff(range(data)),
+            MAD  = sum(abs(data - mean(data))) / n)</code></pre>
+<pre><code># A tibble: 1 × 5
+      n  xbar     s   rng   MAD
+  &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+1     4    57  10.8    23     9</code></pre>
+</div>
+<div id="example-with-guinea-pig-data" class="section level4">
+<h4>Example with Guinea Pig Data</h4>
+<p>Overall dataset</p>
+<pre class="r"><code>gp %&gt;% 
+  summarize(n = n(),
+            xbar = mean(survivaldays),
+            s    = sd(survivaldays),
+            rng  = diff(range(survivaldays))) %&gt;% 
+  kable(digits = 2) %&gt;% 
+  kable_styling(full_width = FALSE,
+             position  = &quot;left&quot;,
+             font_size = 14)</code></pre>
+<table class="table" style="font-size: 14px; width: auto !important; ">
+<thead>
+<tr>
+<th style="text-align:right;">
+n
+</th>
+<th style="text-align:right;">
+xbar
+</th>
+<th style="text-align:right;">
+s
+</th>
+<th style="text-align:right;">
+rng
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+125
+</td>
+<td style="text-align:right;">
+297.61
+</td>
+<td style="text-align:right;">
+187.6
+</td>
+<td style="text-align:right;">
+717
+</td>
+</tr>
+</tbody>
+</table>
+<p>Data by groups</p>
+<pre class="r"><code>gp %&gt;%
+  group_by(group) %&gt;% 
+  summarize(n = n(),
+            xbar = mean(survivaldays),
+            s    = sd(survivaldays),
+            rng  = diff(range(survivaldays))) %&gt;% 
+  kable(digits = 2) %&gt;% 
+  kable_styling(full_width = FALSE,
+             position  = &quot;left&quot;,
+             font_size = 14)</code></pre>
+<table class="table" style="font-size: 14px; width: auto !important; ">
+<thead>
+<tr>
+<th style="text-align:left;">
+group
+</th>
+<th style="text-align:right;">
+n
+</th>
+<th style="text-align:right;">
+xbar
+</th>
+<th style="text-align:right;">
+s
+</th>
+<th style="text-align:right;">
+rng
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+control
+</td>
+<td style="text-align:right;">
+65
+</td>
+<td style="text-align:right;">
+349.68
+</td>
+<td style="text-align:right;">
+223.35
+</td>
+<td style="text-align:right;">
+717
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+treatment
+</td>
+<td style="text-align:right;">
+60
+</td>
+<td style="text-align:right;">
+241.20
+</td>
+<td style="text-align:right;">
+116.77
+</td>
+<td style="text-align:right;">
+522
+</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 3.6.0 (2019-04-26)
+Platform: x86_64-redhat-linux-gnu (64-bit)
+Running under: Red Hat Enterprise Linux
+
+Matrix products: default
+BLAS/LAPACK: /usr/lib64/R/lib/libRblas.so
+
+locale:
+ [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+ [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+ [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+ [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+ [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+[11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] kableExtra_1.3.4 knitr_1.33       forcats_0.5.1    stringr_1.4.0   
+ [5] dplyr_1.0.7      purrr_0.3.4      readr_2.0.1      tidyr_1.1.3     
+ [9] tibble_3.1.4     ggplot2_3.3.5    tidyverse_1.3.1 
+
+loaded via a namespace (and not attached):
+ [1] Rcpp_1.0.7        svglite_2.0.0     lubridate_1.7.10  assertthat_0.2.1 
+ [5] digest_0.6.27     utf8_1.2.2        R6_2.5.1          cellranger_1.1.0 
+ [9] backports_1.2.1   reprex_2.0.1      evaluate_0.14     highr_0.9        
+[13] httr_1.4.2        pillar_1.6.2      rlang_0.4.11      curl_4.3.2       
+[17] readxl_1.3.1      rstudioapi_0.13   jquerylib_0.1.4   rmarkdown_2.10   
+[21] webshot_0.5.2     bit_4.0.4         munsell_0.5.0     broom_0.7.9      
+[25] compiler_3.6.0    modelr_0.1.8      xfun_0.25         pkgconfig_2.0.3  
+[29] systemfonts_1.0.2 htmltools_0.5.2   tidyselect_1.1.1  fansi_0.5.0      
+[33] viridisLite_0.4.0 crayon_1.4.1      tzdb_0.1.2        dbplyr_2.1.1     
+[37] withr_2.4.2       grid_3.6.0        jsonlite_1.7.2    gtable_0.3.0     
+[41] lifecycle_1.0.0   DBI_1.1.1         magrittr_2.0.1    scales_1.1.1     
+[45] cli_3.0.1         stringi_1.7.4     vroom_1.5.4       fs_1.5.0         
+[49] xml2_1.3.2        bslib_0.2.5.1     ellipsis_0.3.2    generics_0.1.0   
+[53] vctrs_0.3.8       tools_3.6.0       bit64_4.0.5       glue_1.4.2       
+[57] hms_1.1.0         parallel_3.6.0    fastmap_1.1.0     yaml_2.2.1       
+[61] colorspace_2.0-2  rvest_1.0.1       haven_2.4.3       sass_0.4.0       </code></pre>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

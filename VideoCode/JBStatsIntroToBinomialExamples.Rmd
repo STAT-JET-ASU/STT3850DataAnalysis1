@@ -1,0 +1,96 @@
+---
+title: "Binomial/Not Binomial Examples"
+subtitle: "Companion `R` Code for JB Statistics Video Lesson"
+author: "Created by Jill E. Thomley"
+date: '`r format(Sys.time(), "%A, %B %d, %Y @ %I:%M %p")`'
+output:
+  html_document:
+    theme: yeti
+    highlight: textmate
+    toc: true
+    toc_depth: 4
+    self_contained: false
+---
+
+```{r globaloptions, include = FALSE}
+knitr::opts_chunk$set(message = FALSE, warning = FALSE, comment = NA)
+```
+
+***
+```{r, echo = FALSE}
+vembedr::embed_youtube(
+id = "UJFIZY0xx_s",
+width = NULL,
+height = 400,
+ratio = c("16by9", "4by3"),
+frameborder = 0,
+allowfullscreen = TRUE,
+query = NULL
+)
+```
+***
+
+### **Packages Used**
+
+<details>
+```{r loadpackages}
+# no packages are required
+```
+</details>
+
+### **The Binomial PMF**
+
+The binomial distribution is a discrete probability distribution. It mathematically models the *number of successes* in a sequence of independent Bernoulli trials. The probability for a given number of successes $x$ is found using the *probability mass function* (pmf).
+
+$$X \sim Bin(n,p)$$
+
+    x = number of successes = {0, 1, 2, ..., n}
+    n = number of trials
+    p = probability of success on a single trial
+
+$$f(x) = P(X = x) = {n \choose x}p^x(1-p)^{n-x}$$
+
+### **Binomial Examples**
+
+#### Chance of Fetal Down Syndrome
+
+The probability a randomly selected 40-year-old pregnant woman is carrying a fetus with Down syndrome is approximately 0.01. Suppose we have an independent random sample of 25 40-year-old women. What is the probability exactly 2 women are carrying a fetus with Down syndrome?
+
+* Trials are independent
+* Fixed number of trials = 25
+* Constant chance of success = 0.01
+* We are counting the number of successes
+
+
+$$X \sim Bin(25,0.01)$$
+
+Solve for $x = 2$.
+
+$$f(2) = P(X = 2) = {25 \choose 2}(0.01)^2(1-0.01)^{25-2} = \frac{25!}{2!\times 23!}(0.01)^2(0.99)^{23}$$
+
+```{r}
+dbinom(2, 25, 0.01)
+```
+
+#### Chance of 3 or 4 on a Die Roll
+
+Suppose an ordinary six-sided die is rolled 16 times. What is the probability that on exactly 5 of the rolls, either a 3 or 4 comes up?
+
+* Trials are independent
+* Fixed number of trials = 16
+* Constant chance of success = 2/6
+* We are counting the number of successes
+
+$$X \sim Bin(16, 2/6)$$
+
+Solve for $x = 5$.
+
+$$f(5) = P(X = 5) = {16 \choose 5}\left(\frac{2}{6}\right)^5\left(1-\frac{2}{6}\right)^{16-5}=\frac{16!}{5!\times 11!}\left(\frac{2}{6}\right)^5\left(\frac{4}{6}\right)^{11}$$
+```{r}
+dbinom(5, 16, 1/3)
+```
+
+***
+```{r}
+sessionInfo()
+```

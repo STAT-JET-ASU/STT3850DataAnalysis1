@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Created by Jill E. Thomley" />
+
+
+<title>Measures of Central Tendency</title>
+
+<script src="JBStatsMeasuresOfCentralTendency_files/header-attrs-2.10/header-attrs.js"></script>
+<script src="JBStatsMeasuresOfCentralTendency_files/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="JBStatsMeasuresOfCentralTendency_files/bootstrap-3.3.5/css/yeti.min.css" rel="stylesheet" />
+<script src="JBStatsMeasuresOfCentralTendency_files/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="JBStatsMeasuresOfCentralTendency_files/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="JBStatsMeasuresOfCentralTendency_files/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="JBStatsMeasuresOfCentralTendency_files/navigation-1.1/tabsets.js"></script>
+<link href="JBStatsMeasuresOfCentralTendency_files/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="JBStatsMeasuresOfCentralTendency_files/highlightjs-9.12.0/highlight.js"></script>
+<script src="JBStatsMeasuresOfCentralTendency_files/kePrint-0.0.1/kePrint.js"></script>
+<link href="JBStatsMeasuresOfCentralTendency_files/lightable-0.0.1/lightable.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Measures of Central Tendency</h1>
+<h3 class="subtitle">Companion <code>R</code> Code for JB Statistics Video Lesson</h3>
+<h4 class="author">Created by Jill E. Thomley</h4>
+<h4 class="date">Monday, August 30, 2021 @ 04:33 PM</h4>
+
+</div>
+
+<div id="TOC">
+<ul>
+<li><a href="#packages-used">Packages Used</a></li>
+<li><a href="#datasets-used">Datasets Used</a></li>
+<li><a href="#example-with-6-observations">Example with 6 Observations</a></li>
+<li><a href="#guinea-pig-survival-times">Guinea Pig Survival Times</a></li>
+</ul>
+</div>
+
+<hr />
+<iframe width="560" height="315" src="https://www.youtube.com/embed/NM_iOLUwZFA" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+</iframe>
+<hr />
+<div id="packages-used" class="section level4">
+<h4>Packages Used</h4>
+<pre class="r"><code>library(tidyverse)
+library(knitr)
+library(kableExtra)</code></pre>
+</div>
+<div id="datasets-used" class="section level4">
+<h4>Datasets Used</h4>
+<pre class="r"><code># sample of 6 observations
+sample6 &lt;- c(1.4, 3.9, 5.0, 6.2, 8.4, 14.1)
+glimpse(sample6)</code></pre>
+<pre><code> num [1:6] 1.4 3.9 5 6.2 8.4 14.1</code></pre>
+<pre class="r"><code># guinea pig survival times
+gp &lt;- read_csv(&quot;https://raw.githubusercontent.com/STAT-JET-ASU/Datasets/master/JBStatistics/jbstatsguineapigs.csv&quot;)
+glimpse(gp)</code></pre>
+<pre><code>Rows: 125
+Columns: 2
+$ group        &lt;chr&gt; &quot;control&quot;, &quot;control&quot;, &quot;control&quot;, &quot;control&quot;, &quot;control&quot;, &quot;c…
+$ survivaldays &lt;dbl&gt; 18, 36, 50, 52, 86, 87, 89, 91, 102, 108, 114, 114, 115, …</code></pre>
+</div>
+<div id="example-with-6-observations" class="section level4">
+<h4>Example with 6 Observations</h4>
+<pre class="r"><code>(xbar_manual &lt;- sum(sample6) / length(sample6))</code></pre>
+<pre><code>[1] 6.5</code></pre>
+<pre class="r"><code>(xbar &lt;- mean(sample6))</code></pre>
+<pre><code>[1] 6.5</code></pre>
+<pre class="r"><code>(x_sorted &lt;- sort(sample6))</code></pre>
+<pre><code>[1]  1.4  3.9  5.0  6.2  8.4 14.1</code></pre>
+<pre class="r"><code>(xmed &lt;- median(sample6))</code></pre>
+<pre><code>[1] 5.6</code></pre>
+<details>
+<pre class="r"><code># https://ggplot2.tidyverse.org/reference/geom_dotplot.html
+# https://ggplot2.tidyverse.org/reference/scale_continuous.html
+# https://ggplot2.tidyverse.org/reference/labs.html
+# https://ggplot2.tidyverse.org/reference/geom_text.html
+# https://ggplot2.tidyverse.org/reference/theme.html
+# https://personal.sron.nl/~pault/#sec:qualitative
+
+dot1 &lt;- ggplot(NULL, aes(x = sample6)) +
+  geom_hline(yintercept = 0) +
+  geom_dotplot(binwidth = 1, 
+               dotsize = 0.5, 
+               color = &quot;black&quot;, 
+               fill = &quot;#DDAA33&quot;) +
+  geom_text(aes(x = sample6, y = 0.1), 
+            label = sample6) +
+  geom_segment(aes(x = xbar, xend = xbar, y = -0.2, yend = 0), 
+               arrow = arrow(length = unit(0.3, &quot;cm&quot;)), 
+               color = &quot;#BB5566&quot;) +
+  geom_text(aes(x = xbar, y = -0.25), 
+            label = paste(&quot;mean = &quot;, xbar), 
+            fontface = &quot;italic&quot;,
+            color = &quot;#BB5566&quot;,
+            hjust = 0) +
+  geom_segment(aes(x = xmed, xend = xmed, y = -0.2, yend = 0), 
+               arrow = arrow(length = unit(0.3, &quot;cm&quot;)), 
+               color = &quot;#004488&quot;) +
+  geom_text(aes(x = xmed, y = -0.25), 
+            label = paste(&quot;median = &quot;, xmed), 
+            fontface = &quot;italic&quot;,
+            color = &quot;#004488&quot;,
+            hjust = 1) +  
+  scale_x_continuous(limits = c(0, 27), 
+                     breaks = seq(from = 0, to = 27, by = 1)) +
+  scale_y_continuous(breaks = NULL) +
+  labs(title = &quot;dotplot for example of 6 data points&quot;, 
+       x = NULL, 
+       y = NULL) +
+  theme_bw() +
+  theme(panel.grid.minor = element_blank())</code></pre>
+</details>
+<pre class="r"><code>dot1</code></pre>
+<p><img src="JBStatsMeasuresOfCentralTendency_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<pre class="r"><code>sample6mod &lt;- c(sample6[1:5], 26.1)
+glimpse(sample6mod)</code></pre>
+<pre><code> num [1:6] 1.4 3.9 5 6.2 8.4 26.1</code></pre>
+<pre class="r"><code>(xbar_mod &lt;- mean(sample6mod))</code></pre>
+<pre><code>[1] 8.5</code></pre>
+<pre class="r"><code>(xmed_mod &lt;- median(sample6mod))</code></pre>
+<pre><code>[1] 5.6</code></pre>
+<details>
+<pre class="r"><code>dot2 &lt;- ggplot(NULL, aes(x = sample6mod)) +
+  geom_dotplot(binwidth = 1, 
+               dotsize = 0.75, 
+               fill = &quot;green&quot;) +
+  scale_x_continuous(limits = c(0, 27), 
+                     breaks = seq(from = 0, to = 25, by = 5)) +
+  scale_y_continuous(breaks = NULL, 
+                     expand = c(0, 0)) +
+  labs(title = &quot;dotplot for modified example of 6 data points&quot;, 
+       x = NULL, 
+       y = NULL) +
+  geom_text(aes(x = sample6mod, y = 0.1), 
+            label = sample6mod) +
+  theme(panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank())</code></pre>
+</details>
+<pre class="r"><code>dot2</code></pre>
+<p><img src="JBStatsMeasuresOfCentralTendency_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+</div>
+<div id="guinea-pig-survival-times" class="section level4">
+<h4>Guinea Pig Survival Times</h4>
+<pre class="r"><code>ggplot(filter(gp, group == &quot;treatment&quot;), aes(x = survivaldays)) +
+  geom_histogram(breaks = seq(from = 0, to = 600, by = 50), 
+                 color = &quot;darkgray&quot;, 
+                 fill = &quot;lightblue&quot;) +
+  labs(title = &quot;Survival times of 60 guinea pigs after being infected with tuberculosis&quot;,
+       x = &quot;Lifetime (days)&quot;,
+       y = &quot;Frequency&quot;) +
+  theme_bw()</code></pre>
+<p><img src="JBStatsMeasuresOfCentralTendency_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<pre class="r"><code>ggplot(gp, aes(x = survivaldays)) +
+  geom_histogram(breaks = seq(from = 0, to = 800, by = 50), 
+                 color = &quot;darkgray&quot;, 
+                 fill = &quot;lightblue&quot;) +
+  labs(title = &quot;Survival times of guinea pigs&quot;, 
+       subtitle = &quot;control group vs. treatment group infected with tuberculosis&quot;,
+       x = &quot;Lifetime (days)&quot;,
+       y = &quot;Frequency&quot;) +
+  facet_grid(group ~ .) +
+  theme_bw()</code></pre>
+<p><img src="JBStatsMeasuresOfCentralTendency_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<pre class="r"><code>gpstats &lt;- gp %&gt;% 
+  group_by(group) %&gt;% 
+  summarize(xbar = mean(survivaldays),
+            xmed = median(survivaldays))
+
+print.data.frame(gpstats, digits = 4) # 4 sig figs</code></pre>
+<pre><code>      group  xbar  xmed
+1   control 349.7 341.0
+2 treatment 241.2 214.5</code></pre>
+<pre class="r"><code>gpstats %&gt;% 
+  kable(digits = 1) %&gt;%   # 1 decimal place 
+  kable_styling(full_width = FALSE, 
+                position = &quot;left&quot;,
+                font_size = 14)</code></pre>
+<table class="table" style="font-size: 14px; width: auto !important; ">
+<thead>
+<tr>
+<th style="text-align:left;">
+group
+</th>
+<th style="text-align:right;">
+xbar
+</th>
+<th style="text-align:right;">
+xmed
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+control
+</td>
+<td style="text-align:right;">
+349.7
+</td>
+<td style="text-align:right;">
+341.0
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+treatment
+</td>
+<td style="text-align:right;">
+241.2
+</td>
+<td style="text-align:right;">
+214.5
+</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 3.6.0 (2019-04-26)
+Platform: x86_64-redhat-linux-gnu (64-bit)
+Running under: Red Hat Enterprise Linux
+
+Matrix products: default
+BLAS/LAPACK: /usr/lib64/R/lib/libRblas.so
+
+locale:
+ [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+ [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+ [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+ [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+ [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+[11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] kableExtra_1.3.4 knitr_1.33       forcats_0.5.1    stringr_1.4.0   
+ [5] dplyr_1.0.7      purrr_0.3.4      readr_2.0.1      tidyr_1.1.3     
+ [9] tibble_3.1.4     ggplot2_3.3.5    tidyverse_1.3.1 
+
+loaded via a namespace (and not attached):
+ [1] Rcpp_1.0.7        svglite_2.0.0     lubridate_1.7.10  assertthat_0.2.1 
+ [5] digest_0.6.27     utf8_1.2.2        R6_2.5.1          cellranger_1.1.0 
+ [9] backports_1.2.1   reprex_2.0.1      evaluate_0.14     highr_0.9        
+[13] httr_1.4.2        pillar_1.6.2      rlang_0.4.11      curl_4.3.2       
+[17] readxl_1.3.1      rstudioapi_0.13   jquerylib_0.1.4   rmarkdown_2.10   
+[21] labeling_0.4.2    webshot_0.5.2     bit_4.0.4         munsell_0.5.0    
+[25] broom_0.7.9       compiler_3.6.0    modelr_0.1.8      xfun_0.25        
+[29] pkgconfig_2.0.3   systemfonts_1.0.2 htmltools_0.5.2   tidyselect_1.1.1 
+[33] fansi_0.5.0       viridisLite_0.4.0 crayon_1.4.1      tzdb_0.1.2       
+[37] dbplyr_2.1.1      withr_2.4.2       grid_3.6.0        jsonlite_1.7.2   
+[41] gtable_0.3.0      lifecycle_1.0.0   DBI_1.1.1         magrittr_2.0.1   
+[45] scales_1.1.1      cli_3.0.1         stringi_1.7.4     vroom_1.5.4      
+[49] farver_2.1.0      fs_1.5.0          xml2_1.3.2        bslib_0.2.5.1    
+[53] ellipsis_0.3.2    generics_0.1.0    vctrs_0.3.8       tools_3.6.0      
+[57] bit64_4.0.5       glue_1.4.2        hms_1.1.0         parallel_3.6.0   
+[61] fastmap_1.1.0     yaml_2.2.1        colorspace_2.0-2  rvest_1.0.1      
+[65] haven_2.4.3       sass_0.4.0       </code></pre>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

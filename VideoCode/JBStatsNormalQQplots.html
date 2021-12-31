@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Created by Jill E. Thomley" />
+
+
+<title>Normal Quantile-Quantile Plots</title>
+
+<script src="JBStatsNormalQQplots_files/header-attrs-2.11/header-attrs.js"></script>
+<script src="JBStatsNormalQQplots_files/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="JBStatsNormalQQplots_files/bootstrap-3.3.5/css/yeti.min.css" rel="stylesheet" />
+<script src="JBStatsNormalQQplots_files/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="JBStatsNormalQQplots_files/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="JBStatsNormalQQplots_files/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="JBStatsNormalQQplots_files/navigation-1.1/tabsets.js"></script>
+<link href="JBStatsNormalQQplots_files/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="JBStatsNormalQQplots_files/highlightjs-9.12.0/highlight.js"></script>
+<script src="JBStatsNormalQQplots_files/kePrint-0.0.1/kePrint.js"></script>
+<link href="JBStatsNormalQQplots_files/lightable-0.0.1/lightable.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Normal Quantile-Quantile Plots</h1>
+<h3 class="subtitle">Companion <code>R</code> Code for JB Statistics Video Lesson</h3>
+<h4 class="author">Created by Jill E. Thomley</h4>
+<h4 class="date">Tuesday, September 28, 2021 @ 05:09 PM</h4>
+
+</div>
+
+<div id="TOC">
+<ul>
+<li><a href="#packages-used">Packages Used</a></li>
+<li><a href="#example-1-sample-of-9-data-points">Example 1: Sample of 9 Data Points</a>
+<ul>
+<li><a href="#create-the-sample-and-quantiles">Create the Sample and Quantiles</a></li>
+<li><a href="#create-a-plot-of-sample-vs.-quantiles">Create a Plot of Sample vs. Quantiles</a></li>
+<li><a href="#find-the-ith-order-statistic">Find the <em>i</em>th Order Statistic</a></li>
+<li><a href="#a-general-tidyverse-algorithm">A General Tidyverse Algorithm</a></li>
+</ul></li>
+<li><a href="#using-statistical-software">Using Statistical Software</a>
+<ul>
+<li><a href="#sample-from-a-normal-population">Sample from a Normal Population</a></li>
+<li><a href="#sample-from-a-uniform-population">Sample from a Uniform Population</a></li>
+<li><a href="#plotting-uniform-vs.-normal-curves">Plotting Uniform vs. Normal Curves</a></li>
+<li><a href="#sample-from-an-exponential-population">Sample from an Exponential Population</a></li>
+<li><a href="#sample-from-an-students-t-population">Sample from an Student’s t Population</a></li>
+</ul></li>
+<li><a href="#qq-plots-sampling-variability">QQ Plots Sampling Variability</a></li>
+</ul>
+</div>
+
+<hr />
+<iframe width="560" height="315" src="https://www.youtube.com/embed/X9_ISJ0YpGw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+</iframe>
+<hr />
+<div id="packages-used" class="section level3">
+<h3>Packages Used</h3>
+<details>
+<pre class="r"><code>library(tidyverse)
+library(readr)
+library(kableExtra)</code></pre>
+</details>
+</div>
+<div id="example-1-sample-of-9-data-points" class="section level3">
+<h3>Example 1: Sample of 9 Data Points</h3>
+<div id="create-the-sample-and-quantiles" class="section level4">
+<h4>Create the Sample and Quantiles</h4>
+<p>The Sample</p>
+<p>The basic example contains nine data points from an unknown population.</p>
+<pre class="r"><code>(sample &lt;- c(3.89, 4.75, 4.75, 5.20, 5.78, 5.80, 6.33, 7.21, 7.90))</code></pre>
+<pre><code>[1] 3.89 4.75 4.75 5.20 5.78 5.80 6.33 7.21 7.90</code></pre>
+<p>The Quantiles</p>
+<p>Find the nine values that split the standard normal distribution into 10 equal areas. That set is known as the <em>deciles</em> (prefix dec = 10, like <em>decade</em>). We want the 10th percentile, the 20th percentile, the 30th percentile, up to the 90th percentile, as shown in the plot in the video.</p>
+<pre class="r"><code># standard normal is N(0, 1)
+# function qnorm(p, mean, SD)
+
+# long way for illustration
+(deciles &lt;- qnorm(c(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9), 0, 1))</code></pre>
+<pre><code>[1] -1.2815516 -0.8416212 -0.5244005 -0.2533471  0.0000000  0.2533471  0.5244005
+[8]  0.8416212  1.2815516</code></pre>
+<pre class="r"><code># this is a better coding strategy
+# it scales up for larger problems
+decile &lt;- qnorm(seq(from = 0.1, to = 0.9, by = 0.1), 0, 1)</code></pre>
+<p>As a Tibble</p>
+<p>When using <code>ggplot2</code> it is often better to create a dataset versus stand-alone vectors.</p>
+<pre class="r"><code>plotdata1 &lt;- tibble(
+  sample = c(3.89, 4.75, 4.75, 5.20, 5.78, 5.80, 6.33, 7.21, 7.90),
+  deciles = qnorm(seq(from = 0.1, to = 0.9, by = 0.1), 0, 1)
+)
+plotdata1 %&gt;%
+  kable(digits = 2) %&gt;%
+  kable_styling(
+    full_width = FALSE,
+    position = &quot;left&quot;,
+    font_size = 14
+  )</code></pre>
+<table class="table" style="font-size: 14px; width: auto !important; ">
+<thead>
+<tr>
+<th style="text-align:right;">
+sample
+</th>
+<th style="text-align:right;">
+deciles
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+3.89
+</td>
+<td style="text-align:right;">
+-1.28
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+4.75
+</td>
+<td style="text-align:right;">
+-0.84
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+4.75
+</td>
+<td style="text-align:right;">
+-0.52
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+5.20
+</td>
+<td style="text-align:right;">
+-0.25
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+5.78
+</td>
+<td style="text-align:right;">
+0.00
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+5.80
+</td>
+<td style="text-align:right;">
+0.25
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+6.33
+</td>
+<td style="text-align:right;">
+0.52
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+7.21
+</td>
+<td style="text-align:right;">
+0.84
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+7.90
+</td>
+<td style="text-align:right;">
+1.28
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="create-a-plot-of-sample-vs.-quantiles" class="section level4">
+<h4>Create a Plot of Sample vs. Quantiles</h4>
+<p>If the data come from a normal distribution, then the theoretical and sample quantiles should have a similar spacing (not perfect, because it’s a sample). When plotted against one another, they should make approximately a straight line.</p>
+<pre class="r"><code>ggplot(plotdata1, aes(x = deciles, y = sample)) +
+  geom_point() +
+  labs(
+    x = &quot;Theretical Quantiles&quot;,
+    y = &quot;Sample Quantiles&quot;
+  ) +
+  theme_linedraw()</code></pre>
+<p><img src="JBStatsNormalQQplots_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+</div>
+<div id="find-the-ith-order-statistic" class="section level4">
+<h4>Find the <em>i</em>th Order Statistic</h4>
+<p>In general, the <em>i</em>th ordered value (or <em>order statistic</em>) is plotted against the <span class="math inline">\(\frac{i}{n + 1}\)</span> quantile of the standard normal distribution. In other words, for <span class="math inline">\(n\)</span> values, we split the normal distribution into <span class="math inline">\(n + 1\)</span> equal chunks and find the quantile (percentile) values.</p>
+<pre class="r"><code>n &lt;- 9
+plotdata1 %&gt;%
+  mutate(
+    point_number = 1:n,
+    order_statistic = point_number / (n + 1)
+  )</code></pre>
+<pre><code># A tibble: 9 × 4
+  sample deciles point_number order_statistic
+   &lt;dbl&gt;   &lt;dbl&gt;        &lt;int&gt;           &lt;dbl&gt;
+1   3.89  -1.28             1             0.1
+2   4.75  -0.842            2             0.2
+3   4.75  -0.524            3             0.3
+4   5.2   -0.253            4             0.4
+5   5.78   0                5             0.5
+6   5.8    0.253            6             0.6
+7   6.33   0.524            7             0.7
+8   7.21   0.842            8             0.8
+9   7.9    1.28             9             0.9</code></pre>
+</div>
+<div id="a-general-tidyverse-algorithm" class="section level4">
+<h4>A General Tidyverse Algorithm</h4>
+<p>We can combine all our steps above to program a general algorith using <code>tidyverse</code> tools. If you have an existing dataset, you use that in place of creating a <code>tibble</code>. Make sure to <code>filter()</code> to eliminate any rows that have missing values in the variable you plan to plot, otherwise your <span class="math inline">\(n\)</span> will be incorrect.</p>
+<pre class="r"><code>plotdata2 &lt;- tibble(sample = c(3.89, 4.75, 4.75, 5.20, 5.78, 5.80, 6.33, 7.21, 7.90)) %&gt;%
+  mutate(
+    point_number = row_number(),
+    order_statistic = point_number / (n() + 1),
+    quantile_value = qnorm(order_statistic, 0, 1)
+  )
+plotdata2</code></pre>
+<pre><code># A tibble: 9 × 4
+  sample point_number order_statistic quantile_value
+   &lt;dbl&gt;        &lt;int&gt;           &lt;dbl&gt;          &lt;dbl&gt;
+1   3.89            1             0.1         -1.28 
+2   4.75            2             0.2         -0.842
+3   4.75            3             0.3         -0.524
+4   5.2             4             0.4         -0.253
+5   5.78            5             0.5          0    
+6   5.8             6             0.6          0.253
+7   6.33            7             0.7          0.524
+8   7.21            8             0.8          0.842
+9   7.9             9             0.9          1.28 </code></pre>
+</div>
+</div>
+<div id="using-statistical-software" class="section level3">
+<h3>Using Statistical Software</h3>
+<div id="sample-from-a-normal-population" class="section level4">
+<h4>Sample from a Normal Population</h4>
+<pre class="r"><code>normal_sample &lt;- tibble(x = rnorm(50, 0, 1))
+
+ggplot(normal_sample, aes(sample = x)) +
+  geom_qq() +
+  geom_qq_line()</code></pre>
+<p><img src="JBStatsNormalQQplots_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+</div>
+<div id="sample-from-a-uniform-population" class="section level4">
+<h4>Sample from a Uniform Population</h4>
+<p>The continuous uniform distribution is <em>platykurtic</em>, which means it has a flatter peak and thinner tails than the normal distribution.</p>
+<pre class="r"><code># X ~ Unif(-3, +3) covers about the same range
+# of values on the x-axis as a standard normal
+
+uniform_sample &lt;- tibble(x = runif(50, -3, +3))
+
+ggplot(uniform_sample, aes(sample = x)) +
+  geom_qq() +
+  geom_qq_line()</code></pre>
+<p><img src="JBStatsNormalQQplots_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+</div>
+<div id="plotting-uniform-vs.-normal-curves" class="section level4">
+<h4>Plotting Uniform vs. Normal Curves</h4>
+<pre class="r"><code>ggplot() +
+  stat_function(
+    fun = dunif,
+    args = list(-3, 3),
+    color = &quot;blue&quot;
+  ) +
+  stat_function(
+    fun = dnorm,
+    args = list(0, 1),
+    color = &quot;orange&quot;
+  ) +
+  scale_x_continuous(limits = c(-3, +3)) +
+  theme_linedraw()</code></pre>
+<p><img src="JBStatsNormalQQplots_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+</div>
+<div id="sample-from-an-exponential-population" class="section level4">
+<h4>Sample from an Exponential Population</h4>
+<p>The exponential distribution is strongly right-skewed.</p>
+<pre class="r"><code># x ~ Exp(1)
+
+exponential_sample &lt;- tibble(x = rexp(50, 1))
+
+# plot of the population
+ggplot() +
+  stat_function(
+    fun = dexp,
+    args = list(1)
+  ) +
+  scale_x_continuous(limits = c(0, 6)) +
+  theme_linedraw()</code></pre>
+<p><img src="JBStatsNormalQQplots_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<pre class="r"><code>ggplot(exponential_sample, aes(sample = x)) +
+  geom_qq() +
+  geom_qq_line() +
+  theme_classic()</code></pre>
+<p><img src="JBStatsNormalQQplots_files/figure-html/unnamed-chunk-10-2.png" width="672" /></p>
+</div>
+<div id="sample-from-an-students-t-population" class="section level4">
+<h4>Sample from an Student’s t Population</h4>
+<p>The Student’s <em>t</em> distribution is <em>leptokurtic</em>, which means it has a taller peak and thicker tails than the normal distribution when the parameter is small. However, the <em>t</em> converges to the standard normal distribution as the parameter approaches <span class="math inline">\(\infty\)</span>. Notice the data curves in the opposite direction from the uniform distribution on a QQ plot.</p>
+<pre class="r"><code># X ~ t(2)
+
+t_sample &lt;- tibble(x = rt(50, 2))
+
+# plot of the population
+ggplot() +
+  stat_function(
+    fun = dt,
+    args = list(2)
+  ) +
+  scale_x_continuous(limits = c(-6, 6)) +
+  theme_linedraw()</code></pre>
+<p><img src="JBStatsNormalQQplots_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<pre class="r"><code># formatted plot
+ggplot(t_sample, aes(sample = x)) +
+  geom_qq() +
+  geom_qq_line() +
+  theme_classic()</code></pre>
+<p><img src="JBStatsNormalQQplots_files/figure-html/unnamed-chunk-11-2.png" width="672" /></p>
+</div>
+</div>
+<div id="qq-plots-sampling-variability" class="section level3">
+<h3>QQ Plots Sampling Variability</h3>
+<p>Try several samples of the same size to observe how the plot can vary from sample to sample. Also try different sample size to see how that affects the plot.</p>
+<pre class="r"><code># choose your sample size
+n &lt;- 10
+
+# sample generation is nested in the plot code
+ggplot(
+  tibble(x = rnorm(n, 0, 1)),
+  aes(sample = x)
+) +
+  geom_qq() +
+  geom_qq_line() +
+  theme_classic()</code></pre>
+<p><img src="JBStatsNormalQQplots_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<pre class="r"><code># this code takes 9 samples of the indicated size
+
+# choose your sample size
+n &lt;- 10
+
+norm_samples &lt;- tibble(
+  sample_values = rnorm(9 * n, 0, 1),
+  sample_number = rep(1:9, each = n)
+)
+
+ggplot(norm_samples, aes(sample = sample_values)) +
+  geom_qq() +
+  geom_qq_line() +
+  facet_wrap(. ~ sample_number) +
+  theme_classic()</code></pre>
+<p><img src="JBStatsNormalQQplots_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<hr />
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 3.6.0 (2019-04-26)
+Platform: x86_64-redhat-linux-gnu (64-bit)
+Running under: Red Hat Enterprise Linux
+
+Matrix products: default
+BLAS/LAPACK: /usr/lib64/R/lib/libRblas.so
+
+locale:
+ [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+ [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+ [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+ [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+ [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+[11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] kableExtra_1.3.4 forcats_0.5.1    stringr_1.4.0    dplyr_1.0.7     
+ [5] purrr_0.3.4      readr_2.0.1      tidyr_1.1.3      tibble_3.1.4    
+ [9] ggplot2_3.3.5    tidyverse_1.3.1 
+
+loaded via a namespace (and not attached):
+ [1] Rcpp_1.0.7        svglite_2.0.0     lubridate_1.7.10  assertthat_0.2.1 
+ [5] digest_0.6.28     utf8_1.2.2        R6_2.5.1          cellranger_1.1.0 
+ [9] backports_1.2.1   reprex_2.0.1      evaluate_0.14     httr_1.4.2       
+[13] highr_0.9         pillar_1.6.2      rlang_0.4.11      readxl_1.3.1     
+[17] rstudioapi_0.13   jquerylib_0.1.4   rmarkdown_2.11    labeling_0.4.2   
+[21] webshot_0.5.2     munsell_0.5.0     broom_0.7.9       compiler_3.6.0   
+[25] modelr_0.1.8      xfun_0.26         pkgconfig_2.0.3   systemfonts_1.0.2
+[29] htmltools_0.5.2   tidyselect_1.1.1  fansi_0.5.0       viridisLite_0.4.0
+[33] crayon_1.4.1      tzdb_0.1.2        dbplyr_2.1.1      withr_2.4.2      
+[37] grid_3.6.0        jsonlite_1.7.2    gtable_0.3.0      lifecycle_1.0.1  
+[41] DBI_1.1.1         magrittr_2.0.1    scales_1.1.1      cli_3.0.1        
+[45] stringi_1.7.4     farver_2.1.0      fs_1.5.0          xml2_1.3.2       
+[49] bslib_0.3.0       ellipsis_0.3.2    generics_0.1.0    vctrs_0.3.8      
+[53] tools_3.6.0       glue_1.4.2        hms_1.1.0         fastmap_1.1.0    
+[57] yaml_2.2.1        colorspace_2.0-2  rvest_1.0.1       knitr_1.34       
+[61] haven_2.4.3       sass_0.4.0       </code></pre>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

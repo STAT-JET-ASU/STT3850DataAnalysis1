@@ -1,0 +1,388 @@
+---
+title: "Introduction to the Central Limit Theorem"
+subtitle: "Companion `R` Code for JB Statistics Video Lesson"
+author: "Created by Jill E. Thomley"
+date: '`r format(Sys.time(), "%A, %B %d, %Y @ %I:%M %p")`'
+output: 
+  html_document: 
+    theme: yeti
+    highlight: textmate
+    toc: true
+    toc_depth: 4
+    self_contained: false
+---
+
+```{r globaloptions, include = FALSE}
+knitr::opts_chunk$set(message = FALSE, warning = FALSE, comment = NA)
+```
+
+***
+<iframe width="560" height="315" src="https://www.youtube.com/embed/Pujol1yC1_A" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+***
+
+### Packages Used
+
+<details>
+```{r loadpackages}
+library(tidyverse)
+library(gridExtra)
+```
+</details>
+
+### Explore the Central Limit Theorem
+
+#### The Exponential Distribution
+
+The exponential distribution has a single parameter $\lambda$, which is the rate of the exponential decay. The larger the value of $\lambda$, the quicker the decrease in the height of the curve. For X ~ Exp($\lambda$), the mean and standard deviation are $\mu$ = $\frac{1}{\lambda}$ and $\sigma = \frac{1}{\lambda}$. Thus, for Exp(1), both the mean and standard deviation are 1. You can change the value of $\lambda$ in the plot below to any real number greater than zero to visualize the shape of other exponential distributions.
+
+<details>
+```{r exponentialpdf}
+lambda <- 1
+
+exp_plot <- ggplot() +
+  stat_function(
+    fun = dexp,
+    args = list(lambda),
+    xlim = c(0, 6 / lambda)
+  ) +
+  geom_vline(
+    xintercept = 1 / lambda,
+    color = "orange",
+    linetype = "dashed",
+    size = 1
+  ) +
+  labs(
+    title = paste("Probability Density Function of Exp(", lambda, ")", sep = ""),
+    subtitle = paste("the dashed orange line displays the value E(X) = ", 1 / lambda, sep = ""),
+    x = "x",
+    y = "f(x)"
+  ) +
+  theme_linedraw()
+```
+</details>
+
+```{r}
+exp_plot
+```
+
+How does the shape of the sampling distribution of $\bar{X}$ compare? We will first explore this via simulation. Instead of histograms as in the video, we will use density plots, but the principle is the same. We will also include a QQ plot to assess normality. Change the value of $n$ below and observe what happens. You can also experiment with different values of $\lambda$. How large does $n$ have to be to make the sampling distribution of $\bar{X}$ look approximately normal to you? Is the rough guideline of 30 enough here?
+
+<details>
+```{r exponentialsim}
+lambda <- 1
+n <- 3
+
+mu <- 1 / lambda
+sigma <- 1 / lambda
+sigma_xbar <- sigma / sqrt(n)
+
+sims <- 10^5
+samplemeans <- numeric(sims) # create storage vector
+
+for (i in 1:sims) {
+  samplemeans[i] <- mean(rexp(n, lambda))
+}
+
+# the black dashed curve is the exponential population
+# the blue curve is the simulated sampling distribution
+# the heavy orange curve is a normal distribution, with
+# mean mu and SD sigma_xbar, used as a visual reference
+# --how do the shapes of these three densities compare?
+
+simresults <- tibble(samplemeans)
+
+sim_plot_exp <- ggplot(simresults) +
+  stat_function(
+    fun = dexp,
+    args = list(lambda),
+    linetype = "dashed"
+  ) +
+  geom_density(aes(x = samplemeans),
+    color = "lightgray",
+    fill = "skyblue",
+    alpha = 0.5
+  ) +
+  stat_function(
+    fun = dnorm,
+    args = list(mu, sigma_xbar),
+    color = "orange",
+    size = 1
+  ) +
+  scale_x_continuous(limits = c(mu - 3 * sigma_xbar, mu + 6 * sigma_xbar)) +
+  labs(x = NULL, y = "density") +
+  theme_linedraw()
+```
+</details>
+
+```{r}
+sim_plot_exp
+```
+
+It can be difficult to judge normality using density plots, so we have a plot that is more specifically geared for assessing normality. It is called a normal quantile-quantile plot, or QQ plot. The plot compares the data to a normal model that has the same mean and standard deviation to see if the percentiles match up. Since `samplemeans` is a vector, we enter `NULL` for the dataset.
+
+```{r exponentialsimqq}
+ggplot(NULL, aes(sample = samplemeans)) +
+  geom_qq() +
+  geom_qq_line(
+    color = "orange",
+    size = 1
+  ) +
+  theme_linedraw()
+```
+
+Data from a perfectly normal distribution theoretically follow the straight line. We will never see this in samples, which always have some variability. Data from an approximately normal distribution will tend to be clustered around the straight line (with random deviations). Data that are right skewed like these will tend to be curved upward.
+
+<details>
+```{r expsimstandardized}
+zscores <- (samplemeans - mean(samplemeans)) / sd(samplemeans)
+
+sim_plot_exp_z <- ggplot() +
+  geom_density(aes(x = zscores),
+    color = "lightgray",
+    fill = "skyblue",
+    alpha = 0.5
+  ) +
+  stat_function(
+    fun = dnorm,
+    args = list(0, 1),
+    color = "orange",
+    size = 1
+  ) +
+  scale_x_continuous(limits = c(-6, 6)) +
+  labs(
+    x = "standardized sample means",
+    y = "density"
+  ) +
+  theme_linedraw()
+```
+</details>
+
+```{r}
+sim_plot_exp_z
+```
+
+#### The Uniform Distribution
+
+$$f(x) = \frac{1}{b - a}$$
+
+The uniform distribution X ~ Unif($a, b$) has a "rectangular" shape with two parameters, which are the upper and lower boundaries of possible values. The uniform distribution with $a$ = 0 and $b$ = 1 is the standard uniform distribution (the plot is a unit square). A uniform distribution can have any real values for $a$ and $b$, where $b > a$. You can experiment with other values in the plot below as long as $b - a \geq 1$ (due to the y-axis scaling). 
+
+<details>
+```{r uniformpdf}
+a <- 0
+b <- 1
+
+unif_plot <- ggplot() +
+  stat_function(
+    fun = dunif,
+    args = list(a, b),
+    xlim = c(a, b)
+  ) +
+  geom_vline(
+    xintercept = (b - a) / 2,
+    color = "orange",
+    linetype = "dashed",
+    size = 1
+  ) +
+  geom_segment(aes(
+    x = c(a, b),
+    xend = c(a, b),
+    y = c(0, 0),
+    yend = c(1 / (b - a), 1 / (b - a))
+  )) +
+  labs(
+    title = paste("Probability Density Function of Unif(", a, ", ", b, ")", sep = ""),
+    subtitle = paste("the dashed orange line displays the value E(X) = ", (b - a) / 2, sep = ""),
+    x = "x",
+    y = "f(x)"
+  ) +
+  scale_y_continuous(
+    limits = c(0, 1),
+    expand = expansion(mult = c(0, 0.05))
+  ) +
+  theme_linedraw() +
+  coord_fixed() # makes the x and y axes have the same spacing
+```
+</details>
+
+```{r}
+unif_plot
+```
+
+
+How does the shape of the sampling distribution of $\bar{X}$ compare when we start with a symmetric distribution versus the right skew we had above? How large does $n$ have to be to make the sampling distribution of $\bar{X}$ look approximately normal to you?
+
+<details>
+```{r uniformsim}
+a <- 0
+b <- 1
+n <- 2
+
+mu <- (b - a) / 2
+sigma <- sqrt((a - b)^2 / 12)
+sigma_xbar <- sigma / sqrt(n)
+
+sims <- 10^5
+samplemeans <- numeric(sims)
+
+for (i in 1:sims) {
+  samplemeans[i] <- mean(runif(n, a, b))
+}
+
+# the black dotted curve is the exponential population
+# the blue curve is the simulated sampling distribution
+# the heavy red curve is a normal distribution, mean mu
+# and standard deviation sigma_xbar, used for reference
+# --how do the shapes of these three densities compare?
+
+sim_plot_unif <- ggplot() +
+  stat_function(
+    fun = dunif,
+    args = list(a, b),
+    xlim = c(a, b),
+    linetype = "dotted"
+  ) +
+  geom_density(aes(x = samplemeans),
+    color = "lightgray",
+    fill = "skyblue",
+    alpha = 0.5
+  ) +
+  stat_function(
+    fun = dnorm,
+    args = list(mu, sigma_xbar),
+    color = "orange",
+    size = 1
+  ) +
+  geom_segment(aes(
+    x = c(a, b),
+    xend = c(a, b),
+    y = c(0, 0),
+    yend = c(1 / (b - a), 1 / (b - a))
+  ),
+  linetype = "dotted"
+  ) +
+  labs(x = NULL, y = "density") +
+  theme_linedraw()
+```
+</details>
+
+```{r}
+sim_plot_unif
+```
+
+Again we assess normality using the normal quantile-quantile plot. 
+
+```{r uniformsimqq}
+ggplot(NULL, aes(sample = samplemeans)) +
+  geom_qq() +
+  geom_qq_line(
+    color = "orange",
+    size = 1
+  )
+```
+
+As we saw above with the exponential distribution, data that are right skewed will tend to be curved upward on a QQ plot. Data that are platykurtic like the uniform distribution will tend to have a logistic shape on a QQ plot, as seen here.
+
+<details>
+Notice that this code is identical to what we used for the exponential distribution. That is one benefit of using standardized scores.
+
+```{r unifsimstandardized}
+zscores <- (samplemeans - mean(samplemeans)) / sd(samplemeans)
+
+sim_plot_unif_z <- ggplot() +
+  geom_density(aes(x = zscores),
+    color = "lightgray",
+    fill = "skyblue",
+    alpha = 0.5
+  ) +
+  stat_function(
+    fun = dnorm,
+    args = list(0, 1),
+    color = "orange",
+    size = 1
+  ) +
+  scale_x_continuous(limits = c(-6, 6)) +
+  labs(
+    x = "standardized sample means",
+    y = "density"
+  ) +
+  theme_linedraw()
+```
+</details>
+
+#### Mean Salary Example
+
+Salaries are generally right skewed. That should make sense if you think about it. There is a natural lower boundary of zero with the majority of individuals having salaries relatively near the lower end of the number line. A smaller number of individuals make somewhat larger amounts of money, with an even smaller number making an exceptionally large amount of money, as shown in the plot below of US Household Income. Therefore, we cannot use a normal model to compute probabilities for individual salaries, even if we know the mean and standard deviation. However, we can for the mean salary of a sufficiently large sample thanks to the Central Limit Theorem.
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/0/0d/Distribution_of_Annual_Household_Income_in_the_United_States_2010.png" width = 600">
+
+```{r salaryexample}
+mu <- 62000
+sigma <- 32000
+n <- 100
+
+x_bar <- 66000
+
+sigma_xbar <- sigma / sqrt(n)
+pnorm(x_bar, mu, sigma_xbar, lower.tail = FALSE)
+
+z_xbar <- (x_bar - mu) / sigma_xbar
+pnorm(z_xbar, lower.tail = FALSE)
+```
+
+<details>
+```{r salaryexampleplots}
+LB <- mu - 4 * sigma_xbar # lower limit for plotting
+UB <- mu + 4 * sigma_xbar # upper limit for plotting
+
+plotXbar <- ggplot() +
+  stat_function(
+    fun = dnorm,
+    args = list(mu, sigma_xbar),
+    geom = "area",
+    xlim = c(x_bar, UB),
+    fill = "lightblue"
+  ) +
+  stat_function(
+    fun = dnorm,
+    args = list(mu, sigma_xbar)
+  ) +
+  scale_x_continuous(
+    limits = c(LB, UB),
+    breaks = seq(from = LB, to = UB, by = sigma_xbar)
+  ) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
+  labs(x = "x-bar", y = "f(x)") +
+  theme_linedraw()
+
+plotZbar <- ggplot() +
+  stat_function(
+    fun = dnorm,
+    args = list(0, 1),
+    geom = "area",
+    xlim = c(z_xbar, 4),
+    fill = "lightblue"
+  ) +
+  stat_function(
+    fun = dnorm,
+    args = list(0, 1)
+  ) +
+  scale_x_continuous(
+    limits = c(-4, 4),
+    breaks = seq(from = -4, to = 4, by = 1)
+  ) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
+  labs(x = "z_xbar", y = "f(z)") +
+  theme_linedraw()
+```
+</details>
+
+```{r}
+grid.arrange(plotXbar, plotZbar)
+```
+
+
+***
+```{r}
+sessionInfo()
+```

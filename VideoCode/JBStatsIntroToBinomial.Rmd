@@ -1,0 +1,359 @@
+---
+title: "An Introduction to the Binomial Distribution"
+subtitle: "Companion `R` Code for JB Statistics Video Lesson"
+author: "Created by Jill E. Thomley"
+date: '`r format(Sys.time(), "%A, %B %d, %Y @ %I:%M %p")`'
+output:
+  html_document:
+    theme: yeti
+    highlight: textmate
+    toc: true
+    toc_depth: 4
+    self_contained: false
+---
+
+```{r globaloptions, include = FALSE}
+knitr::opts_chunk$set(message = FALSE, warning = FALSE, comment = NA)
+```
+
+***
+```{r, echo = FALSE}
+vembedr::embed_youtube(
+id = "qIzC1-9PwQo",
+width = NULL,
+height = 400,
+ratio = c("16by9", "4by3"),
+frameborder = 0,
+allowfullscreen = TRUE,
+query = NULL
+)
+```
+***
+
+### **Packages Used**
+
+<details>
+```{r loadpackages}
+library(tidyverse)
+library(data.tree)
+library(knitr)
+library(kableExtra)
+```
+</details>
+
+### **The Binomial Distribution**
+
+The binomial distribution is a discrete probability distribution. It mathematically models the *number of successes* in a sequence of independent Bernoulli trials. The probability for a given number of successes $x$ is found using the *probability mass function* (pmf).
+
+$$X \sim Bin(n,p)$$
+
+    x = number of successes = {0, 1, 2, ..., n}
+    n = number of trials
+    p = probability of success on a single trial
+    1 - p = probability of failure on a single trial
+
+$$f(x) = P(X = x) = {n \choose x}p^x(1-p)^{n-x}$$
+
+$$F(x)=P(X \leq x) = \sum\limits_{i=0}^x f(x) = \sum\limits_{i=0}^x {n \choose i}p^i(1-p)^{n-i}$$
+
+$$E[X] = np \text{ and } Var[X] = np(1-p)$$
+
+### **Rolling a 6-sided Die Example**
+
+#### Calculating P(X = 2)
+
+The random variable $X$ is the number of fives we get when we roll a fair die three times.
+
+$$X \sim Bin(3,\frac{1}{6})$$
+
+What is the probability that a five comes up exactly 2 times in 3 rolls? Solve for $x = 2$.
+
+$$f(2) = P(X = 2) = {3 \choose 2}\left(\frac{1}{6}\right)^2\left(1-\frac{1}{6}\right)^{3-2}$$
+
+```{r}
+dbinom(2, 3, 1/6)   # dbinom(x, n, p)
+```
+
+#### Using a Tree Diagram 
+
+We can visualize the various combinations of flips leading to two successes with a tree diagram.
+
+<details>
+```{r}
+rolltree <- Node$new("Sequence of 3 Trials")
+   FA <- rolltree$AddChild("Success")
+      FC <- FA$AddChild("Success")
+         FG <- FC$AddChild("Success")
+            SSS <- FG$AddChild("S S S")
+         FH <- FC$AddChild("Failure")
+            SSF <- FH$AddChild("S S F")
+                SSF2 <- SSF$AddChild("2 Successes")
+     FD <- FA$AddChild("Failure")
+         FI <- FD$AddChild("Success")
+            SFS <- FI$AddChild("S F S")
+                SFS2 <- SFS$AddChild("2 Successes")
+         FJ <- FD$AddChild("Failure")
+            SFF <- FJ$AddChild("S F F")
+   FB <- rolltree$AddChild("Failure")
+      FE <- FB$AddChild("Success")
+         FG <- FE$AddChild("Success")
+            FSS <- FG$AddChild("F S S")
+                FSS2 <- FSS$AddChild("2 Successes")
+         FH <- FE$AddChild("Failure")
+            FSF <- FH$AddChild("F S F")
+      FF <- FB$AddChild("Failure")
+         FG <- FF$AddChild("Success")
+            FFS <- FG$AddChild("F F S")
+         FH <- FF$AddChild("Failure")
+            FFF <- FH$AddChild("F F F")
+
+SetGraphStyle(rolltree, rankdir = "TB")
+SetNodeStyle(rolltree, 
+             style = "filled, rounded", 
+             shape = "box", 
+             fillcolor = "lightblue",
+             fontcolor = "black")
+```
+</details>
+
+```{r}
+plot(rolltree)
+```
+
+### **Canadian Life Tables Example**
+
+#### Calculating P(X = 18)
+
+The random variable $X$ is the number of 90-year-old Canadian males out of a sample of 20 that live at least another year.
+
+$$X \sim Bin(20, 0.82)$$
+
+What is the probability that exactly 18 out of 20 survive? Solve for $x = 18$.
+
+$$f(18) = P(X = 18) = {20 \choose 18}(0.82)^18(1-0.82)^{20-18}$$
+
+```{r}
+dbinom(18, 20, 0.82)   # dbinom(x, n, p)
+```
+
+#### Visualize in a Plot
+
+We can calculate and plot the probabilities for all possible values of X. The code below can be used for any binomial distribution; simply input the correct n and p. 
+
+```{r}
+n <- 20
+p <- 0.82
+pmf <- tibble(x = 0:n, probability = dbinom(0:n, n, p))
+```
+
+```{r}
+# probabilities for large digits are shown in scientific notation
+
+probdigits <- 20   # specify display digits for the probabilities
+
+pmf %>%
+  kable(digits = probdigits) %>% 
+  kable_styling(full_width = FALSE, 
+                position = "left", 
+                font_size = 14,
+                bootstrap_options = c("striped"))
+```
+
+<details>
+```{r}
+breakby <- 2   # choose spacing for the x-axis tick marks
+
+pmfplot <- ggplot(pmf, aes(x = x, y = probability)) +
+  geom_col(width = 1, color = "black", fill = "lightblue") +
+  scale_x_continuous(breaks = seq(from = 0, to = n, by = breakby)) +
+  labs(title = "How many 90-year old Canadian men will survive at least another year?",
+       subtitle = "number of survivors from a random sample of 20 men = X ~ Bin(20, 0.82)",
+       x = "Number That Survive for at Least Another Year", 
+       y = "Probability") +
+  theme_linedraw()
+```
+</details>
+
+```{r}
+pmfplot
+```
+
+<details>
+```{r}
+breakby <- 2   # choose spacing of x-axis tick marks
+
+pmfplot <- ggplot(pmf, aes(x = x, y = probability)) +
+  geom_col(width = 1, color = "black", 
+           fill = c(rep("lightblue", 18), "red", rep("lightblue", 2))) +  # bar shading
+  scale_x_continuous(breaks = seq(from = 0, to = n, by = breakby)) +
+  labs(title = "How many 90-year old Canadian men will survive at least another year?",
+       subtitle = "X ~ Bin(20, 0.82), with P(X = 18) shaded in red",
+       x = "Number That Survive for at Least Another Year", 
+       y = "Probability") +
+  theme_linedraw()
+```
+</details>
+
+```{r}
+pmfplot
+```
+
+```{r}
+# probabilities for large digits are shown in scientific notation
+
+probdigits <- 20   # specify display digits for the probabilities
+
+pmf %>% 
+  kable(digits = probdigits) %>% 
+  row_spec(row = 19, color = "white", background = "red", bold = TRUE) %>% 
+  kable_styling(full_width = FALSE, 
+                position = "left", 
+                font_size = 14,
+                bootstrap_options = c("striped"))
+```
+
+#### Expected Value and Variance
+
+Here we use the values for $n$ and $p$ that we input above for the pmf.
+
+Expected Value
+
+```{r}
+(mu <- n * p)
+```
+
+Variance
+
+```{r}
+(sigma2 <- n * p * (1 - p))
+```
+
+Standard Deviation
+
+```{r}
+(sigma <- sqrt(sigma2))
+```
+
+#### Calculating P(X &GreaterEqual; 18)
+
+What is the probability that at least 18 out of 20 survive? Solve for $x \geq 18$.
+
+$$P(X \geq 18) = P(X = 18) + P(x = 19) + P(X = 20)$$
+
+Algorithmically, we can do...
+
+```{r}
+dbinom(18, 20, 0.82) + dbinom(18, 19, 0.82) + dbinom(20, 20, 0.82)
+```
+
+This could be condensed by...
+
+```{r}
+sum(dbinom(18:20, 20, 0.82))
+```
+
+However, for the binomial it is also true that...
+
+$$P(X \geq 18) = P(X > 17) = 1 - P(X \leq 17)$$
+
+Thus we can use the cumulative distribution function...
+
+```{r}
+pbinom(17, 20, 0.82, lower.tail = FALSE)   # pbinom(x, n, p, lower.tail = FALSE)
+```
+
+#### Visualize in a Plot
+
+Here we use the same pmf we calculated and stored above.
+
+<details>
+```{r}
+pmfplot <- ggplot(pmf, aes(x = x, y = probability)) +
+  geom_col(width = 1, color = "black", 
+           fill = c(rep("lightblue", 18), rep("red", 3))) +
+  scale_x_continuous(breaks = seq(from = 0, to = n, by = 2)) +
+  labs(title = "How many 90-year old Canadian men will survive at least another year?",
+       subtitle = "X ~ Bin(20, 0.82), with P(X > 17) shaded in red",
+       x = "Number That Survive for at Least Another Year", 
+       y = "Probability") +
+  theme_linedraw()
+```
+</details>
+
+```{r}
+pmfplot
+```
+
+```{r}
+# the probabilities are in scientific notation
+pmf %>% 
+  kable(digits = 20) %>% 
+  row_spec(row = 19:21, color = "white", background = "red", bold = TRUE) %>% 
+  kable_styling(full_width = FALSE, 
+                position = "left", 
+                font_size = 14,
+                bootstrap_options = c("striped"))
+```
+
+```{r}
+pmf %>% 
+  filter(x >=18) %>% 
+  summarize(prob_greq18 = sum(probability))
+```
+
+### **Babies with Jaundice Example**
+
+The babies with jaundice example from [An Introduction to Discrete Random Variables and Discrete Probability Distributions](https://youtu.be/oHcrna8Fk18) can be modeled with the binomial distribution, because it is a series of independent Bernoulli trials with a constant probability.
+
+```{r}
+n <- 2
+p <- 0.6
+pmf <- tibble(x = 0:n, probability = dbinom(0:n, n, p))
+```
+
+```{r}
+probdigits <- 2   # specify display digits for the probabilities
+
+pmf %>% 
+  kable(digits = probdigits) %>% 
+  kable_styling(full_width = FALSE, 
+                position = "left", 
+                font_size = 14,
+                bootstrap_options = c("striped"))
+```
+
+<details>
+```{r}
+breakby <- 1   # choose spacing of x-axis tick marks
+
+pmfplot <- ggplot(pmf, aes(x = x, y = probability)) +
+  geom_col(width = 1, color = "black", fill = "lightblue") +
+  scale_x_continuous(breaks = 0:2) +
+  labs(x = "x", 
+       y = "p(x)") +
+  theme_linedraw()
+```
+</details>
+
+```{r}
+pmfplot
+```
+
+### **Simulating Bernoulli Trials**
+
+Previously you saw that you can simulate Bernoulli trials using the function `rbernoulli(n, p)` (purrr package). The parameter `n` in this case is the number of times you want to repeat the Bernoulli process. In other words, it is the number of flips. For example, if we want fifty flips of a fair coin, we could use the following code. The output is a logical vector with `TRUE` for a success.
+
+```{r}
+rbernoulli(50, 0.5)
+```
+
+We can also perform this simulation with the `rbinom(n, size, prob)` function. In this case, the `size` parameter is set to 1, for one trial. In this sense, the Bernoulli is a special case of Binomial with `n = 1`. The output is an integer vector with `1` for a success.
+
+```{r}
+rbinom(50, 1, 0.5)
+```
+
+***
+```{r}
+sessionInfo()
+```

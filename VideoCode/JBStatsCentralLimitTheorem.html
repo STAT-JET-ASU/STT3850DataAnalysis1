@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Created by Jill E. Thomley" />
+
+
+<title>Introduction to the Central Limit Theorem</title>
+
+<script src="JBStatsCentralLimitTheorem_files/header-attrs-2.11/header-attrs.js"></script>
+<script src="JBStatsCentralLimitTheorem_files/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="JBStatsCentralLimitTheorem_files/bootstrap-3.3.5/css/yeti.min.css" rel="stylesheet" />
+<script src="JBStatsCentralLimitTheorem_files/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="JBStatsCentralLimitTheorem_files/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="JBStatsCentralLimitTheorem_files/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="JBStatsCentralLimitTheorem_files/navigation-1.1/tabsets.js"></script>
+<link href="JBStatsCentralLimitTheorem_files/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="JBStatsCentralLimitTheorem_files/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Introduction to the Central Limit Theorem</h1>
+<h3 class="subtitle">Companion <code>R</code> Code for JB Statistics Video Lesson</h3>
+<h4 class="author">Created by Jill E. Thomley</h4>
+<h4 class="date">Sunday, September 26, 2021 @ 04:59 PM</h4>
+
+</div>
+
+<div id="TOC">
+<ul>
+<li><a href="#packages-used">Packages Used</a></li>
+<li><a href="#explore-the-central-limit-theorem">Explore the Central Limit Theorem</a>
+<ul>
+<li><a href="#the-exponential-distribution">The Exponential Distribution</a></li>
+<li><a href="#the-uniform-distribution">The Uniform Distribution</a></li>
+<li><a href="#mean-salary-example">Mean Salary Example</a></li>
+</ul></li>
+</ul>
+</div>
+
+<hr />
+<iframe width="560" height="315" src="https://www.youtube.com/embed/Pujol1yC1_A" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+</iframe>
+<hr />
+<div id="packages-used" class="section level3">
+<h3>Packages Used</h3>
+<details>
+<pre class="r"><code>library(tidyverse)
+library(gridExtra)</code></pre>
+</details>
+</div>
+<div id="explore-the-central-limit-theorem" class="section level3">
+<h3>Explore the Central Limit Theorem</h3>
+<div id="the-exponential-distribution" class="section level4">
+<h4>The Exponential Distribution</h4>
+<p>The exponential distribution has a single parameter <span class="math inline">\(\lambda\)</span>, which is the rate of the exponential decay. The larger the value of <span class="math inline">\(\lambda\)</span>, the quicker the decrease in the height of the curve. For X ~ Exp(<span class="math inline">\(\lambda\)</span>), the mean and standard deviation are <span class="math inline">\(\mu\)</span> = <span class="math inline">\(\frac{1}{\lambda}\)</span> and <span class="math inline">\(\sigma = \frac{1}{\lambda}\)</span>. Thus, for Exp(1), both the mean and standard deviation are 1. You can change the value of <span class="math inline">\(\lambda\)</span> in the plot below to any real number greater than zero to visualize the shape of other exponential distributions.</p>
+<details>
+<pre class="r"><code>lambda &lt;- 1
+
+exp_plot &lt;- ggplot() +
+  stat_function(
+    fun = dexp,
+    args = list(lambda),
+    xlim = c(0, 6 / lambda)
+  ) +
+  geom_vline(
+    xintercept = 1 / lambda,
+    color = &quot;orange&quot;,
+    linetype = &quot;dashed&quot;,
+    size = 1
+  ) +
+  labs(
+    title = paste(&quot;Probability Density Function of Exp(&quot;, lambda, &quot;)&quot;, sep = &quot;&quot;),
+    subtitle = paste(&quot;the dashed orange line displays the value E(X) = &quot;, 1 / lambda, sep = &quot;&quot;),
+    x = &quot;x&quot;,
+    y = &quot;f(x)&quot;
+  ) +
+  theme_linedraw()</code></pre>
+</details>
+<pre class="r"><code>exp_plot</code></pre>
+<p><img src="JBStatsCentralLimitTheorem_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
+<p>How does the shape of the sampling distribution of <span class="math inline">\(\bar{X}\)</span> compare? We will first explore this via simulation. Instead of histograms as in the video, we will use density plots, but the principle is the same. We will also include a QQ plot to assess normality. Change the value of <span class="math inline">\(n\)</span> below and observe what happens. You can also experiment with different values of <span class="math inline">\(\lambda\)</span>. How large does <span class="math inline">\(n\)</span> have to be to make the sampling distribution of <span class="math inline">\(\bar{X}\)</span> look approximately normal to you? Is the rough guideline of 30 enough here?</p>
+<details>
+<pre class="r"><code>lambda &lt;- 1
+n &lt;- 3
+
+mu &lt;- 1 / lambda
+sigma &lt;- 1 / lambda
+sigma_xbar &lt;- sigma / sqrt(n)
+
+sims &lt;- 10^5
+samplemeans &lt;- numeric(sims) # create storage vector
+
+for (i in 1:sims) {
+  samplemeans[i] &lt;- mean(rexp(n, lambda))
+}
+
+# the black dashed curve is the exponential population
+# the blue curve is the simulated sampling distribution
+# the heavy orange curve is a normal distribution, with
+# mean mu and SD sigma_xbar, used as a visual reference
+# --how do the shapes of these three densities compare?
+
+simresults &lt;- tibble(samplemeans)
+
+sim_plot_exp &lt;- ggplot(simresults) +
+  stat_function(
+    fun = dexp,
+    args = list(lambda),
+    linetype = &quot;dashed&quot;
+  ) +
+  geom_density(aes(x = samplemeans),
+    color = &quot;lightgray&quot;,
+    fill = &quot;skyblue&quot;,
+    alpha = 0.5
+  ) +
+  stat_function(
+    fun = dnorm,
+    args = list(mu, sigma_xbar),
+    color = &quot;orange&quot;,
+    size = 1
+  ) +
+  scale_x_continuous(limits = c(mu - 3 * sigma_xbar, mu + 6 * sigma_xbar)) +
+  labs(x = NULL, y = &quot;density&quot;) +
+  theme_linedraw()</code></pre>
+</details>
+<pre class="r"><code>sim_plot_exp</code></pre>
+<p><img src="JBStatsCentralLimitTheorem_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<p>It can be difficult to judge normality using density plots, so we have a plot that is more specifically geared for assessing normality. It is called a normal quantile-quantile plot, or QQ plot. The plot compares the data to a normal model that has the same mean and standard deviation to see if the percentiles match up. Since <code>samplemeans</code> is a vector, we enter <code>NULL</code> for the dataset.</p>
+<pre class="r"><code>ggplot(NULL, aes(sample = samplemeans)) +
+  geom_qq() +
+  geom_qq_line(
+    color = &quot;orange&quot;,
+    size = 1
+  ) +
+  theme_linedraw()</code></pre>
+<p><img src="JBStatsCentralLimitTheorem_files/figure-html/exponentialsimqq-1.png" width="672" /></p>
+<p>Data from a perfectly normal distribution theoretically follow the straight line. We will never see this in samples, which always have some variability. Data from an approximately normal distribution will tend to be clustered around the straight line (with random deviations). Data that are right skewed like these will tend to be curved upward.</p>
+<details>
+<pre class="r"><code>zscores &lt;- (samplemeans - mean(samplemeans)) / sd(samplemeans)
+
+sim_plot_exp_z &lt;- ggplot() +
+  geom_density(aes(x = zscores),
+    color = &quot;lightgray&quot;,
+    fill = &quot;skyblue&quot;,
+    alpha = 0.5
+  ) +
+  stat_function(
+    fun = dnorm,
+    args = list(0, 1),
+    color = &quot;orange&quot;,
+    size = 1
+  ) +
+  scale_x_continuous(limits = c(-6, 6)) +
+  labs(
+    x = &quot;standardized sample means&quot;,
+    y = &quot;density&quot;
+  ) +
+  theme_linedraw()</code></pre>
+</details>
+<pre class="r"><code>sim_plot_exp_z</code></pre>
+<p><img src="JBStatsCentralLimitTheorem_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+</div>
+<div id="the-uniform-distribution" class="section level4">
+<h4>The Uniform Distribution</h4>
+<p><span class="math display">\[f(x) = \frac{1}{b - a}\]</span></p>
+<p>The uniform distribution X ~ Unif(<span class="math inline">\(a, b\)</span>) has a “rectangular” shape with two parameters, which are the upper and lower boundaries of possible values. The uniform distribution with <span class="math inline">\(a\)</span> = 0 and <span class="math inline">\(b\)</span> = 1 is the standard uniform distribution (the plot is a unit square). A uniform distribution can have any real values for <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span>, where <span class="math inline">\(b &gt; a\)</span>. You can experiment with other values in the plot below as long as <span class="math inline">\(b - a \geq 1\)</span> (due to the y-axis scaling).</p>
+<details>
+<pre class="r"><code>a &lt;- 0
+b &lt;- 1
+
+unif_plot &lt;- ggplot() +
+  stat_function(
+    fun = dunif,
+    args = list(a, b),
+    xlim = c(a, b)
+  ) +
+  geom_vline(
+    xintercept = (b - a) / 2,
+    color = &quot;orange&quot;,
+    linetype = &quot;dashed&quot;,
+    size = 1
+  ) +
+  geom_segment(aes(
+    x = c(a, b),
+    xend = c(a, b),
+    y = c(0, 0),
+    yend = c(1 / (b - a), 1 / (b - a))
+  )) +
+  labs(
+    title = paste(&quot;Probability Density Function of Unif(&quot;, a, &quot;, &quot;, b, &quot;)&quot;, sep = &quot;&quot;),
+    subtitle = paste(&quot;the dashed orange line displays the value E(X) = &quot;, (b - a) / 2, sep = &quot;&quot;),
+    x = &quot;x&quot;,
+    y = &quot;f(x)&quot;
+  ) +
+  scale_y_continuous(
+    limits = c(0, 1),
+    expand = expansion(mult = c(0, 0.05))
+  ) +
+  theme_linedraw() +
+  coord_fixed() # makes the x and y axes have the same spacing</code></pre>
+</details>
+<pre class="r"><code>unif_plot</code></pre>
+<p><img src="JBStatsCentralLimitTheorem_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p>How does the shape of the sampling distribution of <span class="math inline">\(\bar{X}\)</span> compare when we start with a symmetric distribution versus the right skew we had above? How large does <span class="math inline">\(n\)</span> have to be to make the sampling distribution of <span class="math inline">\(\bar{X}\)</span> look approximately normal to you?</p>
+<details>
+<pre class="r"><code>a &lt;- 0
+b &lt;- 1
+n &lt;- 2
+
+mu &lt;- (b - a) / 2
+sigma &lt;- sqrt((a - b)^2 / 12)
+sigma_xbar &lt;- sigma / sqrt(n)
+
+sims &lt;- 10^5
+samplemeans &lt;- numeric(sims)
+
+for (i in 1:sims) {
+  samplemeans[i] &lt;- mean(runif(n, a, b))
+}
+
+# the black dotted curve is the exponential population
+# the blue curve is the simulated sampling distribution
+# the heavy red curve is a normal distribution, mean mu
+# and standard deviation sigma_xbar, used for reference
+# --how do the shapes of these three densities compare?
+
+sim_plot_unif &lt;- ggplot() +
+  stat_function(
+    fun = dunif,
+    args = list(a, b),
+    xlim = c(a, b),
+    linetype = &quot;dotted&quot;
+  ) +
+  geom_density(aes(x = samplemeans),
+    color = &quot;lightgray&quot;,
+    fill = &quot;skyblue&quot;,
+    alpha = 0.5
+  ) +
+  stat_function(
+    fun = dnorm,
+    args = list(mu, sigma_xbar),
+    color = &quot;orange&quot;,
+    size = 1
+  ) +
+  geom_segment(aes(
+    x = c(a, b),
+    xend = c(a, b),
+    y = c(0, 0),
+    yend = c(1 / (b - a), 1 / (b - a))
+  ),
+  linetype = &quot;dotted&quot;
+  ) +
+  labs(x = NULL, y = &quot;density&quot;) +
+  theme_linedraw()</code></pre>
+</details>
+<pre class="r"><code>sim_plot_unif</code></pre>
+<p><img src="JBStatsCentralLimitTheorem_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p>Again we assess normality using the normal quantile-quantile plot.</p>
+<pre class="r"><code>ggplot(NULL, aes(sample = samplemeans)) +
+  geom_qq() +
+  geom_qq_line(
+    color = &quot;orange&quot;,
+    size = 1
+  )</code></pre>
+<p><img src="JBStatsCentralLimitTheorem_files/figure-html/uniformsimqq-1.png" width="672" /></p>
+<p>As we saw above with the exponential distribution, data that are right skewed will tend to be curved upward on a QQ plot. Data that are platykurtic like the uniform distribution will tend to have a logistic shape on a QQ plot, as seen here.</p>
+<details>
+<p>Notice that this code is identical to what we used for the exponential distribution. That is one benefit of using standardized scores.</p>
+<pre class="r"><code>zscores &lt;- (samplemeans - mean(samplemeans)) / sd(samplemeans)
+
+sim_plot_unif_z &lt;- ggplot() +
+  geom_density(aes(x = zscores),
+    color = &quot;lightgray&quot;,
+    fill = &quot;skyblue&quot;,
+    alpha = 0.5
+  ) +
+  stat_function(
+    fun = dnorm,
+    args = list(0, 1),
+    color = &quot;orange&quot;,
+    size = 1
+  ) +
+  scale_x_continuous(limits = c(-6, 6)) +
+  labs(
+    x = &quot;standardized sample means&quot;,
+    y = &quot;density&quot;
+  ) +
+  theme_linedraw()</code></pre>
+</details>
+</div>
+<div id="mean-salary-example" class="section level4">
+<h4>Mean Salary Example</h4>
+<p>Salaries are generally right skewed. That should make sense if you think about it. There is a natural lower boundary of zero with the majority of individuals having salaries relatively near the lower end of the number line. A smaller number of individuals make somewhat larger amounts of money, with an even smaller number making an exceptionally large amount of money, as shown in the plot below of US Household Income. Therefore, we cannot use a normal model to compute probabilities for individual salaries, even if we know the mean and standard deviation. However, we can for the mean salary of a sufficiently large sample thanks to the Central Limit Theorem.</p>
+<p><img src="https://upload.wikimedia.org/wikipedia/commons/0/0d/Distribution_of_Annual_Household_Income_in_the_United_States_2010.png" width = 600"></p>
+<pre class="r"><code>mu &lt;- 62000
+sigma &lt;- 32000
+n &lt;- 100
+
+x_bar &lt;- 66000
+
+sigma_xbar &lt;- sigma / sqrt(n)
+pnorm(x_bar, mu, sigma_xbar, lower.tail = FALSE)</code></pre>
+<pre><code>[1] 0.1056498</code></pre>
+<pre class="r"><code>z_xbar &lt;- (x_bar - mu) / sigma_xbar
+pnorm(z_xbar, lower.tail = FALSE)</code></pre>
+<pre><code>[1] 0.1056498</code></pre>
+<details>
+<pre class="r"><code>LB &lt;- mu - 4 * sigma_xbar # lower limit for plotting
+UB &lt;- mu + 4 * sigma_xbar # upper limit for plotting
+
+plotXbar &lt;- ggplot() +
+  stat_function(
+    fun = dnorm,
+    args = list(mu, sigma_xbar),
+    geom = &quot;area&quot;,
+    xlim = c(x_bar, UB),
+    fill = &quot;lightblue&quot;
+  ) +
+  stat_function(
+    fun = dnorm,
+    args = list(mu, sigma_xbar)
+  ) +
+  scale_x_continuous(
+    limits = c(LB, UB),
+    breaks = seq(from = LB, to = UB, by = sigma_xbar)
+  ) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
+  labs(x = &quot;x-bar&quot;, y = &quot;f(x)&quot;) +
+  theme_linedraw()
+
+plotZbar &lt;- ggplot() +
+  stat_function(
+    fun = dnorm,
+    args = list(0, 1),
+    geom = &quot;area&quot;,
+    xlim = c(z_xbar, 4),
+    fill = &quot;lightblue&quot;
+  ) +
+  stat_function(
+    fun = dnorm,
+    args = list(0, 1)
+  ) +
+  scale_x_continuous(
+    limits = c(-4, 4),
+    breaks = seq(from = -4, to = 4, by = 1)
+  ) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
+  labs(x = &quot;z_xbar&quot;, y = &quot;f(z)&quot;) +
+  theme_linedraw()</code></pre>
+</details>
+<pre class="r"><code>grid.arrange(plotXbar, plotZbar)</code></pre>
+<p><img src="JBStatsCentralLimitTheorem_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<hr />
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 3.6.0 (2019-04-26)
+Platform: x86_64-redhat-linux-gnu (64-bit)
+Running under: Red Hat Enterprise Linux
+
+Matrix products: default
+BLAS/LAPACK: /usr/lib64/R/lib/libRblas.so
+
+locale:
+ [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+ [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+ [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+ [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+ [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+[11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] gridExtra_2.3   forcats_0.5.1   stringr_1.4.0   dplyr_1.0.7    
+ [5] purrr_0.3.4     readr_2.0.1     tidyr_1.1.3     tibble_3.1.4   
+ [9] ggplot2_3.3.5   tidyverse_1.3.1
+
+loaded via a namespace (and not attached):
+ [1] tidyselect_1.1.1 xfun_0.26        bslib_0.3.0      haven_2.4.3     
+ [5] colorspace_2.0-2 vctrs_0.3.8      generics_0.1.0   htmltools_0.5.2 
+ [9] yaml_2.2.1       utf8_1.2.2       rlang_0.4.11     jquerylib_0.1.4 
+[13] pillar_1.6.2     withr_2.4.2      glue_1.4.2       DBI_1.1.1       
+[17] dbplyr_2.1.1     modelr_0.1.8     readxl_1.3.1     lifecycle_1.0.0 
+[21] munsell_0.5.0    gtable_0.3.0     cellranger_1.1.0 rvest_1.0.1     
+[25] evaluate_0.14    labeling_0.4.2   knitr_1.34       tzdb_0.1.2      
+[29] fastmap_1.1.0    fansi_0.5.0      highr_0.9        broom_0.7.9     
+[33] Rcpp_1.0.7       backports_1.2.1  scales_1.1.1     jsonlite_1.7.2  
+[37] farver_2.1.0     fs_1.5.0         hms_1.1.0        digest_0.6.27   
+[41] stringi_1.7.4    grid_3.6.0       cli_3.0.1        tools_3.6.0     
+[45] magrittr_2.0.1   sass_0.4.0       crayon_1.4.1     pkgconfig_2.0.3 
+[49] ellipsis_0.3.2   xml2_1.3.2       reprex_2.0.1     lubridate_1.7.10
+[53] rstudioapi_0.13  assertthat_0.2.1 rmarkdown_2.11   httr_1.4.2      
+[57] R6_2.5.1         compiler_3.6.0  </code></pre>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Created by Jill E. Thomley" />
+
+
+<title>An Introduction to Discrete Random Variables and Discrete Probability Distributions</title>
+
+<script src="JBStatsDiscreteRV_files/header-attrs-2.10/header-attrs.js"></script>
+<script src="JBStatsDiscreteRV_files/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="JBStatsDiscreteRV_files/bootstrap-3.3.5/css/yeti.min.css" rel="stylesheet" />
+<script src="JBStatsDiscreteRV_files/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="JBStatsDiscreteRV_files/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="JBStatsDiscreteRV_files/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="JBStatsDiscreteRV_files/navigation-1.1/tabsets.js"></script>
+<link href="JBStatsDiscreteRV_files/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="JBStatsDiscreteRV_files/highlightjs-9.12.0/highlight.js"></script>
+<link href="JBStatsDiscreteRV_files/vembedr-0.1.4/css/vembedr.css" rel="stylesheet" />
+<script src="JBStatsDiscreteRV_files/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<script src="JBStatsDiscreteRV_files/viz-1.8.2/viz.js"></script>
+<link href="JBStatsDiscreteRV_files/DiagrammeR-styles-0.2/styles.css" rel="stylesheet" />
+<script src="JBStatsDiscreteRV_files/grViz-binding-1.0.6.1/grViz.js"></script>
+<script src="JBStatsDiscreteRV_files/kePrint-0.0.1/kePrint.js"></script>
+<link href="JBStatsDiscreteRV_files/lightable-0.0.1/lightable.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">An Introduction to Discrete Random Variables and Discrete Probability Distributions</h1>
+<h3 class="subtitle">Companion <code>R</code> Code for JB Statistics Video Lesson</h3>
+<h4 class="author">Created by Jill E. Thomley</h4>
+<h4 class="date">Sunday, September 19, 2021 @ 04:23 PM</h4>
+
+</div>
+
+<div id="TOC">
+<ul>
+<li><a href="#packages-used"><strong>Packages Used</strong></a></li>
+<li><a href="#babies-with-jaundice-example"><strong>Babies with Jaundice Example</strong></a>
+<ul>
+<li><a href="#visualize-the-possibilities">Visualize the Possibilities</a></li>
+<li><a href="#building-the-distribution">Building the Distribution</a></li>
+<li><a href="#plotting-the-distribution">Plotting the Distribution</a></li>
+</ul></li>
+</ul>
+</div>
+
+<hr />
+<div class="vembedr">
+<div>
+<iframe src="https://www.youtube.com/embed/oHcrna8Fk18" width="711" height="400" frameborder="0" allowfullscreen=""></iframe>
+</div>
+</div>
+<hr />
+<div id="packages-used" class="section level3">
+<h3><strong>Packages Used</strong></h3>
+<details>
+<pre class="r"><code>library(tidyverse)
+library(data.tree)
+library(knitr)
+library(kableExtra)</code></pre>
+</details>
+</div>
+<div id="babies-with-jaundice-example" class="section level3">
+<h3><strong>Babies with Jaundice Example</strong></h3>
+<div id="visualize-the-possibilities" class="section level4">
+<h4>Visualize the Possibilities</h4>
+<p>We can visualize the various possible outcomes with a tree diagram. The middle two levels represent Baby 1 and Baby 2. At each step there are two choices, leading to four possible outcomes when we take the order of selection into account.</p>
+<details>
+<pre class="r"><code>babies &lt;- Node$new(&quot;Select Two Babies&quot;)
+
+   branch1 &lt;- babies$AddChild(&quot;Jaundice&quot;)
+           branch11 &lt;- branch1$AddChild(&quot;Jaundice&quot;)
+                    JJ &lt;- branch11$AddChild(&quot;JJ&quot;)
+           branch12 &lt;- branch1$AddChild(&quot;No Jaundice&quot;)
+                    JN &lt;- branch12$AddChild(&quot;JN&quot;)
+   branch2 &lt;- babies$AddChild(&quot;No Jaundice&quot;)
+           branch21 &lt;- branch2$AddChild(&quot;Jaundice&quot;)
+                    NJ &lt;- branch21$AddChild(&quot;NJ&quot;)
+           branch22 &lt;- branch2$AddChild(&quot;No Jaundice&quot;)
+                    NN &lt;- branch22$AddChild(&quot;NN&quot;)
+
+SetGraphStyle(babies, rankdir = &quot;TB&quot;)
+SetNodeStyle(babies, 
+             style = &quot;filled, rounded&quot;, 
+             shape = &quot;box&quot;, 
+             fillcolor = &quot;lightblue&quot;,
+             fontcolor = &quot;black&quot;)</code></pre>
+</details>
+<pre class="r"><code>plot(babies)</code></pre>
+<div id="htmlwidget-2370a4d0ba48086b575c" style="width:672px;height:480px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-2370a4d0ba48086b575c">{"x":{"diagram":"digraph {\n\ngraph [rankdir = \"TB\"]\n\n\n\n  \"1\" [label = \"Select Two Babies\", style = \"filled, rounded\", shape = \"box\", fontcolor = \"black\", fillcolor = \"#ADD8E6\"] \n  \"2\" [label = \"Jaundice\", style = \"filled, rounded\", shape = \"box\", fontcolor = \"black\", fillcolor = \"#ADD8E6\"] \n  \"3\" [label = \"Jaundice\", style = \"filled, rounded\", shape = \"box\", fontcolor = \"black\", fillcolor = \"#ADD8E6\"] \n  \"4\" [label = \"JJ\", style = \"filled, rounded\", shape = \"box\", fontcolor = \"black\", fillcolor = \"#ADD8E6\"] \n  \"5\" [label = \"No Jaundice\", style = \"filled, rounded\", shape = \"box\", fontcolor = \"black\", fillcolor = \"#ADD8E6\"] \n  \"6\" [label = \"JN\", style = \"filled, rounded\", shape = \"box\", fontcolor = \"black\", fillcolor = \"#ADD8E6\"] \n  \"7\" [label = \"No Jaundice\", style = \"filled, rounded\", shape = \"box\", fontcolor = \"black\", fillcolor = \"#ADD8E6\"] \n  \"8\" [label = \"Jaundice\", style = \"filled, rounded\", shape = \"box\", fontcolor = \"black\", fillcolor = \"#ADD8E6\"] \n  \"9\" [label = \"NJ\", style = \"filled, rounded\", shape = \"box\", fontcolor = \"black\", fillcolor = \"#ADD8E6\"] \n  \"10\" [label = \"No Jaundice\", style = \"filled, rounded\", shape = \"box\", fontcolor = \"black\", fillcolor = \"#ADD8E6\"] \n  \"11\" [label = \"NN\", style = \"filled, rounded\", shape = \"box\", fontcolor = \"black\", fillcolor = \"#ADD8E6\"] \n  \"1\"->\"2\" \n  \"1\"->\"7\" \n  \"2\"->\"3\" \n  \"2\"->\"5\" \n  \"7\"->\"8\" \n  \"7\"->\"10\" \n  \"3\"->\"4\" \n  \"5\"->\"6\" \n  \"8\"->\"9\" \n  \"10\"->\"11\" \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+</div>
+<div id="building-the-distribution" class="section level4">
+<h4>Building the Distribution</h4>
+<p>If our two choices are random and independent, then we can find the probability of each of the four outcomes via multiplication. We can build a <code>tibble</code> in <code>R</code> using <code>dplyr</code> functions to perform the calculations.</p>
+<details>
+<pre class="r"><code>p &lt;- 0.6   # try other values of p and see what happens!
+
+treeprobs &lt;- tibble(Baby1 = c(&quot;J&quot;, &quot;J&quot;, &quot;N&quot;, &quot;N&quot;), 
+                    Baby2 = c(&quot;J&quot;, &quot;N&quot;, &quot;J&quot;, &quot;N&quot;)) %&gt;% 
+  mutate(Prob1 = ifelse(Baby1 == &quot;J&quot;, p, 1-p),
+         Prob2 = ifelse(Baby2 == &quot;J&quot;, p, 1-p),
+         Probability = Prob1 * Prob2) %&gt;% 
+  unite(&quot;Outcome&quot;, Baby1, Baby2, sep = &quot; &quot;, remove = FALSE) %&gt;% 
+  select(Baby1, Prob1, Baby2, Prob2, Outcome, Probability)</code></pre>
+</details>
+<pre class="r"><code>treeprobs %&gt;%   # stop here to see the without styling  
+  kable(digits = 2, align = rep(&quot;c&quot;, 6)) %&gt;% 
+  kable_styling(full_width = FALSE, 
+                position = &quot;left&quot;, 
+                font_size = 14,
+                bootstrap_options = c(&quot;striped&quot;))</code></pre>
+<table class="table table-striped" style="font-size: 14px; width: auto !important; ">
+<thead>
+<tr>
+<th style="text-align:center;">
+Baby1
+</th>
+<th style="text-align:center;">
+Prob1
+</th>
+<th style="text-align:center;">
+Baby2
+</th>
+<th style="text-align:center;">
+Prob2
+</th>
+<th style="text-align:center;">
+Outcome
+</th>
+<th style="text-align:center;">
+Probability
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+J
+</td>
+<td style="text-align:center;">
+0.6
+</td>
+<td style="text-align:center;">
+J
+</td>
+<td style="text-align:center;">
+0.6
+</td>
+<td style="text-align:center;">
+J J
+</td>
+<td style="text-align:center;">
+0.36
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+J
+</td>
+<td style="text-align:center;">
+0.6
+</td>
+<td style="text-align:center;">
+N
+</td>
+<td style="text-align:center;">
+0.4
+</td>
+<td style="text-align:center;">
+J N
+</td>
+<td style="text-align:center;">
+0.24
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+N
+</td>
+<td style="text-align:center;">
+0.4
+</td>
+<td style="text-align:center;">
+J
+</td>
+<td style="text-align:center;">
+0.6
+</td>
+<td style="text-align:center;">
+N J
+</td>
+<td style="text-align:center;">
+0.24
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+N
+</td>
+<td style="text-align:center;">
+0.4
+</td>
+<td style="text-align:center;">
+N
+</td>
+<td style="text-align:center;">
+0.4
+</td>
+<td style="text-align:center;">
+N N
+</td>
+<td style="text-align:center;">
+0.16
+</td>
+</tr>
+</tbody>
+</table>
+<p>However, we do not care about the order of selection, just the total number of babies who have jaundice, so we need to find and combine the outcomes that have the same number of J’s and add up their probabilities.</p>
+<details>
+<pre class="r"><code>distribution_x &lt;- treeprobs %&gt;% 
+  mutate(x = ifelse(Baby1 == &quot;J&quot;, 1, 0) + ifelse(Baby2 == &quot;J&quot;, 1, 0)) %&gt;% 
+  group_by(x) %&gt;% 
+  summarize(probability = sum(Probability))</code></pre>
+</details>
+<pre class="r"><code>distribution_x %&gt;% 
+  kable(digits = 2, align = rep(&quot;c&quot;, 2)) %&gt;% 
+  kable_styling(full_width = FALSE, 
+                position = &quot;left&quot;, 
+                font_size = 14,
+                bootstrap_options = c(&quot;striped&quot;))</code></pre>
+<table class="table table-striped" style="font-size: 14px; width: auto !important; ">
+<thead>
+<tr>
+<th style="text-align:center;">
+x
+</th>
+<th style="text-align:center;">
+probability
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+0
+</td>
+<td style="text-align:center;">
+0.16
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+0.48
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+2
+</td>
+<td style="text-align:center;">
+0.36
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="plotting-the-distribution" class="section level4">
+<h4>Plotting the Distribution</h4>
+<p>We can use the <code>tibble</code> containing our distribution to create a plot.</p>
+<pre class="r"><code>ggplot(distribution_x, aes(x = x, y = probability)) +
+  geom_col(fill = &quot;lightblue&quot;, color = &quot;black&quot;, width = 1) +
+  scale_x_continuous(breaks = 0:2) +
+  labs(x = &quot;x&quot;, y = &quot;p(x)&quot;)</code></pre>
+<p><img src="JBStatsDiscreteRV_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<hr />
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 3.6.0 (2019-04-26)
+Platform: x86_64-redhat-linux-gnu (64-bit)
+Running under: Red Hat Enterprise Linux
+
+Matrix products: default
+BLAS/LAPACK: /usr/lib64/R/lib/libRblas.so
+
+locale:
+ [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+ [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+ [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+ [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+ [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+[11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] kableExtra_1.3.4 knitr_1.34       data.tree_1.0.0  forcats_0.5.1   
+ [5] stringr_1.4.0    dplyr_1.0.7      purrr_0.3.4      readr_2.0.1     
+ [9] tidyr_1.1.3      tibble_3.1.4     ggplot2_3.3.5    tidyverse_1.3.1 
+
+loaded via a namespace (and not attached):
+ [1] Rcpp_1.0.7         svglite_2.0.0      lubridate_1.7.10   visNetwork_2.0.9  
+ [5] assertthat_0.2.1   digest_0.6.27      utf8_1.2.2         R6_2.5.1          
+ [9] cellranger_1.1.0   backports_1.2.1    reprex_2.0.1       evaluate_0.14     
+[13] highr_0.9          httr_1.4.2         pillar_1.6.2       rlang_0.4.11      
+[17] readxl_1.3.1       rstudioapi_0.13    jquerylib_0.1.4    DiagrammeR_1.0.6.1
+[21] rmarkdown_2.10     labeling_0.4.2     webshot_0.5.2      htmlwidgets_1.5.4 
+[25] munsell_0.5.0      broom_0.7.9        compiler_3.6.0     modelr_0.1.8      
+[29] xfun_0.25          pkgconfig_2.0.3    systemfonts_1.0.2  vembedr_0.1.4     
+[33] htmltools_0.5.2    tidyselect_1.1.1   fansi_0.5.0        viridisLite_0.4.0 
+[37] crayon_1.4.1       tzdb_0.1.2         dbplyr_2.1.1       withr_2.4.2       
+[41] grid_3.6.0         jsonlite_1.7.2     gtable_0.3.0       lifecycle_1.0.0   
+[45] DBI_1.1.1          magrittr_2.0.1     scales_1.1.1       cli_3.0.1         
+[49] stringi_1.7.4      farver_2.1.0       fs_1.5.0           xml2_1.3.2        
+[53] bslib_0.3.0        ellipsis_0.3.2     generics_0.1.0     vctrs_0.3.8       
+[57] RColorBrewer_1.1-2 tools_3.6.0        glue_1.4.2         hms_1.1.0         
+[61] fastmap_1.1.0      yaml_2.2.1         colorspace_2.0-2   rvest_1.0.1       
+[65] haven_2.4.3        sass_0.4.0        </code></pre>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

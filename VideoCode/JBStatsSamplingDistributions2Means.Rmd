@@ -1,0 +1,301 @@
+---
+title: "Sampling Distribution of the Difference in Sample Means (Independent Samples)"
+subtitle: "Companion `R` Code for JB Statistics Video Lesson"
+author: "Created by Jill E. Thomley"
+date: '`r format(Sys.time(), "%A, %B %d, %Y @ %I:%M %p")`'
+output: 
+  html_document: 
+    theme: yeti
+    highlight: textmate
+---
+
+```{r globaloptions, include = FALSE}
+knitr::opts_chunk$set(message = FALSE, warning = FALSE, comment = NA)
+```
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/4HB-FL529ag" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+***
+#### Packages Used
+
+```{r loadpackages}
+library(tidyverse)
+library(gridExtra)
+```
+
+#### Exploring the Concept via Simulation
+
+##### Both Populations Normally Distributed
+
+The Central Limit Theorem provides a way to quantify the shape of the sampling distribution of the difference in sample means when populations are normal or the sample sizes are large. We can experiment via simulation to understand the properties of sampling distributions when we cannot compute them using mathematical theory. In this case, where the theoretical solution is known, the theoretical answers and the empirical (simulated) answers should match closely when we perform a large number of simulations (thanks to the Law of Large Numbers).
+
+```{r}
+# set parameters for the two populations
+# also set sizes for each of the samples
+
+mu1    <- 10
+sigma1 <- 1
+n1     <- 2
+  
+mu2    <- 0
+sigma2 <- 1
+n2     <- 2
+
+# calculate theoretical results
+  
+mu_diff    <- mu1 - mu2
+var_diff   <- sigma1^2 / n1 + sigma2^2 / n2
+sigma_diff <- sqrt(var_diff)
+
+# investigate using simulation
+# these are empirical results
+# i.e., via experimentation
+
+sims       <- 10^5
+simresults <- numeric(sims)
+
+for (i in 1:sims) {
+  simresults[i] <- mean(rnorm(n1, mu1, sigma1)) - mean(rnorm(n2, mu2, sigma2))
+}
+
+mu_diff_est         <- mean(simresults)
+var_diff_est        <- var(simresults)
+sigma_diff_estimate <- sd(simresults)
+
+# compare the theoretical and empirical
+
+tibble(parameter = c("mean", "variance", "std. dev."),
+       theoretical = c(mu_diff, var_diff, sigma_diff),
+       empirical = c(mu_diff_est, var_diff_est, sigma_diff_estimate))
+
+ggplot(NULL, aes(x = simresults)) +
+  stat_function(fun = dnorm, args = list(mu_diff, sigma_diff), color = "red") +
+  geom_density() +
+  labs(title = "Theoretical vs Empirical Distributions", 
+       x = "difference in means") +
+  theme_linedraw()
+```
+
+##### Both Populations NOT Normally Distributed
+
+When the populations are not normally distributed, when is the sampling distribution of the difference in sample means normally distributed? What does it look like for smaller sample sizes? Experiment with different parameters and sample sizes. In particular, try cases where the populations and sample sizes are different. Also try specifically when n = 30.
+
+```{r}
+# UNIFORM POPULATIONS
+# set parameters for the two populations
+# also set sizes for each of the samples
+
+a1     <- 0
+b1     <- 1
+n1     <- 2
+
+mu1    <- (b1 - a1) / 2
+var1   <- (a1 - b1)^2 / 12
+sigma1 <- sqrt(var1)
+  
+a2     <- 0
+b2     <- 1
+n2     <- 2
+
+mu2    <- (b2 - a2) / 2
+var2   <- (a2 - b2)^2 / 12
+sigma2 <- sqrt(var2)
+
+# calculate theoretical results
+  
+mu_diff    <- mu1 - mu2
+var_diff   <- sigma1^2 / n1 + sigma2^2 / n2
+sigma_diff <- sqrt(var_diff)
+
+# investigate using simulation
+# these are empirical results
+# i.e., via experimentation
+
+sims       <- 10^5
+simresults <- numeric(sims)
+
+for (i in 1:sims) {
+  simresults[i] <- mean(runif(n1, a1, b1)) - mean(runif(n2, a2, b2))
+}
+
+mu_diff_est         <- mean(simresults)
+var_diff_est        <- var(simresults)
+sigma_diff_estimate <- sd(simresults)
+
+# compare the theoretical and empirical
+
+tibble(parameter = c("mean", "variance", "std. dev."),
+       theoretical = c(mu_diff, var_diff, sigma_diff),
+       empirical = c(mu_diff_est, var_diff_est, sigma_diff_estimate))
+
+ggplot(NULL, aes(x = simresults)) +
+  stat_function(fun = dnorm, args = list(mu_diff, sigma_diff), color = "red") +
+  geom_density() +
+  labs(title = "Theoretical vs Empirical Distributions", 
+       x = "difference in means") +
+  theme_linedraw()
+```
+
+```{r}
+# EXPONENTIAL POPULATIONS
+# set parameters for the two populations
+# also set sizes for each of the samples
+
+lambda1 <- 1
+n1      <- 2
+
+mu1     <- 1 / lambda1
+var1    <- 1 / lambda1^2
+sigma1  <- sqrt(var1)
+  
+lambda2 <- 1
+n2      <- 2
+
+mu2     <- 1 / lambda2
+var2    <- 1 / lambda2^2
+sigma2  <- sqrt(var2)
+
+# calculate theoretical results
+  
+mu_diff    <- mu1 - mu2
+var_diff   <- sigma1^2 / n1 + sigma2^2 / n2
+sigma_diff <- sqrt(var_diff)
+
+# investigate using simulation
+# these are empirical results
+# i.e., via experimentation
+
+sims       <- 10^5
+simresults <- numeric(sims)
+
+for (i in 1:sims) {
+  simresults[i] <- mean(rexp(n1, lambda1)) - mean(rexp(n2, lambda2))
+}
+
+mu_diff_est    <- mean(simresults)
+var_diff_est   <- var(simresults)
+sigma_diff_est <- sd(simresults)
+
+# compare the theoretical and empirical
+
+tibble(parameter = c("mean", 
+                     "variance", 
+                     "std. dev."),
+       theoretical = c(mu_diff, 
+                       var_diff, 
+                       sigma_diff),
+       empirical = c(mu_diff_est, 
+                     var_diff_est, 
+                     sigma_diff_est))
+
+ggplot(NULL, aes(x = simresults)) +
+  stat_function(fun = dnorm, args = list(mu_diff, sigma_diff), color = "red") +
+  geom_density() +
+  labs(title = "Theoretical vs Empirical Distributions", 
+       x = "difference in means") +
+  theme_linedraw()
+```
+
+#### Example: Male and Female Heights
+
+Consider the example shown in the video. We can solve this problem theoretically using mathematics and the `pnorm` function, which uses the theoretical functions, or via simulation.
+
+##### Solving Mathematically
+
+```{r}
+mu_M    <- 177.7
+sigma_M <- 5.6
+var_M   <- sigma_M^2
+n_M     <- 20
+
+mu_F    <- 163.0
+sigma_F <- 5.1
+var_F   <- sigma_F^2
+n_F     <- 15
+
+mu_diff    <- mu_M - mu_F 
+var_diff   <- var_M / n_M + var_F / n_F
+sigma_diff <- sqrt(var_diff)
+
+difference <- 10   # change this to explore other differences
+
+z_diff <- (difference - mu_diff) / sqrt(var_diff)
+pnorm(z_diff, lower.tail = FALSE)
+
+# when using R, standardizing is not actually required
+
+pnorm(difference, mu_diff, sigma_diff, lower.tail = FALSE)
+```
+  
+```{r}
+plotXbardiff <- ggplot(NULL, aes((mu_diff - 4 * sigma_diff):(mu_diff + 4 * sigma_diff))) +
+  stat_function(fun = dnorm, args = list(mu_diff, sigma_diff)) +
+  geom_area(stat = "function", 
+            fun = dnorm, 
+            args = list(mu_diff, sigma_diff), 
+            fill = "blue", 
+            xlim = c(difference, mu_diff + 4 * sigma_diff)) + 
+  scale_x_continuous(breaks = seq(mu_diff - (4 * sigma_diff),  mu_diff + (4 * sigma_diff), sigma_diff)) +
+  labs(title = "Sampling Distribution of Difference in Sample Mean Heights",
+       subtitle = paste("probability that the difference is at least", difference, "centimeters"),
+       x = "mean difference in centimeters",
+       y = "f(x)") +
+  theme_linedraw()
+
+plotZxbardiff <- ggplot(NULL, aes(-4:4)) +
+  stat_function(fun = dnorm) +
+  geom_area(stat = "function", 
+            fun = dnorm, 
+            fill = "blue", 
+            xlim = c(z_diff, 4)) +
+  scale_x_continuous(breaks = seq(-4,  4, 1)) +
+  labs(title = "Standardized Distribution of Difference in Sample Mean Heights",
+       subtitle = paste("probability that the difference is at least z =", round(z_diff, 3)),
+       x = "standardized mean difference",
+       y = "f(x)") +
+  theme_linedraw()
+
+grid.arrange(plotXbardiff, plotZxbardiff)
+```
+
+##### Solving Empirically
+
+```{r}
+sims       <- 10^5
+simresults <- numeric(sims)
+
+for (i in 1:sims) {
+  simresults[i] <- mean(rnorm(n_M, mu_M, sigma_M)) - mean(rnorm(n_F, mu_F, sigma_F))
+}
+
+mean(simresults >= difference)   # compute the probability empirically vs theoretical pnorm
+```
+
+```{r}
+# compare the theoretical and empirical distributions
+
+tibble(parameter = c("mean", 
+                     "variance", 
+                     "std. dev.", 
+                     "probability"),
+       theoretical = c(mu_diff, 
+                       var_diff, 
+                       sigma_diff, 
+                       pnorm(difference, mu_diff, sigma_diff, lower.tail = FALSE)),
+       empirical = c(mean(simresults), 
+                     var(simresults), 
+                     sd(simresults), 
+                     mean(simresults >= difference)))
+
+ggplot(NULL, aes(x = simresults)) +
+  stat_function(fun = dnorm, args = list(mu_diff, sigma_diff), color = "red") +
+  geom_density() +
+  labs(title = "Theoretical vs Empirical Distributions", 
+       x = "difference in means") +
+  theme_linedraw()
+```
+
+***
+```{r}
+sessionInfo()
+```

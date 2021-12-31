@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Created by Jill E. Thomley" />
+
+
+<title>An Introduction to the Normal Distribution</title>
+
+<script src="JBStatsIntroToNormal_files/header-attrs-2.10/header-attrs.js"></script>
+<script src="JBStatsIntroToNormal_files/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="JBStatsIntroToNormal_files/bootstrap-3.3.5/css/yeti.min.css" rel="stylesheet" />
+<script src="JBStatsIntroToNormal_files/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="JBStatsIntroToNormal_files/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="JBStatsIntroToNormal_files/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="JBStatsIntroToNormal_files/navigation-1.1/tabsets.js"></script>
+<link href="JBStatsIntroToNormal_files/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="JBStatsIntroToNormal_files/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">An Introduction to the Normal Distribution</h1>
+<h3 class="subtitle">Companion <code>R</code> Code for JB Statistics Video Lesson</h3>
+<h4 class="author">Created by Jill E. Thomley</h4>
+<h4 class="date">Sunday, September 19, 2021 @ 08:54 PM</h4>
+
+</div>
+
+<div id="TOC">
+<ul>
+<li><a href="#packages-used"><strong>Packages Used</strong></a></li>
+<li><a href="#the-normal-distribution"><strong>The Normal Distribution</strong></a></li>
+<li><a href="#areas-under-the-curve"><strong>Areas Under the Curve</strong></a>
+<ul>
+<li><a href="#the-normal-pdf">The Normal pdf</a></li>
+<li><a href="#area-within-μ-1σ">Area Within μ ± 1σ</a></li>
+<li><a href="#area-within-μ-2σ">Area within μ ± 2σ</a></li>
+<li><a href="#area-within-μ-3σ">Area within μ ± 3σ</a></li>
+<li><a href="#two-normal-curves">Two Normal Curves</a></li>
+</ul></li>
+<li><a href="#general-curve-plotting"><strong>General Curve Plotting</strong></a>
+<ul>
+<li><a href="#plotting-the-pdf-for-nμ-σ2">Plotting the pdf for N(μ, σ<sup>2</sup>)</a></li>
+<li><a href="#shading-an-areabetween">Shading an Area—Between</a></li>
+<li><a href="#shading-an-areaoutside">Shading an Area—Outside</a></li>
+</ul></li>
+</ul>
+</div>
+
+<hr />
+<iframe width="560" height="315" src="https://www.youtube.com/embed/iYiOVISWXS4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+</iframe>
+<hr />
+<div id="packages-used" class="section level3">
+<h3><strong>Packages Used</strong></h3>
+<details>
+<pre class="r"><code>library(tidyverse)
+library(scales)
+library(knitr)
+library(kableExtra)</code></pre>
+</details>
+</div>
+<div id="the-normal-distribution" class="section level3">
+<h3><strong>The Normal Distribution</strong></h3>
+<p>The normal distribution is perhaps the most well-known continuous probability distribution. It has a characteristic bell-shaped curve and a vast breadth of applications. The name appears to have originated in an 1895 paper by Karl Pearson (1857-1936), though mathematical investigations of its properties originated centuries earlier. It is sometimes called the Gaussian distribution after German mathematician Johann Carl Friedrich Gauss (1777-1855), who made many advances in normal distribution theory.</p>
+<p><span class="math display">\[X \sim N(\mu,\sigma^2)\]</span></p>
+<pre><code>x = any real number
+μ = mean
+σ = standard deviation</code></pre>
+<p><span class="math display">\[f(x)=\frac{1}{\sqrt{2\pi}\sigma}e^{-(x-\mu)^2/(2\sigma^2)}\]</span></p>
+<p><span class="math display">\[F(x) = P(X \leq x) = \int\limits_{i=-\infty}^x f(x) = \text{no closed-form expression}\]</span></p>
+<p>A <strong>standard normal distribution</strong> has a <span class="math inline">\(\mu = 0\)</span> and <span class="math inline">\(\sigma^2 = 1\)</span>. Sometimes this is written as <span class="math inline">\(Z \sim N(0, 1)\)</span>.</p>
+<p>The standard notation uses mean and variance, but sometimes you will see books and other sources that use mean and standard deviation instead. Be sure you check!</p>
+</div>
+<div id="areas-under-the-curve" class="section level3">
+<h3><strong>Areas Under the Curve</strong></h3>
+<div id="the-normal-pdf" class="section level4">
+<h4>The Normal pdf</h4>
+<details>
+<pre class="r"><code>normalplot &lt;- ggplot() + 
+  stat_function(fun = dnorm, 
+                args = list(0, 1)) +
+  scale_x_continuous(limits = c(-3, 3),
+                     breaks = seq(from = -3, to = 3, by = 1), 
+                     labels = c(&quot;μ - 3σ&quot;, &quot;μ - 2σ&quot;, &quot;μ - 1σ&quot;, &quot;μ&quot;, &quot;μ + 1σ&quot;, &quot;μ + 2σ&quot;, &quot;μ + 3σ&quot;)) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
+  labs(title = &quot;The Normal Distribution&quot;, 
+       x = &quot;x&quot;, 
+       y = &quot;f(x)&quot;) +
+  theme_linedraw()</code></pre>
+</details>
+<pre class="r"><code>normalplot</code></pre>
+<p><img src="JBStatsIntroToNormal_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+</div>
+<div id="area-within-μ-1σ" class="section level4">
+<h4>Area Within μ ± 1σ</h4>
+<details>
+<pre class="r"><code>normalplot_1sigma &lt;- ggplot() + 
+  stat_function(fun = dnorm, 
+                args = list(0, 1), 
+                geom = &quot;area&quot;, 
+                xlim = c(-1, 1),
+                fill = &quot;lightblue&quot;) +
+  stat_function(fun = dnorm, 
+                args = list(0, 1)) +
+  geom_label(aes(label = &quot;≈ 68%&quot;),
+             x = 0, 
+             y = 0.2, 
+             label.padding = unit(0.5, &quot;lines&quot;)) +
+  scale_x_continuous(limits = c(-3, 3),
+                     breaks = seq(from = -3, to = 3, by = 1), 
+                     labels = c(&quot;μ - 3σ&quot;, &quot;μ - 2σ&quot;, &quot;μ - 1σ&quot;, &quot;μ&quot;, &quot;μ + 1σ&quot;, &quot;μ + 2σ&quot;, &quot;μ + 3σ&quot;)) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
+  labs(title = &quot;The Normal Distribution&quot;, 
+       x = &quot;x&quot;, 
+       y = &quot;f(x)&quot;,
+       caption = sprintf(&quot;More precisely, the area is %g.&quot;, pnorm(1) - pnorm(-1))) +
+  theme_linedraw()</code></pre>
+</details>
+<pre class="r"><code>normalplot_1sigma</code></pre>
+<p><img src="JBStatsIntroToNormal_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+</div>
+<div id="area-within-μ-2σ" class="section level4">
+<h4>Area within μ ± 2σ</h4>
+<details>
+<pre class="r"><code>normalplot_2sigma &lt;- ggplot() + 
+  stat_function(fun = dnorm, 
+                args = list(0, 1), 
+                geom = &quot;area&quot;, 
+                xlim = c(-2, 2),
+                fill = &quot;lightblue&quot;) + 
+  stat_function(fun = dnorm, 
+                args = list(0, 1)) +
+  geom_label(aes(label = &quot;≈ 95%&quot;),
+             x = 0, 
+             y = 0.2, 
+             label.padding = unit(0.5, &quot;lines&quot;)) +
+  scale_x_continuous(limits = c(-3, 3),
+                     breaks = seq(from = -3, to = 3, by = 1), 
+                     labels = c(&quot;μ - 3σ&quot;, &quot;μ - 2σ&quot;, &quot;μ - 1σ&quot;, &quot;μ&quot;, &quot;μ + 1σ&quot;, &quot;μ + 2σ&quot;, &quot;μ + 3σ&quot;)) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
+  labs(title = &quot;The Normal Distribution&quot;, 
+       x = &quot;x&quot;, 
+       y = &quot;f(x)&quot;,
+       caption = sprintf(&quot;More precisely, the area is %g.&quot;, pnorm(2) - pnorm(-2))) +
+  theme_linedraw()</code></pre>
+</details>
+<pre class="r"><code>normalplot_2sigma</code></pre>
+<p><img src="JBStatsIntroToNormal_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+</div>
+<div id="area-within-μ-3σ" class="section level4">
+<h4>Area within μ ± 3σ</h4>
+<details>
+<pre class="r"><code>normalplot_3sigma &lt;- ggplot() + 
+  stat_function(fun = dnorm, 
+                args = list(0, 1), 
+                geom = &quot;area&quot;, 
+                xlim = c(-3, 3),
+                fill = &quot;lightblue&quot;) + 
+  stat_function(fun = dnorm, args = list(0, 1)) +
+  geom_label(aes(label = &quot;≈ 99.7%&quot;), 
+             x = 0, 
+             y = 0.2, 
+             label.padding = unit(0.5, &quot;lines&quot;)) +
+  scale_x_continuous(limits = c(-3, 3),
+                     breaks = seq(from = -3, to = 3, by = 1), 
+                     labels = c(&quot;μ - 3σ&quot;, &quot;μ - 2σ&quot;, &quot;μ - 1σ&quot;, &quot;μ&quot;, &quot;μ + 1σ&quot;, &quot;μ + 2σ&quot;, &quot;μ + 3σ&quot;)) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
+  labs(title = &quot;The Normal Distribution&quot;, 
+       x = &quot;x&quot;, 
+       y = &quot;f(x)&quot;,
+       caption = sprintf(&quot;More precisely, the area is %g.&quot;, pnorm(3) - pnorm(-3))) +
+  theme_linedraw()</code></pre>
+</details>
+<pre class="r"><code>normalplot_3sigma</code></pre>
+<p><img src="JBStatsIntroToNormal_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+</div>
+<div id="two-normal-curves" class="section level4">
+<h4>Two Normal Curves</h4>
+<p>The area under the normal curve is always equal to one. The height and width of the bell depend on the standard deviation, but it always has the characteristic shape. The two curves below have the same mean but one has twice the standard deviation. Notice that the curve with twice the standard deviation has half the height.</p>
+<details>
+<pre class="r"><code>normalplot_2curves &lt;- ggplot() + 
+  stat_function(fun = dnorm, 
+                args = list(0, 1), 
+                aes(color = &quot;σ1&quot;)) +
+  stat_function(fun = dnorm, 
+                args = list(0, 2), 
+                aes(color = &quot;σ2 = 2σ1&quot;)) +
+  scale_x_continuous(limits = c(-6, 6), 
+                     breaks = NULL) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
+  scale_color_manual(values = c(&quot;σ1&quot; = &quot;blue&quot;, &quot;σ2 = 2σ1&quot; = &quot;orange&quot;)) +
+  labs(title = &quot;Two Normal Distributions&quot;, 
+       x = &quot;x&quot;, 
+       y = &quot;f(x)&quot;) +
+  theme_linedraw()</code></pre>
+</details>
+<pre class="r"><code>normalplot_2curves</code></pre>
+<p><img src="JBStatsIntroToNormal_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+</div>
+</div>
+<div id="general-curve-plotting" class="section level3">
+<h3><strong>General Curve Plotting</strong></h3>
+<div id="plotting-the-pdf-for-nμ-σ2" class="section level4">
+<h4>Plotting the pdf for N(μ, σ<sup>2</sup>)</h4>
+<p>The code below will allow you to plot a wide variety of normal distributions, within the limits of <code>R</code> and <code>ggplot2</code>. Set the mean (mu) and standard deviation (sigma), and adjust the x-axis decimal display to be appropriate to the scale of the parameters.</p>
+<pre class="r"><code># set the model parameters
+mu    &lt;- 0
+sigma &lt;- 1
+
+# set x-axis decimal place
+decimals &lt;- 0.01 
+
+# scales the x-axis limits
+# don&#39;t alter these values
+LB &lt;- mu - 4 * sigma   # lower limit for plotting
+UB &lt;- mu + 4 * sigma   # upper limit for plotting
+
+# create scaled normal pdf
+ggplot() + 
+  stat_function(fun = dnorm, 
+                args = list(mu, sigma)) +
+  scale_x_continuous(limits = c(LB, UB),
+                     breaks = seq(from = LB, to = UB, by = sigma), 
+                     labels = number_format(accuracy = decimals)) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
+  labs(title = sprintf(&quot;X ~ N(%g, %g)&quot;, mu, sigma^2), 
+       x = &quot;x&quot;, 
+       y = &quot;f(x)&quot;) +
+  theme_linedraw()</code></pre>
+<p><img src="JBStatsIntroToNormal_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+</div>
+<div id="shading-an-areabetween" class="section level4">
+<h4>Shading an Area—Between</h4>
+<p>Here we add a layer for the shading. It comes before plotting the curve because <code>ggplot2</code> adds each layer on top of the others and the appearance is better if we “shade” first. The two layers do not depend on one another. The area μ ± 0.67σ is approximately the middle 50% of the curve (bounded by the quartiles).</p>
+<pre class="r"><code># set the model parameters
+mu    &lt;- 0
+sigma &lt;- 1
+
+# limits of the shaded area
+# do not exceed +/- 4 sigma
+lower &lt;- -0.67
+upper &lt;- 0.67
+
+# color for the shaded area
+shade &lt;- &quot;lightblue&quot;
+
+# set x-axis decimal place
+decimals &lt;- 0.01 
+  
+# scales the x-axis limits
+# don&#39;t alter these values
+LB &lt;- mu - 4 * sigma   # lower limit for plotting
+UB &lt;- mu + 4 * sigma   # upper limit for plotting
+
+# create scaled normal pdf
+ggplot() + 
+  stat_function(fun = dnorm, 
+                args = list(mu, sigma), 
+                geom = &quot;area&quot;, 
+                xlim = c(lower, upper),
+                fill = shade) +
+  stat_function(fun = dnorm, 
+                args = list(mu, sigma)) +
+  scale_x_continuous(limits = c(LB, UB),
+                     breaks = seq(from = LB, to = UB, by = sigma), 
+                     labels = number_format(accuracy = decimals)) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
+  labs(title = sprintf(&quot;X ~ N(%g, %g)&quot;, mu, sigma^2), 
+       x = &quot;x&quot;, 
+       y = &quot;f(x)&quot;) +
+  theme_linedraw()</code></pre>
+<p><img src="JBStatsIntroToNormal_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+</div>
+<div id="shading-an-areaoutside" class="section level4">
+<h4>Shading an Area—Outside</h4>
+<pre class="r"><code># set the model parameters
+mu    &lt;- 0
+sigma &lt;- 1
+
+# limits of the shaded area
+# do not exceed +/- 4 sigma
+lower &lt;- -0.67
+upper &lt;- 0.67
+
+# color for the shaded area
+shade &lt;- &quot;lightblue&quot;
+
+# set x-axis decimal place
+decimals &lt;- 0.01 
+
+# scales the x-axis limits
+# don&#39;t alter these values
+LB &lt;- mu - 4 * sigma   # lower limit for plotting
+UB &lt;- mu + 4 * sigma   # upper limit for plotting
+
+# create scaled normal pdf
+ggplot() + 
+  stat_function(fun = dnorm, 
+                args = list(mu, sigma), 
+                geom = &quot;area&quot;, 
+                xlim = c(LB, lower),
+                fill = shade) + 
+  stat_function(fun = dnorm, 
+                args = list(mu, sigma), 
+                geom = &quot;area&quot;, 
+                xlim = c(upper, UB),
+                fill = shade) + 
+  stat_function(fun = dnorm, 
+                args = list(mu, sigma)) +
+  scale_x_continuous(limits = c(LB, UB),
+                     breaks = seq(from = LB, to = UB, by = sigma), 
+                     labels = number_format(accuracy = decimals)) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
+  labs(title = sprintf(&quot;X ~ N(%g, %g)&quot;, mu, sigma^2), 
+       x = &quot;x&quot;, 
+       y = &quot;f(x)&quot;) +
+  theme_linedraw()</code></pre>
+<p><img src="JBStatsIntroToNormal_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<hr />
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 3.6.0 (2019-04-26)
+Platform: x86_64-redhat-linux-gnu (64-bit)
+Running under: Red Hat Enterprise Linux
+
+Matrix products: default
+BLAS/LAPACK: /usr/lib64/R/lib/libRblas.so
+
+locale:
+ [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+ [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+ [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+ [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+ [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+[11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] kableExtra_1.3.4 knitr_1.34       scales_1.1.1     forcats_0.5.1   
+ [5] stringr_1.4.0    dplyr_1.0.7      purrr_0.3.4      readr_2.0.1     
+ [9] tidyr_1.1.3      tibble_3.1.4     ggplot2_3.3.5    tidyverse_1.3.1 
+
+loaded via a namespace (and not attached):
+ [1] Rcpp_1.0.7        svglite_2.0.0     lubridate_1.7.10  assertthat_0.2.1 
+ [5] digest_0.6.27     utf8_1.2.2        R6_2.5.1          cellranger_1.1.0 
+ [9] backports_1.2.1   reprex_2.0.1      evaluate_0.14     highr_0.9        
+[13] httr_1.4.2        pillar_1.6.2      rlang_0.4.11      readxl_1.3.1     
+[17] rstudioapi_0.13   jquerylib_0.1.4   rmarkdown_2.10    labeling_0.4.2   
+[21] webshot_0.5.2     munsell_0.5.0     broom_0.7.9       compiler_3.6.0   
+[25] modelr_0.1.8      xfun_0.25         pkgconfig_2.0.3   systemfonts_1.0.2
+[29] htmltools_0.5.2   tidyselect_1.1.1  fansi_0.5.0       viridisLite_0.4.0
+[33] crayon_1.4.1      tzdb_0.1.2        dbplyr_2.1.1      withr_2.4.2      
+[37] grid_3.6.0        jsonlite_1.7.2    gtable_0.3.0      lifecycle_1.0.0  
+[41] DBI_1.1.1         magrittr_2.0.1    cli_3.0.1         stringi_1.7.4    
+[45] farver_2.1.0      fs_1.5.0          xml2_1.3.2        bslib_0.3.0      
+[49] ellipsis_0.3.2    generics_0.1.0    vctrs_0.3.8       tools_3.6.0      
+[53] glue_1.4.2        hms_1.1.0         fastmap_1.1.0     yaml_2.2.1       
+[57] colorspace_2.0-2  rvest_1.0.1       haven_2.4.3       sass_0.4.0       </code></pre>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,79 @@
+---
+title: "An Introduction to the Bernoulli Distribution"
+subtitle: "Companion `R` Code for JB Statistics Video Lesson"
+author: "Created by Jill E. Thomley"
+date: '`r format(Sys.time(), "%A, %B %d, %Y @ %I:%M %p")`'
+output: 
+  html_document: 
+    theme: yeti
+    highlight: textmate
+    toc: true
+    toc_depth: 4
+    self_contained: false
+---
+
+```{r globaloptions, include = FALSE}
+knitr::opts_chunk$set(message = FALSE, warning = FALSE, comment = NA)
+```
+
+***
+```{r, echo = FALSE}
+vembedr::embed_youtube(
+id = "bT1p5tJwn_0",
+width = NULL,
+height = 400,
+ratio = c("16by9", "4by3"),
+frameborder = 0,
+allowfullscreen = TRUE,
+query = NULL
+)
+```
+***
+
+### **Packages Used**
+
+<details>
+```{r loadpackages}
+library(tidyverse)
+library(purrr)
+```
+</details>
+
+### **The Bernoulli Distribution**
+
+A Bernoulli trial is a single random event that has only two possible outcomes. These are often called "success" and "failure". Classic examples include one coin flip where a head is considered a success and a tail is considered a failure, or one roll of a standard 6-sided die where 1 is considered a success and any other number 2-6 is considered a failure.
+
+$$X \sim Bernoulli(p)$$
+
+    x = number of successes = {0, 1}
+    p = probability of success
+    1 - p = probability of failure
+
+$$f(x) = P(X = x) = p^x(1-p)^{n-x}$$
+
+$$F(x)=P(X \leq x) = \sum\limits_{i=0}^x f(x) = \sum\limits_{i=0}^x p^i(1-p)^{n-i}$$
+
+$$E[X] = p \text{ and } Var[X] = p(1-p)$$
+
+### **Simulating Bernoulli Trials**
+
+You can simulate Bernoulli trials using the function `rbernoulli(n, p)` from the purrr package. The parameter $n$ in this case is the number of times you want to repeat the Bernoulli process. For example, suppose we want twenty flips of a fair coin. The output is a logical vector with `TRUE` for a success and `FALSE` for a failure.
+
+```{r}
+(fifty_flips <- rbernoulli(50, 0.5))
+```
+
+The mean and variance of the sample will approximate the theoretical values of E[X] = 0.5 and Var[X] = 0.25. As a reminder, we can perform mathematical operations on logical vectors because `TRUE` is stored as `1` and `FALSE` as `0`.
+
+```{r}
+mean(fifty_flips)
+var(fifty_flips)
+```
+
+
+Another (and better) way to perform this kind of simulation is with the `rbinom()` function. You will learn more about the Binomial distribution and its relationship to the Bernoulli in another video. 
+
+***
+```{r}
+sessionInfo()
+```

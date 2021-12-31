@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Created by Jill E. Thomley" />
+
+
+<title>The Sampling Distribution of the Sample Mean</title>
+
+<script src="JBStatsSamplingDistributionsMean_files/header-attrs-2.11/header-attrs.js"></script>
+<script src="JBStatsSamplingDistributionsMean_files/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="JBStatsSamplingDistributionsMean_files/bootstrap-3.3.5/css/yeti.min.css" rel="stylesheet" />
+<script src="JBStatsSamplingDistributionsMean_files/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="JBStatsSamplingDistributionsMean_files/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="JBStatsSamplingDistributionsMean_files/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="JBStatsSamplingDistributionsMean_files/navigation-1.1/tabsets.js"></script>
+<link href="JBStatsSamplingDistributionsMean_files/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="JBStatsSamplingDistributionsMean_files/highlightjs-9.12.0/highlight.js"></script>
+<script src="JBStatsSamplingDistributionsMean_files/kePrint-0.0.1/kePrint.js"></script>
+<link href="JBStatsSamplingDistributionsMean_files/lightable-0.0.1/lightable.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">The Sampling Distribution of the Sample Mean</h1>
+<h3 class="subtitle">Companion <code>R</code> Code for JB Statistics Video Lesson</h3>
+<h4 class="author">Created by Jill E. Thomley</h4>
+<h4 class="date">Sunday, September 26, 2021 @ 03:50 PM</h4>
+
+</div>
+
+<div id="TOC">
+<ul>
+<li><a href="#packages-used">Packages Used</a></li>
+<li><a href="#the-sampling-distribution-of-barx">The Sampling Distribution of <span class="math inline">\(\bar{X}\)</span></a></li>
+<li><a href="#visualizing-when-the-population-is-normal">Visualizing When the Population is Normal</a></li>
+<li><a href="#example-protein-in-a-quarter-pound-patty">Example: Protein in a Quarter Pound Patty</a>
+<ul>
+<li><a href="#the-amount-of-protein-in-a-single-patty">The amount of protein in a single patty</a></li>
+<li><a href="#the-average-amount-of-protein-n-patties">The average amount of protein <span class="math inline">\(n\)</span> patties</a></li>
+<li><a href="#compare-individual-and-mean-results">Compare Individual and Mean Results</a></li>
+</ul></li>
+</ul>
+</div>
+
+<hr />
+<iframe width="560" height="315" src="https://www.youtube.com/embed/q50GpTdFYyI" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+</iframe>
+<hr />
+<div id="packages-used" class="section level4">
+<h4>Packages Used</h4>
+<details>
+<pre class="r"><code>library(tidyverse)
+library(knitr)
+library(kableExtra)
+library(gridExtra)</code></pre>
+</details>
+</div>
+<div id="the-sampling-distribution-of-barx" class="section level4">
+<h4>The Sampling Distribution of <span class="math inline">\(\bar{X}\)</span></h4>
+<p>Let <span class="math inline">\(\mu\)</span> be the mean and <span class="math inline">\(\sigma\)</span> be the standard deviation of a population. Let the random variable <span class="math inline">\(\bar{X}\)</span> represent the sample mean of <span class="math inline">\(n\)</span> independently drawn observations (i.e., a random sample of size <span class="math inline">\(n\)</span>). The mean, variance, and standard deviation of the variable <span class="math inline">\(\bar{X}\)</span> (“x-bar”) are given by the following expressions:</p>
+<p><span class="math display">\[E(\bar{x}) = \mu_{\bar{x}} = \mu\]</span></p>
+<p><span class="math display">\[Var(\bar{x}) = \sigma^2_{\bar{x}} = \frac{\sigma^2}{n}\]</span></p>
+<p><span class="math display">\[SD(\bar{x}) = \sqrt{Var(\bar{x})} = \sigma_{\bar{x}} = \frac{\sigma}{\sqrt{n}}\]</span></p>
+</div>
+<div id="visualizing-when-the-population-is-normal" class="section level4">
+<h4>Visualizing When the Population is Normal</h4>
+<p>The plot and table demonstrate how variability changes as the sample size grows larger. How much do we have to increase the sample size (what multiple) in order to cut the standard deviation in half? Notice the patterns in the plotting code.</p>
+<details>
+<pre class="r"><code># enter the population parameters
+mu &lt;- 0
+sigma &lt;- 1
+
+# plotting limits for the x-axis
+lower &lt;- (mu - 4 * sigma)
+upper &lt;- (mu + 4 * sigma)
+
+curvesplot &lt;- ggplot() +
+  stat_function(
+    fun = dnorm, # population curve
+    args = list(mu, sigma),
+    xlim = c(lower, upper)
+  ) +
+  stat_function(
+    fun = dnorm, # x-bar when n = 2
+    args = list(mu, sigma / sqrt(2)),
+    xlim = c(lower, upper),
+    aes(color = &quot;n = 02&quot;)
+  ) +
+  stat_function(
+    fun = dnorm, # x-bar when n = 4
+    args = list(mu, sigma / sqrt(4)),
+    xlim = c(lower, upper),
+    aes(color = &quot;n = 04&quot;)
+  ) +
+  stat_function(
+    fun = dnorm, # x-bar when n = 8
+    args = list(mu, sigma / sqrt(8)),
+    xlim = c(lower, upper),
+    aes(color = &quot;n = 08&quot;)
+  ) + # x-bar when n = 8
+  stat_function(
+    fun = dnorm, # x-bar when n = 16
+    args = list(mu, sigma / sqrt(16)),
+    xlim = c(lower, upper),
+    aes(color = &quot;n = 16&quot;)
+  ) +
+  scale_x_continuous(breaks = seq(lower, upper, sigma)) +
+  scale_color_manual(values = c(
+    &quot;n = 02&quot; = &quot;red&quot;,
+    &quot;n = 04&quot; = &quot;green&quot;,
+    &quot;n = 08&quot; = &quot;orange&quot;,
+    &quot;n = 16&quot; = &quot;purple&quot;
+  )) +
+  labs(
+    title = &quot;Population Distribution vs. Sampling Distributions for n = 2, 4, 8, and 16&quot;,
+    x = NULL, y = &quot;density&quot;
+  ) +
+  theme_linedraw()</code></pre>
+</details>
+<pre class="r"><code>curvesplot</code></pre>
+<p><img src="JBStatsSamplingDistributionsMean_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
+<pre class="r"><code>tibble(
+  n = c(1, 2, 4, 8, 16),
+  SD = sigma / sqrt(n)
+) %&gt;%
+  kable(
+    digits = 4,
+    align = c(&quot;c&quot;, &quot;c&quot;)
+  ) %&gt;%
+  kable_styling(
+    full_width = FALSE,
+    position = &quot;left&quot;,
+    font_size = 14
+  )</code></pre>
+<table class="table" style="font-size: 14px; width: auto !important; ">
+<thead>
+<tr>
+<th style="text-align:center;">
+n
+</th>
+<th style="text-align:center;">
+SD
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+1.0000
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+2
+</td>
+<td style="text-align:center;">
+0.7071
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+4
+</td>
+<td style="text-align:center;">
+0.5000
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+8
+</td>
+<td style="text-align:center;">
+0.3536
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+16
+</td>
+<td style="text-align:center;">
+0.2500
+</td>
+</tr>
+</tbody>
+</table>
+<p>Quadrupling the sample size cuts the standard deviation in half. Notice this for <span class="math inline">\(n = \{1, 4, 16\}\)</span>, as well as for <span class="math inline">\(n = \{2, 8\}\)</span>.</p>
+</div>
+<div id="example-protein-in-a-quarter-pound-patty" class="section level3">
+<h3>Example: Protein in a Quarter Pound Patty</h3>
+<div id="the-amount-of-protein-in-a-single-patty" class="section level4">
+<h4>The amount of protein in a single patty</h4>
+<pre class="r"><code># population parameters
+mu &lt;- 21.4
+sigma &lt;- 1.9
+
+# the value of interest
+x &lt;- 23.0
+
+# area to the right of chosen x value
+pnorm(x, mu, sigma, lower.tail = FALSE)</code></pre>
+<pre><code>[1] 0.1998645</code></pre>
+<pre class="r"><code># area to the right of standardized x
+z &lt;- (x - mu) / sigma
+pnorm(z, 0, 1, lower.tail = FALSE)</code></pre>
+<pre><code>[1] 0.1998645</code></pre>
+<details>
+<pre class="r"><code>LB &lt;- mu - 3 * sigma # lower limit for plotting
+UB &lt;- mu + 3 * sigma # upper limit for plotting
+
+plotX &lt;- ggplot() +
+  stat_function(
+    fun = dnorm,
+    args = list(mu, sigma),
+    geom = &quot;area&quot;,
+    xlim = c(x, UB),
+    fill = &quot;skyblue&quot;
+  ) +
+  stat_function(
+    fun = dnorm,
+    args = list(mu, sigma)
+  ) +
+  scale_x_continuous(
+    limits = c(LB, UB),
+    breaks = seq(from = LB, to = UB, by = sigma)
+  ) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
+  labs(x = &quot;x&quot;, y = &quot;f(x)&quot;) +
+  theme_linedraw()
+
+plotZ &lt;- ggplot() +
+  stat_function(
+    fun = dnorm,
+    args = list(0, 1),
+    geom = &quot;area&quot;,
+    xlim = c(z, 3),
+    fill = &quot;skyblue&quot;
+  ) +
+  stat_function(fun = dnorm, args = list(0, 1)) +
+  scale_x_continuous(
+    limits = c(-3, 3),
+    breaks = seq(from = -3, to = 3, by = 1)
+  ) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
+  labs(x = &quot;z&quot;, y = &quot;f(z)&quot;) +
+  theme_linedraw()</code></pre>
+</details>
+<pre class="r"><code>grid.arrange(plotX, plotZ)</code></pre>
+<p><img src="JBStatsSamplingDistributionsMean_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+</div>
+<div id="the-average-amount-of-protein-n-patties" class="section level4">
+<h4>The average amount of protein <span class="math inline">\(n\)</span> patties</h4>
+<pre class="r"><code>mu &lt;- 21.4
+sigma &lt;- 1.9
+n &lt;- 4
+x_bar &lt;- 23.0
+
+# area to the right of chosen x-bar value
+sigma_xbar &lt;- sigma / sqrt(n)
+pnorm(x_bar, mu, sigma_xbar, lower.tail = FALSE)</code></pre>
+<pre><code>[1] 0.04607049</code></pre>
+<pre class="r"><code># area to the right of standardized x-bar
+z_xbar &lt;- (x_bar - mu) / sigma_xbar
+pnorm(z_xbar, 0, 1, lower.tail = FALSE)</code></pre>
+<pre><code>[1] 0.04607049</code></pre>
+<details>
+<pre class="r"><code>LB &lt;- mu - 3 * sigma_xbar # lower limit for plotting
+UB &lt;- mu + 3 * sigma_xbar # upper limit for plotting
+
+plotXbar &lt;- ggplot() +
+  stat_function(
+    fun = dnorm,
+    args = list(mu, sigma_xbar),
+    geom = &quot;area&quot;,
+    xlim = c(x_bar, UB),
+    fill = &quot;skyblue&quot;
+  ) +
+  stat_function(
+    fun = dnorm,
+    args = list(mu, sigma_xbar)
+  ) +
+  scale_x_continuous(
+    limits = c(LB, UB),
+    breaks = seq(from = LB, to = UB, by = sigma_xbar)
+  ) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
+  labs(x = &quot;x-bar&quot;, y = &quot;f(x)&quot;) +
+  theme_linedraw()
+
+plotZbar &lt;- ggplot() +
+  stat_function(
+    fun = dnorm,
+    args = list(0, 1),
+    geom = &quot;area&quot;,
+    xlim = c(z_xbar, 3),
+    fill = &quot;skyblue&quot;
+  ) +
+  stat_function(
+    fun = dnorm,
+    args = list(0, 1)
+  ) +
+  scale_x_continuous(
+    limits = c(-3, 3),
+    breaks = seq(from = -3, to = 3, by = 1)
+  ) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
+  labs(x = &quot;z_xbar&quot;, y = &quot;f(z)&quot;) +
+  theme_linedraw()</code></pre>
+</details>
+<pre class="r"><code>grid.arrange(plotXbar, plotZbar)</code></pre>
+<p><img src="JBStatsSamplingDistributionsMean_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+</div>
+<div id="compare-individual-and-mean-results" class="section level4">
+<h4>Compare Individual and Mean Results</h4>
+<pre class="r"><code>grid.arrange(plotX, plotZ, plotXbar, plotZbar)</code></pre>
+<p><img src="JBStatsSamplingDistributionsMean_files/figure-html/compare4plots-1.png" width="672" /></p>
+<pre class="r"><code>tibble(
+  value = c(
+    &quot;x = 23.0&quot;,
+    &quot;z-score of x&quot;,
+    &quot;x-bar = 23.0&quot;,
+    &quot;z-score of x-bar&quot;
+  ),
+  &quot;probability of being at least that value&quot; = c(
+    pnorm(x, mu, sigma, lower.tail = FALSE),
+    pnorm(z, 0, 1, lower.tail = FALSE),
+    pnorm(x_bar, mu, sigma_xbar, lower.tail = FALSE),
+    pnorm(z_xbar, 0, 1, lower.tail = FALSE)
+  )
+) %&gt;%
+  kable(
+    digits = 4,
+    align = c(&quot;c&quot;, &quot;c&quot;)
+  ) %&gt;%
+  kable_styling(
+    full_width = FALSE,
+    position = &quot;left&quot;,
+    font_size = 14
+  )</code></pre>
+<table class="table" style="font-size: 14px; width: auto !important; ">
+<thead>
+<tr>
+<th style="text-align:center;">
+value
+</th>
+<th style="text-align:center;">
+probability of being at least that value
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+x = 23.0
+</td>
+<td style="text-align:center;">
+0.1999
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+z-score of x
+</td>
+<td style="text-align:center;">
+0.1999
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+x-bar = 23.0
+</td>
+<td style="text-align:center;">
+0.0461
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+z-score of x-bar
+</td>
+<td style="text-align:center;">
+0.0461
+</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 3.6.0 (2019-04-26)
+Platform: x86_64-redhat-linux-gnu (64-bit)
+Running under: Red Hat Enterprise Linux
+
+Matrix products: default
+BLAS/LAPACK: /usr/lib64/R/lib/libRblas.so
+
+locale:
+ [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+ [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+ [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+ [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+ [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+[11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] gridExtra_2.3    kableExtra_1.3.4 knitr_1.34       forcats_0.5.1   
+ [5] stringr_1.4.0    dplyr_1.0.7      purrr_0.3.4      readr_2.0.1     
+ [9] tidyr_1.1.3      tibble_3.1.4     ggplot2_3.3.5    tidyverse_1.3.1 
+
+loaded via a namespace (and not attached):
+ [1] Rcpp_1.0.7        svglite_2.0.0     lubridate_1.7.10  assertthat_0.2.1 
+ [5] digest_0.6.27     utf8_1.2.2        R6_2.5.1          cellranger_1.1.0 
+ [9] backports_1.2.1   reprex_2.0.1      evaluate_0.14     highr_0.9        
+[13] httr_1.4.2        pillar_1.6.2      rlang_0.4.11      readxl_1.3.1     
+[17] rstudioapi_0.13   jquerylib_0.1.4   rmarkdown_2.11    labeling_0.4.2   
+[21] webshot_0.5.2     munsell_0.5.0     broom_0.7.9       compiler_3.6.0   
+[25] modelr_0.1.8      xfun_0.26         pkgconfig_2.0.3   systemfonts_1.0.2
+[29] htmltools_0.5.2   tidyselect_1.1.1  fansi_0.5.0       viridisLite_0.4.0
+[33] crayon_1.4.1      tzdb_0.1.2        dbplyr_2.1.1      withr_2.4.2      
+[37] grid_3.6.0        jsonlite_1.7.2    gtable_0.3.0      lifecycle_1.0.0  
+[41] DBI_1.1.1         magrittr_2.0.1    scales_1.1.1      cli_3.0.1        
+[45] stringi_1.7.4     farver_2.1.0      fs_1.5.0          xml2_1.3.2       
+[49] bslib_0.3.0       ellipsis_0.3.2    generics_0.1.0    vctrs_0.3.8      
+[53] tools_3.6.0       glue_1.4.2        hms_1.1.0         fastmap_1.1.0    
+[57] yaml_2.2.1        colorspace_2.0-2  rvest_1.0.1       haven_2.4.3      
+[61] sass_0.4.0       </code></pre>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

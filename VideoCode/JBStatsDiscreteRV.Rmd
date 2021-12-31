@@ -1,0 +1,140 @@
+---
+title: "An Introduction to Discrete Random Variables and Discrete Probability Distributions"
+subtitle: "Companion `R` Code for JB Statistics Video Lesson"
+author: "Created by Jill E. Thomley"
+date: '`r format(Sys.time(), "%A, %B %d, %Y @ %I:%M %p")`'
+output: 
+  html_document: 
+    theme: yeti
+    highlight: textmate
+    toc: TRUE
+    toc_depth: 4
+    self_contained: false
+---
+
+```{r globaloptions, include = FALSE}
+knitr::opts_chunk$set(message = FALSE, warning = FALSE, comment = NA)
+```
+
+***
+```{r, echo = FALSE}
+vembedr::embed_youtube(
+id = "oHcrna8Fk18",
+width = NULL,
+height = 400,
+ratio = c("16by9", "4by3"),
+frameborder = 0,
+allowfullscreen = TRUE,
+query = NULL
+)
+```
+***
+
+### **Packages Used**
+
+<details>
+```{r loadpackages}
+library(tidyverse)
+library(data.tree)
+library(knitr)
+library(kableExtra)
+```
+</details>
+
+### **Babies with Jaundice Example**
+
+#### Visualize the Possibilities 
+
+We can visualize the various possible outcomes with a tree diagram. The middle two levels represent Baby 1 and Baby 2. At each step there are two choices, leading to four possible outcomes when we take the order of selection into account.
+
+<details>
+```{r}
+babies <- Node$new("Select Two Babies")
+
+   branch1 <- babies$AddChild("Jaundice")
+           branch11 <- branch1$AddChild("Jaundice")
+                    JJ <- branch11$AddChild("JJ")
+           branch12 <- branch1$AddChild("No Jaundice")
+                    JN <- branch12$AddChild("JN")
+   branch2 <- babies$AddChild("No Jaundice")
+           branch21 <- branch2$AddChild("Jaundice")
+                    NJ <- branch21$AddChild("NJ")
+           branch22 <- branch2$AddChild("No Jaundice")
+                    NN <- branch22$AddChild("NN")
+
+SetGraphStyle(babies, rankdir = "TB")
+SetNodeStyle(babies, 
+             style = "filled, rounded", 
+             shape = "box", 
+             fillcolor = "lightblue",
+             fontcolor = "black")
+```
+</details>
+
+```{r}
+plot(babies)
+```
+
+#### Building the Distribution
+
+If our two choices are random and independent, then we can find the probability of each of the four outcomes via multiplication. We can build a `tibble` in `R` using `dplyr` functions to perform the calculations.
+
+<details>
+```{r}
+p <- 0.6   # try other values of p and see what happens!
+
+treeprobs <- tibble(Baby1 = c("J", "J", "N", "N"), 
+                    Baby2 = c("J", "N", "J", "N")) %>% 
+  mutate(Prob1 = ifelse(Baby1 == "J", p, 1-p),
+         Prob2 = ifelse(Baby2 == "J", p, 1-p),
+         Probability = Prob1 * Prob2) %>% 
+  unite("Outcome", Baby1, Baby2, sep = " ", remove = FALSE) %>% 
+  select(Baby1, Prob1, Baby2, Prob2, Outcome, Probability)
+```
+</details>
+
+```{r}
+treeprobs %>%   # stop here to see the without styling  
+  kable(digits = 2, align = rep("c", 6)) %>% 
+  kable_styling(full_width = FALSE, 
+                position = "left", 
+                font_size = 14,
+                bootstrap_options = c("striped"))
+```
+
+However, we do not care about the order of selection, just the total number of babies who have jaundice, so we need to find and combine the outcomes that have the same number of J's and add up their probabilities.
+
+<details>
+```{r}
+distribution_x <- treeprobs %>% 
+  mutate(x = ifelse(Baby1 == "J", 1, 0) + ifelse(Baby2 == "J", 1, 0)) %>% 
+  group_by(x) %>% 
+  summarize(probability = sum(Probability))
+```
+</details>
+
+```{r}
+distribution_x %>% 
+  kable(digits = 2, align = rep("c", 2)) %>% 
+  kable_styling(full_width = FALSE, 
+                position = "left", 
+                font_size = 14,
+                bootstrap_options = c("striped"))
+```
+
+#### Plotting the Distribution
+
+We can use the `tibble` containing our distribution to create a plot.
+
+```{r}
+ggplot(distribution_x, aes(x = x, y = probability)) +
+  geom_col(fill = "lightblue", color = "black", width = 1) +
+  scale_x_continuous(breaks = 0:2) +
+  labs(x = "x", y = "p(x)")
+```
+
+
+***
+```{r}
+sessionInfo()
+```

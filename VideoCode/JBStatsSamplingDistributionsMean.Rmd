@@ -1,0 +1,298 @@
+---
+title: "The Sampling Distribution of the Sample Mean"
+subtitle: "Companion `R` Code for JB Statistics Video Lesson"
+author: "Created by Jill E. Thomley"
+date: '`r format(Sys.time(), "%A, %B %d, %Y @ %I:%M %p")`'
+output: 
+  html_document: 
+    theme: yeti
+    highlight: textmate
+    toc: true
+    toc_depth: 4
+    self_contained: false
+---
+
+```{r globaloptions, include = FALSE}
+knitr::opts_chunk$set(message = FALSE, warning = FALSE, comment = NA)
+```
+
+***
+<iframe width="560" height="315" src="https://www.youtube.com/embed/q50GpTdFYyI" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+***
+
+#### Packages Used
+
+<details>
+```{r loadpackages}
+library(tidyverse)
+library(knitr)
+library(kableExtra)
+library(gridExtra)
+```
+</details>
+
+#### The Sampling Distribution of $\bar{X}$
+
+Let $\mu$ be the mean and $\sigma$ be the standard deviation of a population. Let the random variable $\bar{X}$ represent the sample mean of $n$ independently drawn observations (i.e., a random sample of size $n$). The mean, variance, and standard deviation of the variable $\bar{X}$ ("x-bar") are given by the following expressions:
+
+
+$$E(\bar{x}) = \mu_{\bar{x}} = \mu$$
+
+$$Var(\bar{x}) = \sigma^2_{\bar{x}} = \frac{\sigma^2}{n}$$
+
+$$SD(\bar{x}) = \sqrt{Var(\bar{x})} = \sigma_{\bar{x}} = \frac{\sigma}{\sqrt{n}}$$
+
+#### Visualizing When the Population is Normal
+
+The plot and table demonstrate how variability changes as the sample size grows larger. How much do we have to increase the sample size (what multiple) in order to cut the standard deviation in half? Notice the patterns in the plotting code.
+
+<details>
+```{r visualizingcurves}
+# enter the population parameters
+mu <- 0
+sigma <- 1
+
+# plotting limits for the x-axis
+lower <- (mu - 4 * sigma)
+upper <- (mu + 4 * sigma)
+
+curvesplot <- ggplot() +
+  stat_function(
+    fun = dnorm, # population curve
+    args = list(mu, sigma),
+    xlim = c(lower, upper)
+  ) +
+  stat_function(
+    fun = dnorm, # x-bar when n = 2
+    args = list(mu, sigma / sqrt(2)),
+    xlim = c(lower, upper),
+    aes(color = "n = 02")
+  ) +
+  stat_function(
+    fun = dnorm, # x-bar when n = 4
+    args = list(mu, sigma / sqrt(4)),
+    xlim = c(lower, upper),
+    aes(color = "n = 04")
+  ) +
+  stat_function(
+    fun = dnorm, # x-bar when n = 8
+    args = list(mu, sigma / sqrt(8)),
+    xlim = c(lower, upper),
+    aes(color = "n = 08")
+  ) + # x-bar when n = 8
+  stat_function(
+    fun = dnorm, # x-bar when n = 16
+    args = list(mu, sigma / sqrt(16)),
+    xlim = c(lower, upper),
+    aes(color = "n = 16")
+  ) +
+  scale_x_continuous(breaks = seq(lower, upper, sigma)) +
+  scale_color_manual(values = c(
+    "n = 02" = "red",
+    "n = 04" = "green",
+    "n = 08" = "orange",
+    "n = 16" = "purple"
+  )) +
+  labs(
+    title = "Population Distribution vs. Sampling Distributions for n = 2, 4, 8, and 16",
+    x = NULL, y = "density"
+  ) +
+  theme_linedraw()
+```
+</details>
+
+```{r}
+curvesplot
+```
+
+```{r curveSDs}
+tibble(
+  n = c(1, 2, 4, 8, 16),
+  SD = sigma / sqrt(n)
+) %>%
+  kable(
+    digits = 4,
+    align = c("c", "c")
+  ) %>%
+  kable_styling(
+    full_width = FALSE,
+    position = "left",
+    font_size = 14
+  )
+```
+
+Quadrupling the sample size cuts the standard deviation in half. Notice this for $n = \{1, 4, 16\}$, as well as for $n = \{2, 8\}$.
+
+### Example: Protein in a Quarter Pound Patty
+
+#### The amount of protein in a single patty
+
+```{r proteinexample1}
+# population parameters
+mu <- 21.4
+sigma <- 1.9
+
+# the value of interest
+x <- 23.0
+
+# area to the right of chosen x value
+pnorm(x, mu, sigma, lower.tail = FALSE)
+
+# area to the right of standardized x
+z <- (x - mu) / sigma
+pnorm(z, 0, 1, lower.tail = FALSE)
+```
+
+<details>
+```{r proteinexample1plots}
+LB <- mu - 3 * sigma # lower limit for plotting
+UB <- mu + 3 * sigma # upper limit for plotting
+
+plotX <- ggplot() +
+  stat_function(
+    fun = dnorm,
+    args = list(mu, sigma),
+    geom = "area",
+    xlim = c(x, UB),
+    fill = "skyblue"
+  ) +
+  stat_function(
+    fun = dnorm,
+    args = list(mu, sigma)
+  ) +
+  scale_x_continuous(
+    limits = c(LB, UB),
+    breaks = seq(from = LB, to = UB, by = sigma)
+  ) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
+  labs(x = "x", y = "f(x)") +
+  theme_linedraw()
+
+plotZ <- ggplot() +
+  stat_function(
+    fun = dnorm,
+    args = list(0, 1),
+    geom = "area",
+    xlim = c(z, 3),
+    fill = "skyblue"
+  ) +
+  stat_function(fun = dnorm, args = list(0, 1)) +
+  scale_x_continuous(
+    limits = c(-3, 3),
+    breaks = seq(from = -3, to = 3, by = 1)
+  ) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
+  labs(x = "z", y = "f(z)") +
+  theme_linedraw()
+```
+</details>
+
+```{r}
+grid.arrange(plotX, plotZ)
+```
+
+#### The average amount of protein $n$ patties
+
+```{r proteinexample2}
+mu <- 21.4
+sigma <- 1.9
+n <- 4
+x_bar <- 23.0
+
+# area to the right of chosen x-bar value
+sigma_xbar <- sigma / sqrt(n)
+pnorm(x_bar, mu, sigma_xbar, lower.tail = FALSE)
+
+# area to the right of standardized x-bar
+z_xbar <- (x_bar - mu) / sigma_xbar
+pnorm(z_xbar, 0, 1, lower.tail = FALSE)
+```
+
+<details>
+```{r proteinexample2plots}
+LB <- mu - 3 * sigma_xbar # lower limit for plotting
+UB <- mu + 3 * sigma_xbar # upper limit for plotting
+
+plotXbar <- ggplot() +
+  stat_function(
+    fun = dnorm,
+    args = list(mu, sigma_xbar),
+    geom = "area",
+    xlim = c(x_bar, UB),
+    fill = "skyblue"
+  ) +
+  stat_function(
+    fun = dnorm,
+    args = list(mu, sigma_xbar)
+  ) +
+  scale_x_continuous(
+    limits = c(LB, UB),
+    breaks = seq(from = LB, to = UB, by = sigma_xbar)
+  ) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
+  labs(x = "x-bar", y = "f(x)") +
+  theme_linedraw()
+
+plotZbar <- ggplot() +
+  stat_function(
+    fun = dnorm,
+    args = list(0, 1),
+    geom = "area",
+    xlim = c(z_xbar, 3),
+    fill = "skyblue"
+  ) +
+  stat_function(
+    fun = dnorm,
+    args = list(0, 1)
+  ) +
+  scale_x_continuous(
+    limits = c(-3, 3),
+    breaks = seq(from = -3, to = 3, by = 1)
+  ) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
+  labs(x = "z_xbar", y = "f(z)") +
+  theme_linedraw()
+```
+</details>
+
+```{r}
+grid.arrange(plotXbar, plotZbar)
+```
+
+#### Compare Individual and Mean Results
+
+```{r compare4plots}
+grid.arrange(plotX, plotZ, plotXbar, plotZbar)
+```
+
+```{r compare4stats}
+tibble(
+  value = c(
+    "x = 23.0",
+    "z-score of x",
+    "x-bar = 23.0",
+    "z-score of x-bar"
+  ),
+  "probability of being at least that value" = c(
+    pnorm(x, mu, sigma, lower.tail = FALSE),
+    pnorm(z, 0, 1, lower.tail = FALSE),
+    pnorm(x_bar, mu, sigma_xbar, lower.tail = FALSE),
+    pnorm(z_xbar, 0, 1, lower.tail = FALSE)
+  )
+) %>%
+  kable(
+    digits = 4,
+    align = c("c", "c")
+  ) %>%
+  kable_styling(
+    full_width = FALSE,
+    position = "left",
+    font_size = 14
+  )
+```
+
+
+***
+```{r}
+sessionInfo()
+```

@@ -1,0 +1,111 @@
+---
+title: "Measures of Variability"
+subtitle: "Companion `R` Code for JB Statistics Video Lesson"
+author: "Created by Jill E. Thomley"
+date: '`r format(Sys.time(), "%A, %B %d, %Y @ %I:%M %p")`'
+output: 
+  html_document: 
+    theme: yeti
+    highlight: textmate
+    toc: TRUE
+    toc_depth: 4
+    self_contained: false
+---
+
+***
+
+```{r globaloptions, include = FALSE}
+knitr::opts_chunk$set(message = FALSE, warning = FALSE, comment = NA)
+```
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/Cx2tGUze60s" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+***
+
+#### Packages Used
+
+```{r loadpackages}
+library(tidyverse)
+library(knitr)
+library(kableExtra)
+```
+
+#### Datasets Used
+
+```{r}
+# sample of 4 observations
+sample4 <- tibble(data = c(45, 64, 68, 51))
+glimpse(sample4)
+
+# guinea pig survival times
+gp <- read_csv("https://raw.githubusercontent.com/STAT-JET-ASU/Datasets/master/JBStatistics/jbstatsguineapigs.csv")
+glimpse(gp)
+```
+
+#### Example with 4 Observations
+
+Doing the math the long way
+
+```{r}
+(devs <- sample4 %>% 
+   mutate(deviations = data - mean(data),
+          abs_devs   = abs(deviations),
+          sqr_devs   = deviations^2))
+
+(sums <- devs %>% 
+    summarize(sum_abs_devs = sum(abs_devs),
+              sum_sqr_devs = sum(sqr_devs),
+              n            = n()))
+
+(stats <- sums %>%
+  summarize(MAD = sum_abs_devs / n,
+            s   = sqrt(sum_sqr_devs / (n - 1))))
+```
+
+Using R's built-in functions
+
+```{r}
+sample4 %>% 
+  summarize(n    = n(),
+            xbar = mean(data),
+            s    = sd(data),
+            rng  = diff(range(data)),
+            MAD  = sum(abs(data - mean(data))) / n)
+```
+
+#### Example with Guinea Pig Data
+
+Overall dataset
+
+```{r}
+gp %>% 
+  summarize(n = n(),
+            xbar = mean(survivaldays),
+            s    = sd(survivaldays),
+            rng  = diff(range(survivaldays))) %>% 
+  kable(digits = 2) %>% 
+  kable_styling(full_width = FALSE,
+             position  = "left",
+             font_size = 14)
+```
+
+Data by groups
+
+```{r}
+gp %>%
+  group_by(group) %>% 
+  summarize(n = n(),
+            xbar = mean(survivaldays),
+            s    = sd(survivaldays),
+            rng  = diff(range(survivaldays))) %>% 
+  kable(digits = 2) %>% 
+  kable_styling(full_width = FALSE,
+             position  = "left",
+             font_size = 14)
+```
+
+
+***
+```{r}
+sessionInfo()
+```

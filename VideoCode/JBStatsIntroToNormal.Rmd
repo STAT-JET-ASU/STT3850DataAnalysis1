@@ -1,0 +1,328 @@
+---
+title: "An Introduction to the Normal Distribution"
+subtitle: "Companion `R` Code for JB Statistics Video Lesson"
+author: "Created by Jill E. Thomley"
+date: '`r format(Sys.time(), "%A, %B %d, %Y @ %I:%M %p")`'
+output: 
+  html_document:
+    theme: yeti
+    highlight: textmate
+    toc: true
+    toc_depth: 4
+    self_contained: false
+---
+
+```{r globaloptions, include = FALSE}
+knitr::opts_chunk$set(message = FALSE, warning = FALSE, comment = NA)
+```
+
+***
+<iframe width="560" height="315" src="https://www.youtube.com/embed/iYiOVISWXS4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+***
+
+### **Packages Used**
+
+<details>
+```{r loadpackages}
+library(tidyverse)
+library(scales)
+library(knitr)
+library(kableExtra)
+```
+</details>
+
+### **The Normal Distribution**
+
+The normal distribution is perhaps the most well-known continuous probability distribution. It has a characteristic bell-shaped curve and a vast breadth of applications. The name appears to have originated in an 1895 paper by Karl Pearson (1857-1936), though mathematical investigations of its properties originated centuries earlier. It is sometimes called the Gaussian distribution after German mathematician Johann Carl Friedrich Gauss (1777-1855), who made many advances in normal distribution theory.
+
+$$X \sim N(\mu,\sigma^2)$$
+
+    x = any real number
+    μ = mean
+    σ = standard deviation
+    
+$$f(x)=\frac{1}{\sqrt{2\pi}\sigma}e^{-(x-\mu)^2/(2\sigma^2)}$$
+
+$$F(x) = P(X \leq x) = \int\limits_{i=-\infty}^x f(x) = \text{no closed-form expression}$$
+
+A **standard normal distribution** has a $\mu = 0$ and $\sigma^2 = 1$. Sometimes this is written as $Z \sim N(0, 1)$.
+
+The standard notation uses mean and variance, but sometimes you will see books and other sources that use mean and standard deviation instead. Be sure you check!
+
+
+### **Areas Under the Curve**
+
+#### The Normal pdf
+
+<details>
+```{r}
+normalplot <- ggplot() + 
+  stat_function(fun = dnorm, 
+                args = list(0, 1)) +
+  scale_x_continuous(limits = c(-3, 3),
+                     breaks = seq(from = -3, to = 3, by = 1), 
+                     labels = c("μ - 3σ", "μ - 2σ", "μ - 1σ", "μ", "μ + 1σ", "μ + 2σ", "μ + 3σ")) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
+  labs(title = "The Normal Distribution", 
+       x = "x", 
+       y = "f(x)") +
+  theme_linedraw()
+```
+</details>
+
+```{r}
+normalplot
+```
+
+#### Area Within μ ± 1σ
+
+<details>
+```{r}
+normalplot_1sigma <- ggplot() + 
+  stat_function(fun = dnorm, 
+                args = list(0, 1), 
+                geom = "area", 
+                xlim = c(-1, 1),
+                fill = "lightblue") +
+  stat_function(fun = dnorm, 
+                args = list(0, 1)) +
+  geom_label(aes(label = "≈ 68%"),
+             x = 0, 
+             y = 0.2, 
+             label.padding = unit(0.5, "lines")) +
+  scale_x_continuous(limits = c(-3, 3),
+                     breaks = seq(from = -3, to = 3, by = 1), 
+                     labels = c("μ - 3σ", "μ - 2σ", "μ - 1σ", "μ", "μ + 1σ", "μ + 2σ", "μ + 3σ")) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
+  labs(title = "The Normal Distribution", 
+       x = "x", 
+       y = "f(x)",
+       caption = sprintf("More precisely, the area is %g.", pnorm(1) - pnorm(-1))) +
+  theme_linedraw()
+```
+</details>
+
+```{r}
+normalplot_1sigma
+```
+
+#### Area within μ ± 2σ
+
+<details>
+```{r}
+normalplot_2sigma <- ggplot() + 
+  stat_function(fun = dnorm, 
+                args = list(0, 1), 
+                geom = "area", 
+                xlim = c(-2, 2),
+                fill = "lightblue") + 
+  stat_function(fun = dnorm, 
+                args = list(0, 1)) +
+  geom_label(aes(label = "≈ 95%"),
+             x = 0, 
+             y = 0.2, 
+             label.padding = unit(0.5, "lines")) +
+  scale_x_continuous(limits = c(-3, 3),
+                     breaks = seq(from = -3, to = 3, by = 1), 
+                     labels = c("μ - 3σ", "μ - 2σ", "μ - 1σ", "μ", "μ + 1σ", "μ + 2σ", "μ + 3σ")) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
+  labs(title = "The Normal Distribution", 
+       x = "x", 
+       y = "f(x)",
+       caption = sprintf("More precisely, the area is %g.", pnorm(2) - pnorm(-2))) +
+  theme_linedraw()
+```
+</details>
+
+```{r}
+normalplot_2sigma
+```
+
+#### Area within μ ± 3σ
+
+<details>
+```{r}
+normalplot_3sigma <- ggplot() + 
+  stat_function(fun = dnorm, 
+                args = list(0, 1), 
+                geom = "area", 
+                xlim = c(-3, 3),
+                fill = "lightblue") + 
+  stat_function(fun = dnorm, args = list(0, 1)) +
+  geom_label(aes(label = "≈ 99.7%"), 
+             x = 0, 
+             y = 0.2, 
+             label.padding = unit(0.5, "lines")) +
+  scale_x_continuous(limits = c(-3, 3),
+                     breaks = seq(from = -3, to = 3, by = 1), 
+                     labels = c("μ - 3σ", "μ - 2σ", "μ - 1σ", "μ", "μ + 1σ", "μ + 2σ", "μ + 3σ")) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
+  labs(title = "The Normal Distribution", 
+       x = "x", 
+       y = "f(x)",
+       caption = sprintf("More precisely, the area is %g.", pnorm(3) - pnorm(-3))) +
+  theme_linedraw()
+```
+</details>
+
+```{r}
+normalplot_3sigma
+```
+
+#### Two Normal Curves
+
+The area under the normal curve is always equal to one. The height and width of the bell depend on the standard deviation, but it always has the characteristic shape. The two curves below have the same mean but one has twice the standard deviation. Notice that the curve with twice the standard deviation has half the height.
+
+<details>
+```{r}
+normalplot_2curves <- ggplot() + 
+  stat_function(fun = dnorm, 
+                args = list(0, 1), 
+                aes(color = "σ1")) +
+  stat_function(fun = dnorm, 
+                args = list(0, 2), 
+                aes(color = "σ2 = 2σ1")) +
+  scale_x_continuous(limits = c(-6, 6), 
+                     breaks = NULL) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
+  scale_color_manual(values = c("σ1" = "blue", "σ2 = 2σ1" = "orange")) +
+  labs(title = "Two Normal Distributions", 
+       x = "x", 
+       y = "f(x)") +
+  theme_linedraw()
+```
+</details>
+
+```{r}
+normalplot_2curves
+```
+
+### **General Curve Plotting**
+
+#### Plotting the pdf for N(μ, σ^2^)
+
+The code below will allow you to plot a wide variety of normal distributions, within the limits of `R` and `ggplot2`. Set the mean (mu) and standard deviation (sigma), and adjust the x-axis decimal display to be appropriate to the scale of the parameters.
+
+```{r}
+# set the model parameters
+mu    <- 0
+sigma <- 1
+
+# set x-axis decimal place
+decimals <- 0.01 
+
+# scales the x-axis limits
+# don't alter these values
+LB <- mu - 4 * sigma   # lower limit for plotting
+UB <- mu + 4 * sigma   # upper limit for plotting
+
+# create scaled normal pdf
+ggplot() + 
+  stat_function(fun = dnorm, 
+                args = list(mu, sigma)) +
+  scale_x_continuous(limits = c(LB, UB),
+                     breaks = seq(from = LB, to = UB, by = sigma), 
+                     labels = number_format(accuracy = decimals)) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
+  labs(title = sprintf("X ~ N(%g, %g)", mu, sigma^2), 
+       x = "x", 
+       y = "f(x)") +
+  theme_linedraw()
+```
+
+#### Shading an Area---Between
+
+Here we add a layer for the shading. It comes before plotting the curve because `ggplot2` adds each layer on top of the others and the appearance is better if we "shade" first. The two layers do not depend on one another. The area μ ± 0.67σ is approximately the middle 50% of the curve (bounded by the quartiles).
+
+```{r}
+# set the model parameters
+mu    <- 0
+sigma <- 1
+
+# limits of the shaded area
+# do not exceed +/- 4 sigma
+lower <- -0.67
+upper <- 0.67
+
+# color for the shaded area
+shade <- "lightblue"
+
+# set x-axis decimal place
+decimals <- 0.01 
+  
+# scales the x-axis limits
+# don't alter these values
+LB <- mu - 4 * sigma   # lower limit for plotting
+UB <- mu + 4 * sigma   # upper limit for plotting
+
+# create scaled normal pdf
+ggplot() + 
+  stat_function(fun = dnorm, 
+                args = list(mu, sigma), 
+                geom = "area", 
+                xlim = c(lower, upper),
+                fill = shade) +
+  stat_function(fun = dnorm, 
+                args = list(mu, sigma)) +
+  scale_x_continuous(limits = c(LB, UB),
+                     breaks = seq(from = LB, to = UB, by = sigma), 
+                     labels = number_format(accuracy = decimals)) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
+  labs(title = sprintf("X ~ N(%g, %g)", mu, sigma^2), 
+       x = "x", 
+       y = "f(x)") +
+  theme_linedraw()
+```
+
+#### Shading an Area---Outside
+
+```{r}
+# set the model parameters
+mu    <- 0
+sigma <- 1
+
+# limits of the shaded area
+# do not exceed +/- 4 sigma
+lower <- -0.67
+upper <- 0.67
+
+# color for the shaded area
+shade <- "lightblue"
+
+# set x-axis decimal place
+decimals <- 0.01 
+
+# scales the x-axis limits
+# don't alter these values
+LB <- mu - 4 * sigma   # lower limit for plotting
+UB <- mu + 4 * sigma   # upper limit for plotting
+
+# create scaled normal pdf
+ggplot() + 
+  stat_function(fun = dnorm, 
+                args = list(mu, sigma), 
+                geom = "area", 
+                xlim = c(LB, lower),
+                fill = shade) + 
+  stat_function(fun = dnorm, 
+                args = list(mu, sigma), 
+                geom = "area", 
+                xlim = c(upper, UB),
+                fill = shade) + 
+  stat_function(fun = dnorm, 
+                args = list(mu, sigma)) +
+  scale_x_continuous(limits = c(LB, UB),
+                     breaks = seq(from = LB, to = UB, by = sigma), 
+                     labels = number_format(accuracy = decimals)) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
+  labs(title = sprintf("X ~ N(%g, %g)", mu, sigma^2), 
+       x = "x", 
+       y = "f(x)") +
+  theme_linedraw()
+```
+
+
+***
+```{r}
+sessionInfo()
+```

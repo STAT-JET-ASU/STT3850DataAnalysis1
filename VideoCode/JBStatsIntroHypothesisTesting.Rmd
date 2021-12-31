@@ -1,0 +1,110 @@
+---
+title: "An Introduction to Hypothesis Testing"
+subtitle: "Companion `R` Code for JB Statistics Video Lesson"
+author: "Created by Jill E. Thomley"
+date: '`r format(Sys.time(), "%A, %B %d, %Y @ %I:%M %p")`'
+output: 
+  html_document: 
+    theme: yeti
+    highlight: textmate
+    toc: TRUE
+    toc_depth: 4
+---
+
+```{r globaloptions, include = FALSE}
+knitr::opts_chunk$set(message = FALSE, warning = FALSE, comment = NA)
+```
+
+***
+<iframe width="560" height="315" src="https://www.youtube.com/embed/tTeMYuS87oU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+***
+
+### Packages Used
+
+```{r loadpackages}
+library(tidyverse)
+```
+
+### Purely Guessing Cards
+
+#### Binomial Model for Probabilities
+
+```{r purelyrandommodel}
+n <- 100
+p <- 1/4
+
+(expected_value <- n * p)
+
+bin_pmf <- tibble(x = 0:n, probability = dbinom(x, n, p))
+
+bin_pmf_50 <- bin_pmf %>% filter(x <= 50)
+
+ggplot(bin_pmf_50, aes(x = x, y = probability)) + 
+  geom_bar(stat = "identity", color = "white", fill = "skyblue") +
+  labs(title = "Probability Distribution for X = Number of Card Suits Guessed Correctly",
+       subtitle = "number correct of n = 100 independent and purely random guesses", 
+       caption = "plot truncated at x = 50 for visualization",
+       x = "number of cards correct") +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
+  theme_linedraw()
+```
+
+#### Evidence about Pete's Guessing Skills 
+
+This method of assessing the evidence is the p-value approach (think p for probability). In general, we find the area corresponding to the observed data and values more extreme than the data. We will explore this in greater depth in future activities.
+
+```{r petedatasimulation}
+pete_x <- 28  # change this to test 44 correct guesses
+
+bin_pmf <- bin_pmf %>% 
+  mutate(shading = ifelse(x >= pete_x, "orange", "skyblue"))
+
+bin_pmf_50 <- bin_pmf %>% filter(x <= 50)
+
+ggplot(bin_pmf_50, aes(x = x, y = probability, fill = shading)) + 
+  geom_bar(stat = "identity", color = "white", fill = bin_pmf_50$shading) +
+  annotate("rect", xmin = pete_x - 0.5, xmax = 50, ymin = 0, ymax = .1, alpha = .2) +
+  labs(title = "Probability Distribution for X = Number of Card Suits Guessed Correctly",
+       subtitle = "the orange bars (upper tail, in the gray box) indicate the value of Pete's guess and higher",
+       x = "number correct") +
+    scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
+  theme_linedraw()
+
+(pete_prob <- pbinom(pete_x - 1, n, p, lower.tail = FALSE))  # find the blue area and subtract from 1
+```
+
+#### An Extension: Flipping the Question
+
+**Question:** What is the minimum number of cards would Pete have to guess correctly to be in the top 20% of the distribution?
+
+This method of assessing the evidence is the rejection region approach. We set a value threshold for rejecting the null hypothesis based on a certain area or percentage of the sampling distribution. If the evidence derived from the data exceeds the threshold, we reject the null hypothesis. Here the rejection region is the top 20% of the curve, and the threshold is the minimum number of cards required to be in that region. The smaller the region, the higher the number of cards we need. Try varying the percent and watch what happens to the plot.
+
+```{r petedataexact}
+upper_pct <- 0.20
+lower_pct <- 1 - upper_pct
+
+bin_cdf <- tibble(x = 0:n, cum_prob = pbinom(x, n, p))
+
+bin_cdf <- bin_cdf %>% 
+  mutate(shading = ifelse(cum_prob >= lower_pct, "orange", "skyblue"))
+
+bin_cdf_50 <- bin_cdf %>% 
+  filter(x <= 50)
+
+ggplot(bin_cdf_50, aes(x = x, y = cum_prob)) + 
+  geom_bar(stat = "identity", color = "white", fill = bin_cdf_50$shading) +
+  geom_hline(yintercept = lower_pct, linetype = "dashed") +
+  scale_y_continuous(breaks = seq(0, 1, 0.2)) +
+  labs(title = "Cumulative Distribution for X = Number of Card Suits Guessed Correctly",
+       subtitle = "number correct of n = 100 independent and purely random guesses, truncated at x = 50",
+       x = "number correct",
+       y = "cumulatice probbaility") +
+  theme_linedraw()
+
+(threshold <- qbinom(upper_pct, n, p, lower.tail = FALSE))
+```
+
+***
+```{r}
+sessionInfo()
+```

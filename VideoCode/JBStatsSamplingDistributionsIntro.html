@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Created by Jill E. Thomley" />
+
+
+<title>Sampling Distributions: Introduction to the Concept</title>
+
+<script src="JBStatsSamplingDistributionsIntro_files/header-attrs-2.11/header-attrs.js"></script>
+<script src="JBStatsSamplingDistributionsIntro_files/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="JBStatsSamplingDistributionsIntro_files/bootstrap-3.3.5/css/yeti.min.css" rel="stylesheet" />
+<script src="JBStatsSamplingDistributionsIntro_files/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="JBStatsSamplingDistributionsIntro_files/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="JBStatsSamplingDistributionsIntro_files/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="JBStatsSamplingDistributionsIntro_files/navigation-1.1/tabsets.js"></script>
+<link href="JBStatsSamplingDistributionsIntro_files/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="JBStatsSamplingDistributionsIntro_files/highlightjs-9.12.0/highlight.js"></script>
+<script src="JBStatsSamplingDistributionsIntro_files/kePrint-0.0.1/kePrint.js"></script>
+<link href="JBStatsSamplingDistributionsIntro_files/lightable-0.0.1/lightable.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Sampling Distributions: Introduction to the Concept</h1>
+<h3 class="subtitle">Companion <code>R</code> Code for JB Statistics Video Lesson</h3>
+<h4 class="author">Created by Jill E. Thomley</h4>
+<h4 class="date">Sunday, September 26, 2021 @ 04:07 PM</h4>
+
+</div>
+
+<div id="TOC">
+<ul>
+<li><a href="#packages-used">Packages Used</a></li>
+<li><a href="#university-class-population">University Class Population</a>
+<ul>
+<li><a href="#create-a-population-vector">Create a Population Vector</a></li>
+<li><a href="#accessing-population-values">Accessing Population Values</a></li>
+<li><a href="#university-class-sample-1">University Class Sample (1)</a></li>
+<li><a href="#university-class-sample-2">University Class Sample (2)</a></li>
+</ul></li>
+<li><a href="#sampling-distribution-n-3">Sampling Distribution (n = 3)</a>
+<ul>
+<li><a href="#resampling-many-times">Resampling Many Times</a></li>
+<li><a href="#number-of-possible-samples">Number of Possible Samples?</a></li>
+<li><a href="#means-of-all-possible-samples">Means of All Possible Samples</a></li>
+</ul></li>
+<li><a href="#revisit-example-using-tidyverse">Revisit Example Using Tidyverse</a>
+<ul>
+<li><a href="#create-the-population">Create the Population</a></li>
+<li><a href="#select-a-many-samples">Select a Many Samples</a></li>
+</ul></li>
+</ul>
+</div>
+
+<hr />
+<iframe width="560" height="315" src="https://www.youtube.com/embed/Zbw-YvELsaM" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+</iframe>
+<hr />
+<div id="packages-used" class="section level3">
+<h3>Packages Used</h3>
+<details>
+<pre class="r"><code>library(tidyverse)
+library(knitr)
+library(kableExtra)
+library(combinat) # required for combn() function</code></pre>
+</details>
+</div>
+<div id="university-class-population" class="section level3">
+<h3>University Class Population</h3>
+<div id="create-a-population-vector" class="section level4">
+<h4>Create a Population Vector</h4>
+<p>The video uses a population of 16 students in a college classroom as an example. The variable of interest is the students’ ages in months. We can create this population in <code>R</code> as a vector.</p>
+<pre class="r"><code>pop_ages &lt;- c(234, 241, 233, 227, 251, 227, 242, 239, 241, 238, 230, 246, 231, 243, 238, 276)</code></pre>
+</div>
+<div id="accessing-population-values" class="section level4">
+<h4>Accessing Population Values</h4>
+<p>Each value in the vector has a location or index numbered from 1-16. We can identify a value via its location and access it with <code>[ ]</code> index notation. We can choose multiple values by using a vector.</p>
+<pre class="r"><code>pop_ages[1] # first value</code></pre>
+<pre><code>[1] 234</code></pre>
+<pre class="r"><code>pop_ages[10] # tenth value</code></pre>
+<pre><code>[1] 238</code></pre>
+<pre class="r"><code>pop_ages[c(1, 10)] # first and tenth values</code></pre>
+<pre><code>[1] 234 238</code></pre>
+<pre class="r"><code>pop_ages[1:10] # first through tenth values</code></pre>
+<pre><code> [1] 234 241 233 227 251 227 242 239 241 238</code></pre>
+<p>The overall population mean is <span class="math inline">\(\mu\)</span>. Recall that placing <code>()</code> around the object prints it after assigning using <code>&lt;-</code>.</p>
+<pre class="r"><code>(mu &lt;- mean(pop_ages))</code></pre>
+<pre><code>[1] 239.8125</code></pre>
+</div>
+<div id="university-class-sample-1" class="section level4">
+<h4>University Class Sample (1)</h4>
+<p>The first random sample of n = 3 students includes students 3, 6, and 15.</p>
+<pre class="r"><code>sampleIDs &lt;- c(3, 6, 15)
+sample_ages &lt;- pop_ages[sampleIDs] # use vector index [ ] to get data for sampled students
+(xbar1 &lt;- mean(sample_ages))</code></pre>
+<pre><code>[1] 232.6667</code></pre>
+</div>
+<div id="university-class-sample-2" class="section level4">
+<h4>University Class Sample (2)</h4>
+<p>The second random sample of n = 3 students includes students 5, 15, and 16. Notice that student 15 is included in both samples. Since each sample is independent of the other and all samples are equally likely, it is not unusual for this to happen.</p>
+<pre class="r"><code>sampleIDs &lt;- c(5, 15, 16)
+sample_ages &lt;- pop_ages[sampleIDs]
+(xbar2 &lt;- mean(sample_ages))</code></pre>
+<pre><code>[1] 255</code></pre>
+</div>
+</div>
+<div id="sampling-distribution-n-3" class="section level3">
+<h3>Sampling Distribution (n = 3)</h3>
+<div id="resampling-many-times" class="section level4">
+<h4>Resampling Many Times</h4>
+<p>We will take advantage of being able to choose values using <code>[ ]</code> to take a large number of random samples from the population. While it is possible to accomplish what we want by using the <code>sample()</code> function directly on the vector here, we are laying down a methodological foundation for resampling-based hypothesis tests by doing it this way.</p>
+<pre class="r"><code>sims &lt;- 10^6 # number of samples
+pop_N &lt;- length(pop_ages) # population size
+n &lt;- 3 # sample size
+
+sim_means &lt;- numeric(sims) # vector to store the means of the random samples
+# there is one location for each simulated sample
+# initially this vector contains zeroes, try it!
+
+# our for loop starts at 1 because vectors in R are indexed starting at one
+# in mathematics, locations in vectors and/or matrices are numbered from 1
+# the counter serves not only to count, but also to index results using [i]
+
+for (i in 1:sims) {
+  sampleIDs &lt;- sample(pop_N, n) # randomly choose n sample IDs
+  sim_means[i] &lt;- mean(pop_ages[sampleIDs]) # compute/store the sample mean
+}</code></pre>
+<pre class="r"><code>ggplot(NULL, aes(x = sim_means)) +
+  geom_histogram(
+    bins = 15,
+    color = &quot;white&quot;,
+    fill = &quot;lightblue&quot;
+  ) +
+  geom_vline(
+    xintercept = mu,
+    color = &quot;orange&quot;,
+    linetype = &quot;dashed&quot;,
+    size = 1
+  ) +
+  labs(
+    title = &quot;Means of Simulated Samples of n = 3 from the Population of Class Ages&quot;,
+    subtitle = &quot;the dashed orange line represents the population mean&quot;,
+    x = &quot;Mean Age in Months&quot;
+  ) +
+  theme_linedraw()</code></pre>
+<p><img src="JBStatsSamplingDistributionsIntro_files/figure-html/plotsimsamples-1.png" width="672" /></p>
+<pre class="r"><code>mean(sim_means)</code></pre>
+<pre><code>[1] 239.8167</code></pre>
+<pre class="r"><code>sd(sim_means)</code></pre>
+<pre><code>[1] 6.133535</code></pre>
+<pre class="r"><code># if you are confused about this, run it a few times and see what happens
+# clarify for yourself so that you understand what pop_N is and what n is
+
+sample(pop_N, n)</code></pre>
+<pre><code>[1]  6 10  5</code></pre>
+</div>
+<div id="number-of-possible-samples" class="section level4">
+<h4>Number of Possible Samples?</h4>
+<p>How many possible samples are there if we wanted to find the exact sampling distribution?</p>
+<pre class="r"><code>choose(pop_N, n)</code></pre>
+<pre><code>[1] 560</code></pre>
+</div>
+<div id="means-of-all-possible-samples" class="section level4">
+<h4>Means of All Possible Samples</h4>
+<p>The <code>combn()</code> function finds all the unique samples of n = 3 from the population and outputs the results as a matrix, one sample in each column. We can then compute all the sample means and plot them. Notice the <code>NULL</code> where we would usually put the dataset name in the <code>ggplot()</code> function, since the data are in a vector instead of a data frame. We can do this for fairly small populations, but the number of combinations increases nonlinearly when the population size increases, so it quickly becomes intractable. You should notice how closely our random resampling results resemble the exact distribution.</p>
+<pre class="r"><code>n &lt;- 3
+all_samples &lt;- combn(pop_ages, n) # each matrix column is one sample
+all_means &lt;- colSums(all_samples) / n # compute the mean of each sample
+
+ggplot(NULL, aes(x = all_means)) +
+  geom_dotplot(
+    dotsize = 0.35,
+    color = &quot;white&quot;,
+    fill = &quot;skyblue&quot;
+  ) +
+  geom_vline(
+    xintercept = mu,
+    color = &quot;orange&quot;,
+    linetype = &quot;dashed&quot;,
+    size = 1
+  ) +
+  scale_y_continuous(NULL, expand = c(0, 0)) +
+  labs(
+    title = &quot;Means of All Possible Samples of n = 3 from the Population of Class Ages&quot;,
+    subtitle = &quot;the dashed orange line represents the population mean&quot;,
+    x = &quot;Mean Age in Months&quot;
+  ) +
+  theme_linedraw()</code></pre>
+<p><img src="JBStatsSamplingDistributionsIntro_files/figure-html/allsamples-1.png" width="672" /></p>
+<p>Notice that the average of all possible sample means is exactly the the same as the population mean.</p>
+<pre class="r"><code>mean(all_means)</code></pre>
+<pre><code>[1] 239.8125</code></pre>
+<pre class="r"><code>mean(all_means) == mu</code></pre>
+<pre><code>[1] TRUE</code></pre>
+</div>
+</div>
+<div id="revisit-example-using-tidyverse" class="section level3">
+<h3>Revisit Example Using Tidyverse</h3>
+<p>We could also do this example using <code>tidyverse</code> tools. If you look “under the hood” of these functions, you’d see a process much like the one above.</p>
+<div id="create-the-population" class="section level4">
+<h4>Create the Population</h4>
+<pre class="r"><code>pop_ages &lt;- tibble(ages = c(234, 241, 233, 227, 251, 227, 242, 239, 241, 238, 230, 246, 231, 243, 238, 276))</code></pre>
+<pre class="r"><code>mu &lt;- pop_ages %&gt;%
+  summarize(mu = mean(ages)) %&gt;%
+  pull(mu)</code></pre>
+</div>
+<div id="select-a-many-samples" class="section level4">
+<h4>Select a Many Samples</h4>
+<p>This code replaces the simulation loop above, but it relies on the same fundamental functions. We are taking fewer resamples here (1000 vs. 100,000) because of runtime. The results will have more sampling variability.</p>
+<pre class="r"><code>sim_means &lt;- replicate(
+  n = 1000, # this n is the number of replications
+  expr = {
+    pop_ages %&gt;%
+      slice_sample(n = 3) %&gt;% # this n is the sample size
+      summarize(sample_mean = mean(ages)) %&gt;%
+      pull(sample_mean)
+  }
+)</code></pre>
+<p>Plotting the simulation results is identical to the previous simulation.</p>
+<pre class="r"><code>ggplot(NULL, aes(x = sim_means)) +
+  geom_histogram(
+    bins = 15,
+    color = &quot;white&quot;,
+    fill = &quot;lightblue&quot;
+  ) +
+  geom_vline(
+    xintercept = mu,
+    color = &quot;orange&quot;,
+    linetype = &quot;dashed&quot;,
+    size = 1
+  ) +
+  labs(
+    title = &quot;Means of Simulated Samples of n = 3 from the Population of Class Ages&quot;,
+    subtitle = &quot;the dashed orange line represents the population mean&quot;,
+    x = &quot;Mean Age in Months&quot;
+  ) +
+  theme_linedraw()</code></pre>
+<p><img src="JBStatsSamplingDistributionsIntro_files/figure-html/plotsimsamplestidy-1.png" width="672" /></p>
+<p>We can use <code>summarize()</code> if we make our simulation output a <code>tibble</code> first.</p>
+<pre class="r"><code>tibble(sim_means) %&gt;%
+  summarize(
+    mean_of_sim_means = mean(sim_means),
+    sd_of_sim_means = sd(sim_means)
+  ) %&gt;%
+  kable(digits = 2) %&gt;%
+  kable_styling(
+    full_width = FALSE,
+    position = &quot;left&quot;,
+    font_size = 14
+  )</code></pre>
+<table class="table" style="font-size: 14px; width: auto !important; ">
+<thead>
+<tr>
+<th style="text-align:right;">
+mean_of_sim_means
+</th>
+<th style="text-align:right;">
+sd_of_sim_means
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+240.14
+</td>
+<td style="text-align:right;">
+6.21
+</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 3.6.0 (2019-04-26)
+Platform: x86_64-redhat-linux-gnu (64-bit)
+Running under: Red Hat Enterprise Linux
+
+Matrix products: default
+BLAS/LAPACK: /usr/lib64/R/lib/libRblas.so
+
+locale:
+ [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+ [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+ [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+ [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+ [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+[11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] combinat_0.0-8   kableExtra_1.3.4 knitr_1.34       forcats_0.5.1   
+ [5] stringr_1.4.0    dplyr_1.0.7      purrr_0.3.4      readr_2.0.1     
+ [9] tidyr_1.1.3      tibble_3.1.4     ggplot2_3.3.5    tidyverse_1.3.1 
+
+loaded via a namespace (and not attached):
+ [1] Rcpp_1.0.7        svglite_2.0.0     lubridate_1.7.10  assertthat_0.2.1 
+ [5] digest_0.6.27     utf8_1.2.2        R6_2.5.1          cellranger_1.1.0 
+ [9] backports_1.2.1   reprex_2.0.1      evaluate_0.14     highr_0.9        
+[13] httr_1.4.2        pillar_1.6.2      rlang_0.4.11      readxl_1.3.1     
+[17] rstudioapi_0.13   jquerylib_0.1.4   rmarkdown_2.11    labeling_0.4.2   
+[21] webshot_0.5.2     munsell_0.5.0     broom_0.7.9       compiler_3.6.0   
+[25] modelr_0.1.8      xfun_0.26         pkgconfig_2.0.3   systemfonts_1.0.2
+[29] htmltools_0.5.2   tidyselect_1.1.1  fansi_0.5.0       viridisLite_0.4.0
+[33] crayon_1.4.1      tzdb_0.1.2        dbplyr_2.1.1      withr_2.4.2      
+[37] grid_3.6.0        jsonlite_1.7.2    gtable_0.3.0      lifecycle_1.0.0  
+[41] DBI_1.1.1         magrittr_2.0.1    scales_1.1.1      cli_3.0.1        
+[45] stringi_1.7.4     farver_2.1.0      fs_1.5.0          xml2_1.3.2       
+[49] bslib_0.3.0       ellipsis_0.3.2    generics_0.1.0    vctrs_0.3.8      
+[53] tools_3.6.0       glue_1.4.2        hms_1.1.0         fastmap_1.1.0    
+[57] yaml_2.2.1        colorspace_2.0-2  rvest_1.0.1       haven_2.4.3      
+[61] sass_0.4.0       </code></pre>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

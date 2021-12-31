@@ -1,0 +1,181 @@
+---
+title: "Measures of Central Tendency"
+subtitle: "Companion `R` Code for JB Statistics Video Lesson"
+author: "Created by Jill E. Thomley"
+date: '`r format(Sys.time(), "%A, %B %d, %Y @ %I:%M %p")`'
+output: 
+  html_document: 
+    theme: yeti
+    highlight: textmate
+    toc: TRUE
+    toc_depth: 4
+    self_contained: false
+---
+
+***
+
+```{r globaloptions, include = FALSE}
+knitr::opts_chunk$set(message = FALSE, warning = FALSE, comment = NA)
+```
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/NM_iOLUwZFA" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+***
+
+#### Packages Used
+
+```{r loadpackages}
+library(tidyverse)
+library(knitr)
+library(kableExtra)
+```
+
+#### Datasets Used
+
+```{r}
+# sample of 6 observations
+sample6 <- c(1.4, 3.9, 5.0, 6.2, 8.4, 14.1)
+glimpse(sample6)
+
+# guinea pig survival times
+gp <- read_csv("https://raw.githubusercontent.com/STAT-JET-ASU/Datasets/master/JBStatistics/jbstatsguineapigs.csv")
+glimpse(gp)
+```
+
+#### Example with 6 Observations
+
+```{r}
+(xbar_manual <- sum(sample6) / length(sample6))
+(xbar <- mean(sample6))
+
+(x_sorted <- sort(sample6))
+(xmed <- median(sample6))
+```
+
+<details>
+```{r}
+# https://ggplot2.tidyverse.org/reference/geom_dotplot.html
+# https://ggplot2.tidyverse.org/reference/scale_continuous.html
+# https://ggplot2.tidyverse.org/reference/labs.html
+# https://ggplot2.tidyverse.org/reference/geom_text.html
+# https://ggplot2.tidyverse.org/reference/theme.html
+# https://personal.sron.nl/~pault/#sec:qualitative
+
+dot1 <- ggplot(NULL, aes(x = sample6)) +
+  geom_hline(yintercept = 0) +
+  geom_dotplot(binwidth = 1, 
+               dotsize = 0.5, 
+               color = "black", 
+               fill = "#DDAA33") +
+  geom_text(aes(x = sample6, y = 0.1), 
+            label = sample6) +
+  geom_segment(aes(x = xbar, xend = xbar, y = -0.2, yend = 0), 
+               arrow = arrow(length = unit(0.3, "cm")), 
+               color = "#BB5566") +
+  geom_text(aes(x = xbar, y = -0.25), 
+            label = paste("mean = ", xbar), 
+            fontface = "italic",
+            color = "#BB5566",
+            hjust = 0) +
+  geom_segment(aes(x = xmed, xend = xmed, y = -0.2, yend = 0), 
+               arrow = arrow(length = unit(0.3, "cm")), 
+               color = "#004488") +
+  geom_text(aes(x = xmed, y = -0.25), 
+            label = paste("median = ", xmed), 
+            fontface = "italic",
+            color = "#004488",
+            hjust = 1) +  
+  scale_x_continuous(limits = c(0, 27), 
+                     breaks = seq(from = 0, to = 27, by = 1)) +
+  scale_y_continuous(breaks = NULL) +
+  labs(title = "dotplot for example of 6 data points", 
+       x = NULL, 
+       y = NULL) +
+  theme_bw() +
+  theme(panel.grid.minor = element_blank())
+```
+</details>
+
+```{r}
+dot1
+```
+
+```{r}
+sample6mod <- c(sample6[1:5], 26.1)
+glimpse(sample6mod)
+```
+
+```{r}
+(xbar_mod <- mean(sample6mod))
+(xmed_mod <- median(sample6mod))
+```
+
+<details>
+```{r}
+dot2 <- ggplot(NULL, aes(x = sample6mod)) +
+  geom_dotplot(binwidth = 1, 
+               dotsize = 0.75, 
+               fill = "green") +
+  scale_x_continuous(limits = c(0, 27), 
+                     breaks = seq(from = 0, to = 25, by = 5)) +
+  scale_y_continuous(breaks = NULL, 
+                     expand = c(0, 0)) +
+  labs(title = "dotplot for modified example of 6 data points", 
+       x = NULL, 
+       y = NULL) +
+  geom_text(aes(x = sample6mod, y = 0.1), 
+            label = sample6mod) +
+  theme(panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank())
+```
+</details>
+
+```{r}
+dot2
+```
+
+#### Guinea Pig Survival Times
+
+```{r}
+ggplot(filter(gp, group == "treatment"), aes(x = survivaldays)) +
+  geom_histogram(breaks = seq(from = 0, to = 600, by = 50), 
+                 color = "darkgray", 
+                 fill = "lightblue") +
+  labs(title = "Survival times of 60 guinea pigs after being infected with tuberculosis",
+       x = "Lifetime (days)",
+       y = "Frequency") +
+  theme_bw()
+```
+
+```{r}
+ggplot(gp, aes(x = survivaldays)) +
+  geom_histogram(breaks = seq(from = 0, to = 800, by = 50), 
+                 color = "darkgray", 
+                 fill = "lightblue") +
+  labs(title = "Survival times of guinea pigs", 
+       subtitle = "control group vs. treatment group infected with tuberculosis",
+       x = "Lifetime (days)",
+       y = "Frequency") +
+  facet_grid(group ~ .) +
+  theme_bw()
+```
+
+```{r}
+gpstats <- gp %>% 
+  group_by(group) %>% 
+  summarize(xbar = mean(survivaldays),
+            xmed = median(survivaldays))
+
+print.data.frame(gpstats, digits = 4) # 4 sig figs
+
+gpstats %>% 
+  kable(digits = 1) %>%   # 1 decimal place 
+  kable_styling(full_width = FALSE, 
+                position = "left",
+                font_size = 14)
+```
+
+***
+```{r}
+sessionInfo()
+```

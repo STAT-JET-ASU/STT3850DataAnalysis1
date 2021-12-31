@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Created by Jill E. Thomley" />
+
+
+<title>An Introduction to the Binomial Distribution</title>
+
+<script src="JBStatsIntroToBinomial_files/header-attrs-2.9/header-attrs.js"></script>
+<script src="JBStatsIntroToBinomial_files/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="JBStatsIntroToBinomial_files/bootstrap-3.3.5/css/yeti.min.css" rel="stylesheet" />
+<script src="JBStatsIntroToBinomial_files/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="JBStatsIntroToBinomial_files/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="JBStatsIntroToBinomial_files/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="JBStatsIntroToBinomial_files/navigation-1.1/tabsets.js"></script>
+<link href="JBStatsIntroToBinomial_files/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="JBStatsIntroToBinomial_files/highlightjs-9.12.0/highlight.js"></script>
+<link href="JBStatsIntroToBinomial_files/vembedr-0.1.4/css/vembedr.css" rel="stylesheet" />
+<script src="JBStatsIntroToBinomial_files/htmlwidgets-1.5.3/htmlwidgets.js"></script>
+<script src="JBStatsIntroToBinomial_files/viz-1.8.2/viz.js"></script>
+<link href="JBStatsIntroToBinomial_files/DiagrammeR-styles-0.2/styles.css" rel="stylesheet" />
+<script src="JBStatsIntroToBinomial_files/grViz-binding-1.0.6.1/grViz.js"></script>
+<script src="JBStatsIntroToBinomial_files/kePrint-0.0.1/kePrint.js"></script>
+<link href="JBStatsIntroToBinomial_files/lightable-0.0.1/lightable.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">An Introduction to the Binomial Distribution</h1>
+<h3 class="subtitle">Companion <code>R</code> Code for JB Statistics Video Lesson</h3>
+<h4 class="author">Created by Jill E. Thomley</h4>
+<h4 class="date">Tuesday, July 27, 2021 @ 01:05 PM</h4>
+
+</div>
+
+<div id="TOC">
+<ul>
+<li><a href="#packages-used"><strong>Packages Used</strong></a></li>
+<li><a href="#the-binomial-distribution"><strong>The Binomial Distribution</strong></a></li>
+<li><a href="#rolling-a-6-sided-die-example"><strong>Rolling a 6-sided Die Example</strong></a>
+<ul>
+<li><a href="#calculating-px-2">Calculating P(X = 2)</a></li>
+<li><a href="#using-a-tree-diagram">Using a Tree Diagram</a></li>
+</ul></li>
+<li><a href="#canadian-life-tables-example"><strong>Canadian Life Tables Example</strong></a>
+<ul>
+<li><a href="#calculating-px-18">Calculating P(X = 18)</a></li>
+<li><a href="#visualize-in-a-plot">Visualize in a Plot</a></li>
+<li><a href="#expected-value-and-variance">Expected Value and Variance</a></li>
+<li><a href="#calculating-px-18-1">Calculating P(X ≥ 18)</a></li>
+<li><a href="#visualize-in-a-plot-1">Visualize in a Plot</a></li>
+</ul></li>
+<li><a href="#babies-with-jaundice-example"><strong>Babies with Jaundice Example</strong></a></li>
+<li><a href="#simulating-bernoulli-trials"><strong>Simulating Bernoulli Trials</strong></a></li>
+</ul>
+</div>
+
+<hr />
+<div class="vembedr">
+<div>
+<iframe src="https://www.youtube.com/embed/qIzC1-9PwQo" width="711" height="400" frameborder="0" allowfullscreen=""></iframe>
+</div>
+</div>
+<hr />
+<div id="packages-used" class="section level3">
+<h3><strong>Packages Used</strong></h3>
+<details>
+<pre class="r"><code>library(tidyverse)
+library(data.tree)
+library(knitr)
+library(kableExtra)</code></pre>
+</details>
+</div>
+<div id="the-binomial-distribution" class="section level3">
+<h3><strong>The Binomial Distribution</strong></h3>
+<p>The binomial distribution is a discrete probability distribution. It mathematically models the <em>number of successes</em> in a sequence of independent Bernoulli trials. The probability for a given number of successes <span class="math inline">\(x\)</span> is found using the <em>probability mass function</em> (pmf).</p>
+<p><span class="math display">\[X \sim Bin(n,p)\]</span></p>
+<pre><code>x = number of successes = {0, 1, 2, ..., n}
+n = number of trials
+p = probability of success on a single trial
+1 - p = probability of failure on a single trial</code></pre>
+<p><span class="math display">\[f(x) = P(X = x) = {n \choose x}p^x(1-p)^{n-x}\]</span></p>
+<p><span class="math display">\[F(x)=P(X \leq x) = \sum\limits_{i=0}^x f(x) = \sum\limits_{i=0}^x {n \choose i}p^i(1-p)^{n-i}\]</span></p>
+<p><span class="math display">\[E[X] = np \text{ and } Var[X] = np(1-p)\]</span></p>
+</div>
+<div id="rolling-a-6-sided-die-example" class="section level3">
+<h3><strong>Rolling a 6-sided Die Example</strong></h3>
+<div id="calculating-px-2" class="section level4">
+<h4>Calculating P(X = 2)</h4>
+<p>The random variable <span class="math inline">\(X\)</span> is the number of fives we get when we roll a fair die three times.</p>
+<p><span class="math display">\[X \sim Bin(3,\frac{1}{6})\]</span></p>
+<p>What is the probability that a five comes up exactly 2 times in 3 rolls? Solve for <span class="math inline">\(x = 2\)</span>.</p>
+<p><span class="math display">\[f(2) = P(X = 2) = {3 \choose 2}\left(\frac{1}{6}\right)^2\left(1-\frac{1}{6}\right)^{3-2}\]</span></p>
+<pre class="r"><code>dbinom(2, 3, 1/6)   # dbinom(x, n, p)</code></pre>
+<pre><code>[1] 0.06944444</code></pre>
+</div>
+<div id="using-a-tree-diagram" class="section level4">
+<h4>Using a Tree Diagram</h4>
+<p>We can visualize the various combinations of flips leading to two successes with a tree diagram.</p>
+<details>
+<pre class="r"><code>rolltree &lt;- Node$new(&quot;Sequence of 3 Trials&quot;)
+   FA &lt;- rolltree$AddChild(&quot;Success&quot;)
+      FC &lt;- FA$AddChild(&quot;Success&quot;)
+         FG &lt;- FC$AddChild(&quot;Success&quot;)
+            SSS &lt;- FG$AddChild(&quot;S S S&quot;)
+         FH &lt;- FC$AddChild(&quot;Failure&quot;)
+            SSF &lt;- FH$AddChild(&quot;S S F&quot;)
+                SSF2 &lt;- SSF$AddChild(&quot;2 Successes&quot;)
+     FD &lt;- FA$AddChild(&quot;Failure&quot;)
+         FI &lt;- FD$AddChild(&quot;Success&quot;)
+            SFS &lt;- FI$AddChild(&quot;S F S&quot;)
+                SFS2 &lt;- SFS$AddChild(&quot;2 Successes&quot;)
+         FJ &lt;- FD$AddChild(&quot;Failure&quot;)
+            SFF &lt;- FJ$AddChild(&quot;S F F&quot;)
+   FB &lt;- rolltree$AddChild(&quot;Failure&quot;)
+      FE &lt;- FB$AddChild(&quot;Success&quot;)
+         FG &lt;- FE$AddChild(&quot;Success&quot;)
+            FSS &lt;- FG$AddChild(&quot;F S S&quot;)
+                FSS2 &lt;- FSS$AddChild(&quot;2 Successes&quot;)
+         FH &lt;- FE$AddChild(&quot;Failure&quot;)
+            FSF &lt;- FH$AddChild(&quot;F S F&quot;)
+      FF &lt;- FB$AddChild(&quot;Failure&quot;)
+         FG &lt;- FF$AddChild(&quot;Success&quot;)
+            FFS &lt;- FG$AddChild(&quot;F F S&quot;)
+         FH &lt;- FF$AddChild(&quot;Failure&quot;)
+            FFF &lt;- FH$AddChild(&quot;F F F&quot;)
+
+SetGraphStyle(rolltree, rankdir = &quot;TB&quot;)
+SetNodeStyle(rolltree, 
+             style = &quot;filled, rounded&quot;, 
+             shape = &quot;box&quot;, 
+             fillcolor = &quot;lightblue&quot;,
+             fontcolor = &quot;black&quot;)</code></pre>
+</details>
+<pre class="r"><code>plot(rolltree)</code></pre>
+<div id="htmlwidget-0a6e8284a5b30633cd51" style="width:672px;height:480px;" class="grViz html-widget"></div>
+<script type="application/json" data-for="htmlwidget-0a6e8284a5b30633cd51">{"x":{"diagram":"digraph {\n\ngraph [rankdir = \"TB\"]\n\n\n\n  \"1\" [label = \"Sequence of 3 Trials\", style = \"filled, rounded\", shape = \"box\", fontcolor = \"black\", fillcolor = \"#ADD8E6\"] \n  \"2\" [label = \"Success\", style = \"filled, rounded\", shape = \"box\", fontcolor = \"black\", fillcolor = \"#ADD8E6\"] \n  \"3\" [label = \"Success\", style = \"filled, rounded\", shape = \"box\", fontcolor = \"black\", fillcolor = \"#ADD8E6\"] \n  \"4\" [label = \"Success\", style = \"filled, rounded\", shape = \"box\", fontcolor = \"black\", fillcolor = \"#ADD8E6\"] \n  \"5\" [label = \"S S S\", style = \"filled, rounded\", shape = \"box\", fontcolor = \"black\", fillcolor = \"#ADD8E6\"] \n  \"6\" [label = \"Failure\", style = \"filled, rounded\", shape = \"box\", fontcolor = \"black\", fillcolor = \"#ADD8E6\"] \n  \"7\" [label = \"S S F\", style = \"filled, rounded\", shape = \"box\", fontcolor = \"black\", fillcolor = \"#ADD8E6\"] \n  \"8\" [label = \"2 Successes\", style = \"filled, rounded\", shape = \"box\", fontcolor = \"black\", fillcolor = \"#ADD8E6\"] \n  \"9\" [label = \"Failure\", style = \"filled, rounded\", shape = \"box\", fontcolor = \"black\", fillcolor = \"#ADD8E6\"] \n  \"10\" [label = \"Success\", style = \"filled, rounded\", shape = \"box\", fontcolor = \"black\", fillcolor = \"#ADD8E6\"] \n  \"11\" [label = \"S F S\", style = \"filled, rounded\", shape = \"box\", fontcolor = \"black\", fillcolor = \"#ADD8E6\"] \n  \"12\" [label = \"2 Successes\", style = \"filled, rounded\", shape = \"box\", fontcolor = \"black\", fillcolor = \"#ADD8E6\"] \n  \"13\" [label = \"Failure\", style = \"filled, rounded\", shape = \"box\", fontcolor = \"black\", fillcolor = \"#ADD8E6\"] \n  \"14\" [label = \"S F F\", style = \"filled, rounded\", shape = \"box\", fontcolor = \"black\", fillcolor = \"#ADD8E6\"] \n  \"15\" [label = \"Failure\", style = \"filled, rounded\", shape = \"box\", fontcolor = \"black\", fillcolor = \"#ADD8E6\"] \n  \"16\" [label = \"Success\", style = \"filled, rounded\", shape = \"box\", fontcolor = \"black\", fillcolor = \"#ADD8E6\"] \n  \"17\" [label = \"Success\", style = \"filled, rounded\", shape = \"box\", fontcolor = \"black\", fillcolor = \"#ADD8E6\"] \n  \"18\" [label = \"F S S\", style = \"filled, rounded\", shape = \"box\", fontcolor = \"black\", fillcolor = \"#ADD8E6\"] \n  \"19\" [label = \"2 Successes\", style = \"filled, rounded\", shape = \"box\", fontcolor = \"black\", fillcolor = \"#ADD8E6\"] \n  \"20\" [label = \"Failure\", style = \"filled, rounded\", shape = \"box\", fontcolor = \"black\", fillcolor = \"#ADD8E6\"] \n  \"21\" [label = \"F S F\", style = \"filled, rounded\", shape = \"box\", fontcolor = \"black\", fillcolor = \"#ADD8E6\"] \n  \"22\" [label = \"Failure\", style = \"filled, rounded\", shape = \"box\", fontcolor = \"black\", fillcolor = \"#ADD8E6\"] \n  \"23\" [label = \"Success\", style = \"filled, rounded\", shape = \"box\", fontcolor = \"black\", fillcolor = \"#ADD8E6\"] \n  \"24\" [label = \"F F S\", style = \"filled, rounded\", shape = \"box\", fontcolor = \"black\", fillcolor = \"#ADD8E6\"] \n  \"25\" [label = \"Failure\", style = \"filled, rounded\", shape = \"box\", fontcolor = \"black\", fillcolor = \"#ADD8E6\"] \n  \"26\" [label = \"F F F\", style = \"filled, rounded\", shape = \"box\", fontcolor = \"black\", fillcolor = \"#ADD8E6\"] \n  \"1\"->\"2\" \n  \"1\"->\"15\" \n  \"2\"->\"3\" \n  \"2\"->\"9\" \n  \"15\"->\"16\" \n  \"15\"->\"22\" \n  \"3\"->\"4\" \n  \"3\"->\"6\" \n  \"9\"->\"10\" \n  \"9\"->\"13\" \n  \"16\"->\"17\" \n  \"16\"->\"20\" \n  \"22\"->\"23\" \n  \"22\"->\"25\" \n  \"4\"->\"5\" \n  \"6\"->\"7\" \n  \"10\"->\"11\" \n  \"13\"->\"14\" \n  \"17\"->\"18\" \n  \"20\"->\"21\" \n  \"23\"->\"24\" \n  \"25\"->\"26\" \n  \"7\"->\"8\" \n  \"11\"->\"12\" \n  \"18\"->\"19\" \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<div id="canadian-life-tables-example" class="section level3">
+<h3><strong>Canadian Life Tables Example</strong></h3>
+<div id="calculating-px-18" class="section level4">
+<h4>Calculating P(X = 18)</h4>
+<p>The random variable <span class="math inline">\(X\)</span> is the number of 90-year-old Canadian males out of a sample of 20 that live at least another year.</p>
+<p><span class="math display">\[X \sim Bin(20, 0.82)\]</span></p>
+<p>What is the probability that exactly 18 out of 20 survive? Solve for <span class="math inline">\(x = 18\)</span>.</p>
+<p><span class="math display">\[f(18) = P(X = 18) = {20 \choose 18}(0.82)^18(1-0.82)^{20-18}\]</span></p>
+<pre class="r"><code>dbinom(18, 20, 0.82)   # dbinom(x, n, p)</code></pre>
+<pre><code>[1] 0.1729609</code></pre>
+</div>
+<div id="visualize-in-a-plot" class="section level4">
+<h4>Visualize in a Plot</h4>
+<p>We can calculate and plot the probabilities for all possible values of X. The code below can be used for any binomial distribution; simply input the correct n and p. </p>
+<pre class="r"><code>n &lt;- 20
+p &lt;- 0.82
+pmf &lt;- tibble(x = 0:n, probability = dbinom(0:n, n, p))</code></pre>
+<pre class="r"><code># probabilities for large digits are shown in scientific notation
+
+probdigits &lt;- 20   # specify display digits for the probabilities
+
+pmf %&gt;%
+  kable(digits = probdigits) %&gt;% 
+  kable_styling(full_width = FALSE, 
+                position = &quot;left&quot;, 
+                font_size = 14,
+                bootstrap_options = c(&quot;striped&quot;))</code></pre>
+<table class="table table-striped" style="font-size: 14px; width: auto !important; ">
+<thead>
+<tr>
+<th style="text-align:right;">
+x
+</th>
+<th style="text-align:right;">
+probability
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1.274820e-15
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1.161506e-13
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+5.026740e-12
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+1.373976e-10
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+2.660169e-09
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+3.877936e-08
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+4.416538e-07
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+4.023957e-06
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+2.978846e-05
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+1.809373e-04
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+10
+</td>
+<td style="text-align:right;">
+9.066969e-04
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+11
+</td>
+<td style="text-align:right;">
+3.755007e-03
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+12
+</td>
+<td style="text-align:right;">
+1.282961e-02
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+13
+</td>
+<td style="text-align:right;">
+3.596677e-02
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+14
+</td>
+<td style="text-align:right;">
+8.192430e-02
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:right;">
+1.492843e-01
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+16
+</td>
+<td style="text-align:right;">
+2.125228e-01
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+17
+</td>
+<td style="text-align:right;">
+2.278022e-01
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+18
+</td>
+<td style="text-align:right;">
+1.729609e-01
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+19
+</td>
+<td style="text-align:right;">
+8.294032e-02
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+20
+</td>
+<td style="text-align:right;">
+1.889196e-02
+</td>
+</tr>
+</tbody>
+</table>
+<details>
+<pre class="r"><code>breakby &lt;- 2   # choose spacing for the x-axis tick marks
+
+pmfplot &lt;- ggplot(pmf, aes(x = x, y = probability)) +
+  geom_col(width = 1, color = &quot;black&quot;, fill = &quot;lightblue&quot;) +
+  scale_x_continuous(breaks = seq(from = 0, to = n, by = breakby)) +
+  labs(title = &quot;How many 90-year old Canadian men will survive at least another year?&quot;,
+       subtitle = &quot;number of survivors from a random sample of 20 men = X ~ Bin(20, 0.82)&quot;,
+       x = &quot;Number That Survive for at Least Another Year&quot;, 
+       y = &quot;Probability&quot;) +
+  theme_linedraw()</code></pre>
+</details>
+<pre class="r"><code>pmfplot</code></pre>
+<p><img src="JBStatsIntroToBinomial_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<details>
+<pre class="r"><code>breakby &lt;- 2   # choose spacing of x-axis tick marks
+
+pmfplot &lt;- ggplot(pmf, aes(x = x, y = probability)) +
+  geom_col(width = 1, color = &quot;black&quot;, 
+           fill = c(rep(&quot;lightblue&quot;, 18), &quot;red&quot;, rep(&quot;lightblue&quot;, 2))) +  # bar shading
+  scale_x_continuous(breaks = seq(from = 0, to = n, by = breakby)) +
+  labs(title = &quot;How many 90-year old Canadian men will survive at least another year?&quot;,
+       subtitle = &quot;X ~ Bin(20, 0.82), with P(X = 18) shaded in red&quot;,
+       x = &quot;Number That Survive for at Least Another Year&quot;, 
+       y = &quot;Probability&quot;) +
+  theme_linedraw()</code></pre>
+</details>
+<pre class="r"><code>pmfplot</code></pre>
+<p><img src="JBStatsIntroToBinomial_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<pre class="r"><code># probabilities for large digits are shown in scientific notation
+
+probdigits &lt;- 20   # specify display digits for the probabilities
+
+pmf %&gt;% 
+  kable(digits = probdigits) %&gt;% 
+  row_spec(row = 19, color = &quot;white&quot;, background = &quot;red&quot;, bold = TRUE) %&gt;% 
+  kable_styling(full_width = FALSE, 
+                position = &quot;left&quot;, 
+                font_size = 14,
+                bootstrap_options = c(&quot;striped&quot;))</code></pre>
+<table class="table table-striped" style="font-size: 14px; width: auto !important; ">
+<thead>
+<tr>
+<th style="text-align:right;">
+x
+</th>
+<th style="text-align:right;">
+probability
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1.274820e-15
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1.161506e-13
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+5.026740e-12
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+1.373976e-10
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+2.660169e-09
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+3.877936e-08
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+4.416538e-07
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+4.023957e-06
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+2.978846e-05
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+1.809373e-04
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+10
+</td>
+<td style="text-align:right;">
+9.066969e-04
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+11
+</td>
+<td style="text-align:right;">
+3.755007e-03
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+12
+</td>
+<td style="text-align:right;">
+1.282961e-02
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+13
+</td>
+<td style="text-align:right;">
+3.596677e-02
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+14
+</td>
+<td style="text-align:right;">
+8.192430e-02
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:right;">
+1.492843e-01
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+16
+</td>
+<td style="text-align:right;">
+2.125228e-01
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+17
+</td>
+<td style="text-align:right;">
+2.278022e-01
+</td>
+</tr>
+<tr>
+<td style="text-align:right;font-weight: bold;color: white !important;background-color: red !important;">
+18
+</td>
+<td style="text-align:right;font-weight: bold;color: white !important;background-color: red !important;">
+1.729609e-01
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+19
+</td>
+<td style="text-align:right;">
+8.294032e-02
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+20
+</td>
+<td style="text-align:right;">
+1.889196e-02
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="expected-value-and-variance" class="section level4">
+<h4>Expected Value and Variance</h4>
+<p>Here we use the values for <span class="math inline">\(n\)</span> and <span class="math inline">\(p\)</span> that we input above for the pmf.</p>
+<p>Expected Value</p>
+<pre class="r"><code>(mu &lt;- n * p)</code></pre>
+<pre><code>[1] 16.4</code></pre>
+<p>Variance</p>
+<pre class="r"><code>(sigma2 &lt;- n * p * (1 - p))</code></pre>
+<pre><code>[1] 2.952</code></pre>
+<p>Standard Deviation</p>
+<pre class="r"><code>(sigma &lt;- sqrt(sigma2))</code></pre>
+<pre><code>[1] 1.718139</code></pre>
+</div>
+<div id="calculating-px-18-1" class="section level4">
+<h4>Calculating P(X ≥ 18)</h4>
+<p>What is the probability that at least 18 out of 20 survive? Solve for <span class="math inline">\(x \geq 18\)</span>.</p>
+<p><span class="math display">\[P(X \geq 18) = P(X = 18) + P(x = 19) + P(X = 20)\]</span></p>
+<p>Algorithmically, we can do…</p>
+<pre class="r"><code>dbinom(18, 20, 0.82) + dbinom(18, 19, 0.82) + dbinom(20, 20, 0.82)</code></pre>
+<pre><code>[1] 0.2879423</code></pre>
+<p>This could be condensed by…</p>
+<pre class="r"><code>sum(dbinom(18:20, 20, 0.82))</code></pre>
+<pre><code>[1] 0.2747932</code></pre>
+<p>However, for the binomial it is also true that…</p>
+<p><span class="math display">\[P(X \geq 18) = P(X &gt; 17) = 1 - P(X \leq 17)\]</span></p>
+<p>Thus we can use the cumulative distribution function…</p>
+<pre class="r"><code>pbinom(17, 20, 0.82, lower.tail = FALSE)   # pbinom(x, n, p, lower.tail = FALSE)</code></pre>
+<pre><code>[1] 0.2747932</code></pre>
+</div>
+<div id="visualize-in-a-plot-1" class="section level4">
+<h4>Visualize in a Plot</h4>
+<p>Here we use the same pmf we calculated and stored above.</p>
+<details>
+<pre class="r"><code>pmfplot &lt;- ggplot(pmf, aes(x = x, y = probability)) +
+  geom_col(width = 1, color = &quot;black&quot;, 
+           fill = c(rep(&quot;lightblue&quot;, 18), rep(&quot;red&quot;, 3))) +
+  scale_x_continuous(breaks = seq(from = 0, to = n, by = 2)) +
+  labs(title = &quot;How many 90-year old Canadian men will survive at least another year?&quot;,
+       subtitle = &quot;X ~ Bin(20, 0.82), with P(X &gt; 17) shaded in red&quot;,
+       x = &quot;Number That Survive for at Least Another Year&quot;, 
+       y = &quot;Probability&quot;) +
+  theme_linedraw()</code></pre>
+</details>
+<pre class="r"><code>pmfplot</code></pre>
+<p><img src="JBStatsIntroToBinomial_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
+<pre class="r"><code># the probabilities are in scientific notation
+pmf %&gt;% 
+  kable(digits = 20) %&gt;% 
+  row_spec(row = 19:21, color = &quot;white&quot;, background = &quot;red&quot;, bold = TRUE) %&gt;% 
+  kable_styling(full_width = FALSE, 
+                position = &quot;left&quot;, 
+                font_size = 14,
+                bootstrap_options = c(&quot;striped&quot;))</code></pre>
+<table class="table table-striped" style="font-size: 14px; width: auto !important; ">
+<thead>
+<tr>
+<th style="text-align:right;">
+x
+</th>
+<th style="text-align:right;">
+probability
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+1.274820e-15
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+1.161506e-13
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+5.026740e-12
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+1.373976e-10
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+2.660169e-09
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+3.877936e-08
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+4.416538e-07
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+4.023957e-06
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+2.978846e-05
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+1.809373e-04
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+10
+</td>
+<td style="text-align:right;">
+9.066969e-04
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+11
+</td>
+<td style="text-align:right;">
+3.755007e-03
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+12
+</td>
+<td style="text-align:right;">
+1.282961e-02
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+13
+</td>
+<td style="text-align:right;">
+3.596677e-02
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+14
+</td>
+<td style="text-align:right;">
+8.192430e-02
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:right;">
+1.492843e-01
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+16
+</td>
+<td style="text-align:right;">
+2.125228e-01
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+17
+</td>
+<td style="text-align:right;">
+2.278022e-01
+</td>
+</tr>
+<tr>
+<td style="text-align:right;font-weight: bold;color: white !important;background-color: red !important;">
+18
+</td>
+<td style="text-align:right;font-weight: bold;color: white !important;background-color: red !important;">
+1.729609e-01
+</td>
+</tr>
+<tr>
+<td style="text-align:right;font-weight: bold;color: white !important;background-color: red !important;">
+19
+</td>
+<td style="text-align:right;font-weight: bold;color: white !important;background-color: red !important;">
+8.294032e-02
+</td>
+</tr>
+<tr>
+<td style="text-align:right;font-weight: bold;color: white !important;background-color: red !important;">
+20
+</td>
+<td style="text-align:right;font-weight: bold;color: white !important;background-color: red !important;">
+1.889196e-02
+</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>pmf %&gt;% 
+  filter(x &gt;=18) %&gt;% 
+  summarize(prob_greq18 = sum(probability))</code></pre>
+<pre><code># A tibble: 1 × 1
+  prob_greq18
+        &lt;dbl&gt;
+1       0.275</code></pre>
+</div>
+</div>
+<div id="babies-with-jaundice-example" class="section level3">
+<h3><strong>Babies with Jaundice Example</strong></h3>
+<p>The babies with jaundice example from <a href="https://youtu.be/oHcrna8Fk18">An Introduction to Discrete Random Variables and Discrete Probability Distributions</a> can be modeled with the binomial distribution, because it is a series of independent Bernoulli trials with a constant probability.</p>
+<pre class="r"><code>n &lt;- 2
+p &lt;- 0.6
+pmf &lt;- tibble(x = 0:n, probability = dbinom(0:n, n, p))</code></pre>
+<pre class="r"><code>probdigits &lt;- 2   # specify display digits for the probabilities
+
+pmf %&gt;% 
+  kable(digits = probdigits) %&gt;% 
+  kable_styling(full_width = FALSE, 
+                position = &quot;left&quot;, 
+                font_size = 14,
+                bootstrap_options = c(&quot;striped&quot;))</code></pre>
+<table class="table table-striped" style="font-size: 14px; width: auto !important; ">
+<thead>
+<tr>
+<th style="text-align:right;">
+x
+</th>
+<th style="text-align:right;">
+probability
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+0.16
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.48
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+0.36
+</td>
+</tr>
+</tbody>
+</table>
+<details>
+<pre class="r"><code>breakby &lt;- 1   # choose spacing of x-axis tick marks
+
+pmfplot &lt;- ggplot(pmf, aes(x = x, y = probability)) +
+  geom_col(width = 1, color = &quot;black&quot;, fill = &quot;lightblue&quot;) +
+  scale_x_continuous(breaks = 0:2) +
+  labs(x = &quot;x&quot;, 
+       y = &quot;p(x)&quot;) +
+  theme_linedraw()</code></pre>
+</details>
+<pre class="r"><code>pmfplot</code></pre>
+<p><img src="JBStatsIntroToBinomial_files/figure-html/unnamed-chunk-26-1.png" width="672" /></p>
+</div>
+<div id="simulating-bernoulli-trials" class="section level3">
+<h3><strong>Simulating Bernoulli Trials</strong></h3>
+<p>Previously you saw that you can simulate Bernoulli trials using the function <code>rbernoulli(n, p)</code> (purrr package). The parameter <code>n</code> in this case is the number of times you want to repeat the Bernoulli process. In other words, it is the number of flips. For example, if we want fifty flips of a fair coin, we could use the following code. The output is a logical vector with <code>TRUE</code> for a success.</p>
+<pre class="r"><code>rbernoulli(50, 0.5)</code></pre>
+<pre><code> [1] FALSE  TRUE FALSE FALSE FALSE  TRUE  TRUE  TRUE FALSE FALSE  TRUE FALSE
+[13]  TRUE  TRUE  TRUE  TRUE FALSE FALSE  TRUE FALSE FALSE  TRUE FALSE  TRUE
+[25]  TRUE  TRUE FALSE FALSE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE FALSE FALSE
+[37]  TRUE  TRUE FALSE FALSE  TRUE FALSE  TRUE  TRUE  TRUE FALSE  TRUE  TRUE
+[49] FALSE  TRUE</code></pre>
+<p>We can also perform this simulation with the <code>rbinom(n, size, prob)</code> function. In this case, the <code>size</code> parameter is set to 1, for one trial. In this sense, the Bernoulli is a special case of Binomial with <code>n = 1</code>. The output is an integer vector with <code>1</code> for a success.</p>
+<pre class="r"><code>rbinom(50, 1, 0.5)</code></pre>
+<pre><code> [1] 1 0 1 1 0 0 0 0 1 1 0 0 1 0 1 0 0 1 1 1 1 1 1 1 1 0 1 0 1 0 0 0 0 0 0 0 1 1
+[39] 0 0 0 1 0 0 1 0 1 0 1 0</code></pre>
+<hr />
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 3.6.0 (2019-04-26)
+Platform: x86_64-redhat-linux-gnu (64-bit)
+Running under: Red Hat Enterprise Linux
+
+Matrix products: default
+BLAS/LAPACK: /usr/lib64/R/lib/libRblas.so
+
+locale:
+ [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+ [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+ [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+ [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+ [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+[11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] kableExtra_1.3.4 knitr_1.33       data.tree_1.0.0  forcats_0.5.1   
+ [5] stringr_1.4.0    dplyr_1.0.7      purrr_0.3.4      readr_2.0.0     
+ [9] tidyr_1.1.3      tibble_3.1.3     ggplot2_3.3.5    tidyverse_1.3.1 
+
+loaded via a namespace (and not attached):
+ [1] Rcpp_1.0.7         svglite_2.0.0      lubridate_1.7.10   visNetwork_2.0.9  
+ [5] assertthat_0.2.1   digest_0.6.27      utf8_1.2.2         R6_2.5.0          
+ [9] cellranger_1.1.0   backports_1.2.1    reprex_2.0.0       evaluate_0.14     
+[13] highr_0.9          httr_1.4.2         pillar_1.6.1       rlang_0.4.11      
+[17] readxl_1.3.1       rstudioapi_0.13    jquerylib_0.1.4    DiagrammeR_1.0.6.1
+[21] rmarkdown_2.9      labeling_0.4.2     webshot_0.5.2      htmlwidgets_1.5.3 
+[25] munsell_0.5.0      broom_0.7.8        compiler_3.6.0     modelr_0.1.8      
+[29] xfun_0.24          pkgconfig_2.0.3    systemfonts_1.0.2  vembedr_0.1.4     
+[33] htmltools_0.5.1.1  tidyselect_1.1.1   fansi_0.5.0        viridisLite_0.4.0 
+[37] crayon_1.4.1       tzdb_0.1.2         dbplyr_2.1.1       withr_2.4.2       
+[41] grid_3.6.0         jsonlite_1.7.2     gtable_0.3.0       lifecycle_1.0.0   
+[45] DBI_1.1.1          magrittr_2.0.1     scales_1.1.1       cli_3.0.1         
+[49] stringi_1.7.3      farver_2.1.0       fs_1.5.0           xml2_1.3.2        
+[53] bslib_0.2.5.1      ellipsis_0.3.2     generics_0.1.0     vctrs_0.3.8       
+[57] RColorBrewer_1.1-2 tools_3.6.0        glue_1.4.2         hms_1.1.0         
+[61] yaml_2.2.1         colorspace_2.0-2   rvest_1.0.0        haven_2.4.1       
+[65] sass_0.4.0        </code></pre>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

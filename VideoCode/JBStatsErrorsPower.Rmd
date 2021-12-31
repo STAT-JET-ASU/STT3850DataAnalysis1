@@ -1,0 +1,56 @@
+---
+title: "Type I Errors, Type II Errors, and Power of the Test"
+subtitle: "JB Statistics Video Lesson Companion `R` Code"
+author: "Created by Jill E. Thomley"
+date: '`r format(Sys.time(), "%A, %B %d, %Y @ %I:%M %p")`'
+output: 
+  html_document: 
+    theme: yeti
+    highlight: textmate
+---
+
+```{r globaloptions, include = FALSE}
+knitr::opts_chunk$set(message = FALSE, warning = FALSE, comment = NA)
+```
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/7mE-K_w1v90" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+***
+Packages Used
+
+```{r loadpackages}
+library(tidyverse)
+```
+
+Relationship between $\alpha$ and $\beta$ for $H_0: \mu = 0$ versus $H_A: \mu > 0$
+
+**Note:** These calculations assume that a normal distribution can be used to model the sampling distribution of the sample mean.  
+
+```{r type1vversustype2}
+null_mu   <- 0
+true_mu   <- 1
+sigma     <- 5
+n         <- 20
+alphas    <- seq(0, .2, .05)
+threshold <- qnorm(alphas, null_mu, sigma/sqrt(n), lower.tail = FALSE) 
+betas     <- pnorm(threshold, true_mu, sigma/sqrt(n))
+
+errors_plot_data <- tibble(n, alphas, betas)
+
+ggplot(errors_plot_data, aes(x = alphas, y = betas)) +
+  geom_point() +
+  scale_y_continuous(limits = c(0, 1))
+
+ggplot(errors_plot_data, aes(x = alphas, y = betas)) +
+  geom_point() +
+  scale_y_continuous(limits = c(0, 1))
+
+ggplot(errors_plot_data, aes(x = alphas, y = betas)) +
+  geom_point() +
+  scale_y_continuous(limits = c(0, 1))
+```
+
+***
+```{r}
+sessionInfo()
+```

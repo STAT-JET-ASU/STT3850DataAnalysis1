@@ -1,0 +1,218 @@
+---
+title: "Describing a Categorical Variable"
+subtitle: "Companion `R` Code for Stats 101 Video Lesson"
+author: "Created by Jill E. Thomley"
+date: '`r format(Sys.time(), "%A, %B %d, %Y @ %I:%M %p")`'
+output: 
+  html_document: 
+    theme: yeti
+    highlight: textmate
+    toc: TRUE
+    toc_depth: 5
+    self_contained: false
+---
+
+```{r globaloptions, include = FALSE}
+knitr::opts_chunk$set(
+  message = FALSE,
+  warning = FALSE,
+  comment = NA
+)
+```
+
+***
+```{r, echo = FALSE}
+vembedr::embed_youtube(
+  id = "vrWYw8d2830",
+  width = NULL,
+  height = 400,
+  ratio = c("16by9", "4by3"),
+  frameborder = 0,
+  allowfullscreen = TRUE,
+  query = NULL
+)
+```
+***
+
+## Packages Used
+
+```{r loadpackages}
+library(tidyverse)
+```
+
+## Smartphone User Example
+
+### Read in the Dataset 
+
+The data is in a CSV file stored on the web, so we will read it into RStudio using `read_csv()` from the tidyverse package (which has been loaded above). It is always good to inspect the structure of a dataset, especially if you have not used it before.
+
+```{r}
+URL <- "https://raw.githubusercontent.com/STAT-JET-ASU/Datasets/master/Stats101/stats101smartphones.csv"
+smartphones <- read_csv(URL)
+glimpse(smartphones)
+head(smartphones)
+```
+
+### Make `brand` a Factor
+
+We can convert `brand` into a factor variable so the categories are ordered the way we want.
+
+```{r}
+# extract and alphabetize the category names
+
+sortedcats <- sort(unique(smartphones$brand))
+sortedcats
+
+# move the 'Other' category to the end
+# you need to switch positions 5 and 6
+# indices [i] are the vector locations
+
+categories <- c(sortedcats[1:4], sortedcats[6], sortedcats[5])
+categories
+
+# you could also manually type the order, since this is a short vector
+# however, big picture, manual inputs in code are not very reproducible
+# categories <- c("Apple", "HTC", "LG", "Motorola", "Samsung", "Other")
+
+# mutate into a factor variable
+
+smartphones <- smartphones %>%
+  mutate(brand = factor(brand, levels = categories))
+
+# check structure, now brand is <fct> versus <chr>
+
+glimpse(smartphones)
+```
+
+### Frequency Distribution
+
+Most methods for creating frequency distributions in `R` do not automatically add the totals, since we may want to use the "table" in further operations. We can use other methods to calculate totals. Because we are using the dplyr package function `count()` the output will be a tibble. This is useful because we can easily perform other operations on it.
+
+```{r}
+smartphones %>%
+  count(brand)
+
+smartphones %>%
+  count(brand) %>%
+  summarize(total = sum(n))
+```
+
+A better way to do this would be to save the frequency distribution as an object to avoid redundant coding.
+
+```{r}
+phonedist1 <- smartphones %>%
+  count(brand)
+phonedist1
+
+phonedist1 %>%
+  summarize(total = sum(n))
+```
+
+### Frequency Bar Plot
+
+#### Bare-Bones Bar Plot
+
+If you are exploring your data, you can make a quick plot like the one below.
+
+```{r}
+ggplot(smartphones, aes(x = brand)) +
+  geom_bar()
+```
+
+#### Formatted Bar Plot
+
+If you are presenting your data, you should at least add a title and better axis labels. This plot is formatted to resemble the one in the video by changing the colors, bar widths, y-axis numbering, and removing some grid lines.
+
+```{r}
+ggplot(smartphones, aes(x = brand)) +
+  geom_bar(fill = "darkorange", width = 0.5) +
+  scale_y_continuous(breaks = seq(0, 50, by = 5)) +
+  labs(
+    title = "Sample Distribution of Smartphone Ownership",
+    x = "Brand of Cell Phone",
+    y = "Frequency"
+  ) +
+  theme(
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.y = element_blank()
+  )
+```
+
+#### Using the "Table"
+
+You can also make a bar plot from your saved frequency distribution object using `geom_col()`. This plot can be formatted in the same way as the one above, which is one major advantage of using ggplot2.
+
+```{r}
+ggplot(phonedist1, aes(x = brand, y = n)) +
+  geom_col()
+```
+
+### Relative Fequencies
+
+```{r}
+smartphones %>%
+  count(brand) %>%
+  mutate(rel_freq = prop.table(n))
+```
+
+We also could have used the distribution we saved above to avoid re-typing the same code. You should think about these kinds of things when planning your workflow. We can also rename `n` to be `frequency`.
+
+```{r}
+phonedist2 <- phonedist1 %>%
+  mutate(rel_freq = prop.table(n)) %>% 
+  rename(frequency = n)
+phonedist2
+
+phonedist2 %>%
+  summarize(
+    total_frequency = sum(frequency),
+    total_rel_freq = sum(rel_freq)
+  )
+```
+
+### Relative Frequency Bar Plot
+
+#### Bare-Bones Bar Plot
+
+We have to instruct ggplot2 to compute relative frequencies from the data.
+
+```{r}
+ggplot(smartphones, aes(x = brand)) +
+  geom_bar(aes(y = (..count..) / sum(..count..)))
+```
+
+#### Formatted Bar Plot
+
+If you are presenting your data, you should at least add a title and better axis labels. This plot is formatted to resemble the one in the video by changing the colors, bar widths, y-axis numbering, and the grid lines.
+
+```{r}
+ggplot(smartphones, aes(x = brand)) +
+  geom_bar(aes(y = (..count..) / sum(..count..)),
+    fill = "darkorange",
+    width = 0.5
+  ) +
+  scale_y_continuous(breaks = seq(0, 0.5, by = 0.1)) +
+  labs(
+    title = "Sample Distribution of Smartphone Ownership",
+    x = "Brand of Cell Phone",
+    y = "Relative Frequency"
+  ) +
+  theme(
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.y = element_blank()
+  )
+```
+
+#### Using the "Table"
+
+Again, you can also make a bar plot from your saved frequency distribution object using `geom_col()`.
+
+```{r}
+ggplot(phonedist2, aes(x = brand, y = rel_freq)) +
+  geom_col()
+```
+
+***
+```{r}
+sessionInfo()
+```
