@@ -169,7 +169,7 @@ pre code {
 <h1 class="title toc-ignore">Measures of Variability</h1>
 <h3 class="subtitle">Companion <code>R</code> Code for JB Statistics Video Lesson</h3>
 <h4 class="author">Created by Jill E. Thomley</h4>
-<h4 class="date">Friday, December 31, 2021 @ 03:34 PM</h4>
+<h4 class="date">Friday, December 31, 2021 @ 03:42 PM</h4>
 
 </div>
 
@@ -251,14 +251,15 @@ $ survivaldays &lt;dbl&gt; 18, 36, 50, 52, 86, 87, 89, 91, 102, 108, 114, 114, 1
 4    51         -6             6          36</code></pre>
 <pre class="r"><code>(sums &lt;- devs %&gt;%
   summarize(
+    n = n(),
+    sum_devs = sum(deviations),
     sum_abs_devs = sum(absolute_devs),
-    sum_sqr_devs = sum(square_devs),
-    n = n()
+    sum_sqr_devs = sum(square_devs)
   ))</code></pre>
-<pre><code># A tibble: 1 × 3
-  sum_abs_devs sum_sqr_devs     n
-         &lt;dbl&gt;        &lt;dbl&gt; &lt;int&gt;
-1           36          350     4</code></pre>
+<pre><code># A tibble: 1 × 4
+      n sum_devs sum_abs_devs sum_sqr_devs
+  &lt;int&gt;    &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;
+1     4        0           36          350</code></pre>
 <pre class="r"><code>(stats &lt;- sums %&gt;%
   summarize(
     MAD = sum_abs_devs / n,

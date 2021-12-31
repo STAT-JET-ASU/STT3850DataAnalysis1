@@ -63,9 +63,10 @@ Doing the calculations for deviations the long way. Deviations are the distances
 
 (sums <- devs %>%
   summarize(
+    n = n(),
+    sum_devs = sum(deviations),
     sum_abs_devs = sum(absolute_devs),
-    sum_sqr_devs = sum(square_devs),
-    n = n()
+    sum_sqr_devs = sum(square_devs)
   ))
 
 (stats <- sums %>%
