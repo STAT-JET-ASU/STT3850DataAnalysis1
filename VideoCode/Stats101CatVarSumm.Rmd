@@ -8,7 +8,7 @@ output:
     theme: yeti
     highlight: textmate
     toc: TRUE
-    toc_depth: 5
+    toc_depth: 4
 ---
 
 ```{r globaloptions, include = FALSE}
