@@ -92,7 +92,7 @@ data %>%
   )
 ```
 
-For comparison...
+For comparison, the nine different methods are show below. The `quantile()` help page gives brief descriptions.
 
 ```{r}
 data %>%
@@ -167,7 +167,7 @@ fences <- data %>%
 fences
 ```
 
-We can use the fence values to filter the dataset and findthe outliers.
+We can use the fence values to filter the dataset and find the outliers.
 
 ```{r}
 outliers <- data %>%
