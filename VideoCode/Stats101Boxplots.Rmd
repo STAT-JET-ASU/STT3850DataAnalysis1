@@ -1,0 +1,235 @@
+---
+title: "IQR and Boxplots"
+subtitle: "Companion `R` Code for Stats 101 Video Lesson"
+author: "Created by Jill E. Thomley"
+date: '`r format(Sys.time(), "%A, %B %d, %Y @ %I:%M %p")`'
+output: 
+  html_document: 
+    theme: yeti
+    highlight: textmate
+    toc: TRUE
+    toc_depth: 4
+---
+
+```{r globaloptions, include = FALSE}
+knitr::opts_chunk$set(
+  message = FALSE,
+  warning = FALSE,
+  comment = NA
+)
+```
+
+▶ [GO TO VIDEO](https://youtu.be/k6Nm8sGXNaQ)
+
+<hr>
+
+## Packages Used
+
+```{r loadpackages}
+library(tidyverse)
+library(knitr)
+library(kableExtra)
+```
+
+## Datasets Used
+
+### Salary Data
+
+```{r}
+data <- tibble(
+  orderID = 1:12,
+  salary = c(29500, 54000, 54000, 65600, 70400, 73600, 78800, 80400, 91200, 94700, 99200, 500000)
+)
+data
+```
+
+### Guinea Pig Survival Data
+
+```{r}
+gp <- read_csv("https://raw.githubusercontent.com/STAT-JET-ASU/Datasets/master/JBStatistics/jbstatsguineapigs.csv")
+glimpse(gp)
+head(gp)
+```
+
+## Salary Data Example
+
+### Compute Quartiles and IQR
+
+There are several different ways to calculate the quartiles for a dataset. When a dataset is large, the answers generally will be very similar. When a dataset is small, the methods can produce answers that are more dissimilar. There are n = 12 points in our salary data, so there should be 12/4 = 3 data points in each quarter of the data. The first quartile will be somewhere between data points 3 and 4 when the data are in order. But where?
+
+#### Video Quartiles
+
+In the video, Q1 is shown to be 56,900. That value is 25% of the distance between 54,000 and 65,600, rather than halfway (i.e., it is not the median of the lower half, which is another common method). On the other side, Q3 is 75% of the way between 91,200 and 94,700. This is based on the idea of [*order statistics*](https://online.stat.psu.edu/stat414/lesson/13/13.3) for n = 12 data points: (12 + 1) / 4 = position 3.25.
+
+```{r}
+data3 <- 54000
+Q1vid <- 56900
+data4 <- 65600
+
+d1 <- data4 - data3
+d2 <- Q1vid - data3
+d2 / d1
+
+data9 <- 91200
+Q3vid <- 93825
+data10 <- 94700
+
+d3 <- data10 - data9
+d4 <- Q3vid - data9
+d4 / d3
+```
+
+#### Quartiles in `R`
+
+The `quantile()` function in `R` offers several calculation methods, specified using `type =`. The default type uses a process similar to the one described [HERE](https://rstudio-pubs-static.s3.amazonaws.com/21508_35a770dc38fa4658accef1acc4fb2fbe.html). For example, Q1 is one-quarter of the way from the first data point to the last data point. Calculating the position, 1/4 the way from the first value to the last value is 1 + (12 - 1) / 4 = position 3.75.
+
+```{r}
+data %>%
+  summarize(
+    Q1 = quantile(salary, 0.25),
+    Q3 = quantile(salary, 0.75),
+    iqr = IQR(salary)
+  )
+```
+
+For comparison...
+
+```{r}
+data %>%
+  summarize(
+    Q1_1 = quantile(salary, 0.25, type = 1),
+    Q1_2 = quantile(salary, 0.25, type = 2),
+    Q1_3 = quantile(salary, 0.25, type = 3), # default method
+    Q1_4 = quantile(salary, 0.25, type = 4),
+    Q1_5 = quantile(salary, 0.25, type = 5),
+    Q1_6 = quantile(salary, 0.25, type = 6), # like the video
+    Q1_7 = quantile(salary, 0.25, type = 7),
+    Q1_8 = quantile(salary, 0.25, type = 8),
+    Q1_9 = quantile(salary, 0.25, type = 9)
+  )
+```
+
+```{r}
+data %>%
+  summarize(
+    Q3_1 = quantile(salary, 0.75, type = 1),
+    Q3_2 = quantile(salary, 0.75, type = 2),
+    Q3_3 = quantile(salary, 0.75, type = 3), # default method
+    Q3_4 = quantile(salary, 0.75, type = 4),
+    Q3_5 = quantile(salary, 0.75, type = 5),
+    Q3_6 = quantile(salary, 0.75, type = 6), # like the video
+    Q3_7 = quantile(salary, 0.75, type = 7),
+    Q3_8 = quantile(salary, 0.75, type = 8),
+    Q3_9 = quantile(salary, 0.75, type = 9)
+  )
+```
+
+### Boxplot and Fences
+
+A Tukey-style boxplot like the one produced by `geom_boxplot()` typically uses Tukey's "hinge" idea of quartiles to define the enda of the box. The lower hinge is the median of the lower half of the ordered data up to and including the median (if the media is a data point). The upper hinge is the median of the upper half of the data. Boxplots may be drawn horizontally or vertically. In either case, the other axis has labels that are not meaningful.
+
+```{r}
+ggplot(data, aes(x = salary)) +
+  geom_boxplot()
+```
+
+```{r}
+ggplot(data, aes(y = salary)) +
+  geom_boxplot()
+```
+
+We can format the boxplot for better presentation, including outlier [shape](https://blog.albertkuo.me/post/point-shape-options-in-ggplot/).
+
+```{r}
+ggplot(data, aes(x = salary)) +
+  geom_boxplot(
+    fill = "skyblue",
+    outlier.shape = 8,
+    outlier.size = 2
+  ) +
+  scale_x_continuous(labels = scales::dollar_format()) +
+  scale_y_continuous(breaks = NULL) +
+  labs(
+    title = "Distribution of Salary Data",
+    x = "Salary"
+  ) +
+  theme_linedraw()
+```
+
+The limits for determining outliers are also commonly called "fences". 
+
+```{r}
+fences <- data %>%
+  summarize(
+    LF = quantile(salary, 0.25) - 1.5 * IQR(salary),
+    UF = quantile(salary, 0.75) + 1.5 * IQR(salary)
+  )
+fences
+```
+
+We can use the fence values to filter the dataset and findthe outliers.
+
+```{r}
+outliers <- data %>%
+  filter(salary < fences$LF | salary > fences$UF)
+outliers
+```
+
+## Guines Pig Survival Example
+
+Boxplots can also be used to compare groups. Consider how they compare to the [histograms](https://stat-jet-asu.github.io/STT3850DataAnalysis1/VideoCode/JBStatsMeasuresOfCentralTendency.html) from an earlier video.
+
+```{r}
+gp %>%
+  group_by(group) %>%
+  summarize(
+    min = min(survivaldays),
+    Q1 = quantile(survivaldays, 0.25),
+    med = median(survivaldays),
+    Q3 = quantile(survivaldays, 0.75),
+    max = max(survivaldays),
+    iqr = IQR(survivaldays)
+  ) %>%
+  kable(digits = 1) %>% # 1 decimal place
+  kable_styling(
+    full_width = FALSE,
+    position = "left",
+    font_size = 14
+  )
+```
+
+```{r}
+ggplot(gp, aes(x = survivaldays, y = group)) +
+  geom_boxplot(fill = "skyblue") +
+  labs(
+    title = "Survival Times of Guinea Pigs",
+    subtitle = "control group vs. treatment group infected with tuberculosis",
+    x = "Lifetime (days)",
+    y = "Experimental Group"
+  ) +
+  theme_bw()
+```
+
+Each group will have its own fences. The two groups have similar Q1 values, but the much wider IQR of the control group means its upper fence is more than twice as large as the treatment group. The outliers we see in the treatment group are approximately the same number of days as Q3 in the control group. Notice that the lower fences are negative, even though survival days cannot be less than zero. The algebra of the fence calculations does not take the natural limits of the variable into account. 
+
+```{r}
+fences <- gp %>%
+  group_by(group) %>%
+  summarize(
+    LF = quantile(survivaldays, 0.25) - 1.5 * IQR(survivaldays),
+    UF = quantile(survivaldays, 0.75) + 1.5 * IQR(survivaldays)
+  )
+fences
+```
+
+
+### References
+
+Tidyverse: [Summarise each group to fewer rows](https://dplyr.tidyverse.org/reference/summarise.html)
+
+Tidyverse: [A Box and Whiskers Plot (in the style of Tukey)](https://ggplot2.tidyverse.org/reference/geom_boxplot.html)
+
+<hr>
+```{r}
+sessionInfo()
+```

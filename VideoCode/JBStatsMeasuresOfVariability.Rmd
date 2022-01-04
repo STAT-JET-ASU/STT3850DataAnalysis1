@@ -33,15 +33,17 @@ library(kableExtra)
 
 ## Datasets Used
 
-```{r}
-# sample of 4 observations
+### Sample of 4 Observations
 
+```{r}
 sample4 <- tibble(data = c(45, 64, 68, 51))
 glimpse(sample4)
 head(sample4)
+```
 
-# guinea pig survival times
+### Guinea Pig Survival Data
 
+```{r}
 gp <- read_csv("https://raw.githubusercontent.com/STAT-JET-ASU/Datasets/master/JBStatistics/jbstatsguineapigs.csv")
 glimpse(gp)
 head(gp)
@@ -51,29 +53,42 @@ head(gp)
 
 ### Steps in Calculating MAD and SD
 
-Doing the calculations for deviations the long way. Deviations are the distances of each point from the mean. Putting `()` around the code prints out the stored `devs` object. We use `mutate()` to create new columns from the original `data` column.
+Doing the calculations for deviations the long way. Deviations are the distances of each point from the mean. We use `mutate()` to create new columns from the original `data` column.
+
+#### Calculate all the deviations
 
 ```{r}
-(devs <- sample4 %>%
+devs <- sample4 %>%
   mutate(
     deviations = data - mean(data),
     absolute_devs = abs(deviations),
     square_devs = deviations^2
-  ))
+  )
+devs
+```
 
-(sums <- devs %>%
+#### Sum the columns of deviations
+
+```{r}
+sums <- devs %>%
   summarize(
     n = n(),
     sum_devs = sum(deviations),
     sum_abs_devs = sum(absolute_devs),
     sum_sqr_devs = sum(square_devs)
-  ))
+  )
+sums
+```
 
-(stats <- sums %>%
+#### Compute MAD and SD from sums
+
+```{r}
+stats <- sums %>%
   summarize(
     MAD = sum_abs_devs / n,
     s = sqrt(sum_sqr_devs / (n - 1))
-  ))
+  )
+stats
 ```
 
 ### `R` Functions for Summarizing Data
@@ -85,24 +100,24 @@ sample4 %>%
   summarize(
     n = n(),
     xbar = mean(data),
-    s = sd(data),
-    rng = diff(range(data)),
-    MAD = sum(abs(data - mean(data))) / n
+    MAD = sum(abs(data - xbar)) / n,
+    s = sd(data)
   )
 ```
 
-## Example with Guinea Pig Data
+## Example with Guinea Pig Survival Data
 
-Summarize the overall dataset.
+Summarize the overall dataset. Base `R` does not have a function for mean absolute deviation.
 
 ```{r}
-(gp_stats_all <- gp %>%
+gp_stats_all <- gp %>%
   summarize(
     n = n(),
     xbar = mean(survivaldays),
     s = sd(survivaldays),
     rng = diff(range(survivaldays))
-  ))
+  )
+gp_stats_all
 ```
 
 We can format the output for presentation using `kable()`.
@@ -150,4 +165,3 @@ Tidyverse: [Summarise each group to fewer rows](https://dplyr.tidyverse.org/refe
 ```{r}
 sessionInfo()
 ```
-

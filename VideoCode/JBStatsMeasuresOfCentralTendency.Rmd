@@ -33,14 +33,18 @@ library(kableExtra)
 
 ## Datasets Used
 
+### Sample of 4 Observations
+
 ```{r}
-# sample of 6 observations, stored as a vector
+# stored as a vector versus a data frame
 
 sample6 <- c(1.4, 3.9, 5.0, 6.2, 8.4, 14.1)
 glimpse(sample6)
+```
 
-# guinea pig survival times
+### Guinea Pig Survival Data
 
+```{r}
 gp <- read_csv("https://raw.githubusercontent.com/STAT-JET-ASU/Datasets/master/JBStatistics/jbstatsguineapigs.csv")
 glimpse(gp)
 head(gp)
@@ -130,7 +134,7 @@ glimpse(sample6mod)
 (xmed_mod <- median(sample6mod))
 ```
 
-## Guinea Pig Survival Times
+## Example with Guinea Pig Survival Data
 
 ```{r}
 gp %>%
@@ -158,7 +162,7 @@ ggplot(gp, aes(x = survivaldays)) +
   ) +
   facet_grid(group ~ .) +
   labs(
-    title = "Survival times of guinea pigs",
+    title = "Survival Times of Guinea Pigs",
     subtitle = "control group vs. treatment group infected with tuberculosis",
     x = "Lifetime (days)",
     y = "Frequency"

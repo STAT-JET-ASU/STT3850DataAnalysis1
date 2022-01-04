@@ -169,20 +169,29 @@ pre code {
 <h1 class="title toc-ignore">Measures of Variability</h1>
 <h3 class="subtitle">Companion <code>R</code> Code for JB Statistics Video Lesson</h3>
 <h4 class="author">Created by Jill E. Thomley</h4>
-<h4 class="date">Friday, December 31, 2021 @ 03:42 PM</h4>
+<h4 class="date">Tuesday, January 04, 2022 @ 12:58 PM</h4>
 
 </div>
 
 <div id="TOC">
 <ul>
 <li><a href="#packages-used">Packages Used</a></li>
-<li><a href="#datasets-used">Datasets Used</a></li>
+<li><a href="#datasets-used">Datasets Used</a>
+<ul>
+<li><a href="#sample-of-4-observations">Sample of 4 Observations</a></li>
+<li><a href="#guinea-pig-survival-data">Guinea Pig Survival Data</a></li>
+</ul></li>
 <li><a href="#example-with-4-observations">Example with 4 Observations</a>
 <ul>
-<li><a href="#steps-in-calculating-mad-and-sd">Steps in Calculating MAD and SD</a></li>
+<li><a href="#steps-in-calculating-mad-and-sd">Steps in Calculating MAD and SD</a>
+<ul>
+<li><a href="#calculate-all-the-deviations">Calculate all the deviations</a></li>
+<li><a href="#sum-the-columns-of-deviations">Sum the columns of deviations</a></li>
+<li><a href="#compute-mad-and-sd-from-sums">Compute MAD and SD from sums</a></li>
+</ul></li>
 <li><a href="#r-functions-for-summarizing-data"><code>R</code> Functions for Summarizing Data</a></li>
 </ul></li>
-<li><a href="#example-with-guinea-pig-data">Example with Guinea Pig Data</a></li>
+<li><a href="#example-with-guinea-pig-survival-data">Example with Guinea Pig Survival Data</a></li>
 <li><a href="#references">References</a></li>
 </ul>
 </div>
@@ -197,9 +206,9 @@ library(kableExtra)</code></pre>
 </div>
 <div id="datasets-used" class="section level2">
 <h2>Datasets Used</h2>
-<pre class="r"><code># sample of 4 observations
-
-sample4 &lt;- tibble(data = c(45, 64, 68, 51))
+<div id="sample-of-4-observations" class="section level3">
+<h3>Sample of 4 Observations</h3>
+<pre class="r"><code>sample4 &lt;- tibble(data = c(45, 64, 68, 51))
 glimpse(sample4)</code></pre>
 <pre><code>Rows: 4
 Columns: 1
@@ -212,9 +221,10 @@ $ data &lt;dbl&gt; 45, 64, 68, 51</code></pre>
 2    64
 3    68
 4    51</code></pre>
-<pre class="r"><code># guinea pig survival times
-
-gp &lt;- read_csv(&quot;https://raw.githubusercontent.com/STAT-JET-ASU/Datasets/master/JBStatistics/jbstatsguineapigs.csv&quot;)
+</div>
+<div id="guinea-pig-survival-data" class="section level3">
+<h3>Guinea Pig Survival Data</h3>
+<pre class="r"><code>gp &lt;- read_csv(&quot;https://raw.githubusercontent.com/STAT-JET-ASU/Datasets/master/JBStatistics/jbstatsguineapigs.csv&quot;)
 glimpse(gp)</code></pre>
 <pre><code>Rows: 125
 Columns: 2
@@ -231,17 +241,21 @@ $ survivaldays &lt;dbl&gt; 18, 36, 50, 52, 86, 87, 89, 91, 102, 108, 114, 114, 1
 5 control           86
 6 control           87</code></pre>
 </div>
+</div>
 <div id="example-with-4-observations" class="section level2">
 <h2>Example with 4 Observations</h2>
 <div id="steps-in-calculating-mad-and-sd" class="section level3">
 <h3>Steps in Calculating MAD and SD</h3>
-<p>Doing the calculations for deviations the long way. Deviations are the distances of each point from the mean. Putting <code>()</code> around the code prints out the stored <code>devs</code> object. We use <code>mutate()</code> to create new columns from the original <code>data</code> column.</p>
-<pre class="r"><code>(devs &lt;- sample4 %&gt;%
+<p>Doing the calculations for deviations the long way. Deviations are the distances of each point from the mean. We use <code>mutate()</code> to create new columns from the original <code>data</code> column.</p>
+<div id="calculate-all-the-deviations" class="section level4">
+<h4>Calculate all the deviations</h4>
+<pre class="r"><code>devs &lt;- sample4 %&gt;%
   mutate(
     deviations = data - mean(data),
     absolute_devs = abs(deviations),
     square_devs = deviations^2
-  ))</code></pre>
+  )
+devs</code></pre>
 <pre><code># A tibble: 4 × 4
    data deviations absolute_devs square_devs
   &lt;dbl&gt;      &lt;dbl&gt;         &lt;dbl&gt;       &lt;dbl&gt;
@@ -249,26 +263,35 @@ $ survivaldays &lt;dbl&gt; 18, 36, 50, 52, 86, 87, 89, 91, 102, 108, 114, 114, 1
 2    64          7             7          49
 3    68         11            11         121
 4    51         -6             6          36</code></pre>
-<pre class="r"><code>(sums &lt;- devs %&gt;%
+</div>
+<div id="sum-the-columns-of-deviations" class="section level4">
+<h4>Sum the columns of deviations</h4>
+<pre class="r"><code>sums &lt;- devs %&gt;%
   summarize(
     n = n(),
     sum_devs = sum(deviations),
     sum_abs_devs = sum(absolute_devs),
     sum_sqr_devs = sum(square_devs)
-  ))</code></pre>
+  )
+sums</code></pre>
 <pre><code># A tibble: 1 × 4
       n sum_devs sum_abs_devs sum_sqr_devs
   &lt;int&gt;    &lt;dbl&gt;        &lt;dbl&gt;        &lt;dbl&gt;
 1     4        0           36          350</code></pre>
-<pre class="r"><code>(stats &lt;- sums %&gt;%
+</div>
+<div id="compute-mad-and-sd-from-sums" class="section level4">
+<h4>Compute MAD and SD from sums</h4>
+<pre class="r"><code>stats &lt;- sums %&gt;%
   summarize(
     MAD = sum_abs_devs / n,
     s = sqrt(sum_sqr_devs / (n - 1))
-  ))</code></pre>
+  )
+stats</code></pre>
 <pre><code># A tibble: 1 × 2
     MAD     s
   &lt;dbl&gt; &lt;dbl&gt;
 1     9  10.8</code></pre>
+</div>
 </div>
 <div id="r-functions-for-summarizing-data" class="section level3">
 <h3><code>R</code> Functions for Summarizing Data</h3>
@@ -277,26 +300,26 @@ $ survivaldays &lt;dbl&gt; 18, 36, 50, 52, 86, 87, 89, 91, 102, 108, 114, 114, 1
   summarize(
     n = n(),
     xbar = mean(data),
-    s = sd(data),
-    rng = diff(range(data)),
-    MAD = sum(abs(data - mean(data))) / n
+    MAD = sum(abs(data - xbar)) / n,
+    s = sd(data)
   )</code></pre>
-<pre><code># A tibble: 1 × 5
-      n  xbar     s   rng   MAD
-  &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-1     4    57  10.8    23     9</code></pre>
+<pre><code># A tibble: 1 × 4
+      n  xbar   MAD     s
+  &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+1     4    57     9  10.8</code></pre>
 </div>
 </div>
-<div id="example-with-guinea-pig-data" class="section level2">
-<h2>Example with Guinea Pig Data</h2>
-<p>Summarize the overall dataset.</p>
-<pre class="r"><code>(gp_stats_all &lt;- gp %&gt;%
+<div id="example-with-guinea-pig-survival-data" class="section level2">
+<h2>Example with Guinea Pig Survival Data</h2>
+<p>Summarize the overall dataset. Base <code>R</code> does not have a function for mean absolute deviation.</p>
+<pre class="r"><code>gp_stats_all &lt;- gp %&gt;%
   summarize(
     n = n(),
     xbar = mean(survivaldays),
     s = sd(survivaldays),
     rng = diff(range(survivaldays))
-  ))</code></pre>
+  )
+gp_stats_all</code></pre>
 <pre><code># A tibble: 1 × 4
       n  xbar     s   rng
   &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
