@@ -1,0 +1,24 @@
+---
+title: "STT3850 Statistical Data Analysis 1"
+output: 
+  html_document: 
+    theme: cosmo
+---
+
+<hr>
+
+* [Course Syllabus](SyllabusSchedule/STT3850S22Syllabus.html)
+
+* [GitHub Repository](https://github.com/STAT-JET-ASU/STT3850DataAnalysis1)
+
+* [ASU RStudio Server](https://mathr.math.appstate.edu)
+
+* Additional course information/resources can be found on [AsULearn](https://asulearn.appstate.edu/).
+
+<br>
+
+<figure><img src="./images/DataCamp125px.png" alt="DataCamp" align="left"></figure><br>
+
+_This class is supported by [DataCamp](https://www.datacamp.com), an intuitive learning platform for data science. Learn R, Python, and SQL the way many people learn best, through a combination of short expert videos and hands-on-the-keyboard exercises. Take over 100+ courses by expert instructors on topics such as importing data, data visualization, or machine learning and learn faster through immediate and personalised feedback on every exercise._
+
+<hr>
