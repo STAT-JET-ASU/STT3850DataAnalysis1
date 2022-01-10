@@ -1,0 +1,189 @@
+---
+title: "Categorical EDA Quiz Worksheet"
+date: '`r format(Sys.time(), "%A, %B %d, %Y @ %I:%M %p")`'
+output: 
+  html_document: 
+    theme: yeti
+    highlight: textmate
+    toc: true
+    toc_depth: 5
+---
+
+```{r globaloptions, include = FALSE}
+knitr::opts_chunk$set(
+  message = FALSE,
+  warning = FALSE,
+  comment = NA
+)
+```
+<hr>
+
+## Setup
+
+### Packages Used
+
+```{r}
+library(tidyverse)
+library(resampledata)
+```
+
+### Datasets Used
+
+#### NFL Players Data
+
+The `NFLplayers2016.csv` dataset contains data about all National Football League (NFL) players in 2016. You can read more about the variables on its [description page](https://stat-jet-asu.github.io/Datasets/InstructorDescriptions/NFLplayers2016.html). 
+
+```{r}
+nfl <-
+  read_csv("https://raw.githubusercontent.com/STAT-JET-ASU/Datasets/master/Instructor/NFLplayers2016.csv") %>%
+  mutate(Playtime = factor(Playtime,
+    levels = c(
+      "Rookie",
+      "1-4 Yrs",
+      "5-8 Yrs",
+      "9-12 Yrs",
+      "13+ Yrs"
+    )
+  ))
+glimpse(nfl)
+```
+
+#### Smallpox Data
+
+[William Watson](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4109147/) (1717-1787) conducted one of the earliest known examples of the type of research we now call a clinical trial. The `smallpox.csv` dataset contains data from three studies in which he tested various pre-treatments that were believed to improve the effectiveness of smallpox inoculations. 
+
+```{r}
+pox <- read_csv("https://raw.githubusercontent.com/STAT-JET-ASU/Datasets/master/Instructor/smallpox.csv")
+glimpse(pox)
+```
+
+## Problems
+
+### NFL Players 2016
+
+#### Table of `Side`
+
+Create a table of frequencies and relative frequencies for the variable `Side`.
+
+```{r}
+
+```
+
+#### Table of `PositionGrp`
+
+Create a table of frequencies and relative frequencies for the variable `PositionGrp`. Use `arrange()` to sort the rows in descending order (i.e., the most frequent category at the top).
+
+```{r}
+
+```
+
+#### Table of `Playtime`
+
+Tabulate frequencies, cumulative frequencies, relative frequencies, and cumulative relative frequencies for the variable `Playtime`. 
+
+```{r}
+
+```
+
+#### Tables of `Side` x `Playtime`
+
+```{r}
+
+```
+
+##### Frequencies
+
+Create a contingency table of counts for `Side` by `Playtime`.
+
+```{r}
+
+```
+
+##### Row Relative Frequencies
+
+Create a contingency table of the relative frequencies of `Playtime` within each category (row) of `Side`.
+
+```{r}
+
+```
+
+#### Top Five Player `College`s
+
+Find the top five colleges among NFL players in 2016.
+
+```{r}
+
+```
+
+#### Questions
+
+About _____ % of NFL players were classified as special teams. 
+
+Answer:
+
+The number of players on offense was _____ the number of players on defense.
+
+(A) substantially more than
+(B) moderately more than
+(C) approximately the same as
+(D) moderately less than
+(E) substantially less than
+
+Players in the _____ group(s) seem to be more likely than other players to have a long NFL career.
+
+(A) defense
+(B) offense
+(C) special teams
+(D) defense and offense
+(E) defense and special teams
+(F) offense and special teams
+
+### Smallpox Data
+
+#### Table of `experiment` x `pretreatment`
+
+Create a contingency table of counts for `experiment` by `pretreatment`.
+
+```{r}
+
+```
+
+#### Questions
+
+Which pretreatments were used in Study 1? 
+
+(A) Mercury Only
+(B) Mercury and Jalap
+(C) Senna and Rose Syrup
+(D) Mercury Only *and* Mercury and Jalap
+(E) Mercury Only *and* Senna and Rose Syrup
+(F) Mercury and Jalap *and* Senna and Rose Syrup
+(G) Mercury Only, Mercury and Jalap, *and* Senna and Rose Syrup
+(H) none, it was a control study only
+
+Which pretreatments were used in Study 2? 
+
+(A) Mercury Only
+(B) Mercury and Jalap
+(C) Senna and Rose Syrup
+(D) Mercury Only *and* Mercury and Jalap
+(E) Mercury Only *and* Senna and Rose Syrup
+(F) Mercury and Jalap *and* Senna and Rose Syrup
+(G) Mercury Only, Mercury and Jalap, *and* Senna and Rose Syrup
+(H) none, it was a control study only
+
+Which pretreatments were used in Study 3? 
+
+(A) Mercury Only
+(B) Mercury and Jalap
+(C) Senna and Rose Syrup
+(D) Mercury Only *and* Mercury and Jalap
+(E) Mercury Only *and* Senna and Rose Syrup
+(F) Mercury and Jalap *and* Senna and Rose Syrup
+(G) Mercury Only, Mercury and Jalap, *and* Senna and Rose Syrup
+(H) none, it was a control study only
+ 
+<hr>
+```{r}
+sessionInfo()
+```
