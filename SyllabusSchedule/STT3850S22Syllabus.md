@@ -33,9 +33,9 @@ I will be available on Zoom during all posted office hours. You may drop in or [
 
 This is a 100% web-based class. We will meet via Zoom.
 
-* Tuesday: @ 2:00pm – 3:15pm (*asynchronous*, no class meeting)
-* Wednesday: @ 2:00pm – 2:50pm (synchronous lecture in Zoom)
-* Thursday: @ 2:00pm – 3:15pm (synchronous lab period in Zoom)
+* Tuesday: 2:00pm – 3:15pm (*asynchronous*, no class meeting)
+* Wednesday: 2:00pm – 2:50pm (synchronous lecture in Zoom)
+* Thursday: 2:00pm – 3:15pm (synchronous lab period in Zoom)
 * Physical classroom space: Walker Hall 303 computer lab (Wed/Thu)
 
 Class will be held via Zoom, but you can use our classroom during class. You will need to bring your own headphones if you exercise this option. I will assess student use of the physical space during the semester to determine whether it continues to be an option (per my department).
@@ -80,11 +80,15 @@ The [CBMS](https://www.cbmsweb.org/) statement “Active Learning in Post-Second
 
 * Quizzes --- Quizzes test concept knowledge and allow you to practice your skills in a different format than in class or Datacamp. Grading is credit (1)/no credit (0). To get completion credit for a quiz, you must earn **80% or more on the quiz**. You will get multiple tries to achieve this grade. Once the deadline has passed, there will be a period in which you can still get credit, beginning 12 hours after the original due date, but you must earn **90% or more on the quiz** in this "second chance" window of opportunity.
 
+* Labs --- Lab assignments allow you to practice skills that are not well-tested in quizzes, such as plotting and written interpretations of data analyses. Some of these may involve using the Workshop tool in AsULearn to give and receive peer feedback.
+
 * Projects --- The purpose of the projects is to tie together concepts and have you demonstrate your statistics and R programming knowledge by working on somewhat more open-ended problems than you encountered in DataCamp and quizzes. You will communicate your results in an R Markdown writeup. I will assess your projects with a rubric that I will provide to you in the assignment. 
 
-* Engagement --- There are a number of ways to engage with the course and you will have a variety of ways to choose from. For example, you could provide feedback to the instructor (e.g., introduce yourself in your Private Forum), answer your classmates' questions about coding in `R`, complete self-reflections, or participate in class discussions via Poll Everywhere or AsULearn polls. 
+* Engagement --- There are a number of ways to engage with the course and you will have a variety of ways to choose from. For example, you could provide feedback to the instructor (e.g., introduce yourself in your Private Forum), answer your classmates' questions about coding in R, complete self-reflections, or participate in class discussions via Poll Everywhere or AsULearn polls. 
 
-**Final Grade** = 40% DataCamp + 20% Quizzes + 15% Project 1 + 15% Project 2 + 10% Engagement
+[AsULearn](https://asulearn.appstate.edu/) contains additional information about assignments. 
+
+**Final Grade** = 30% DataCamp + 15% Quizzes + 15% Labs + 15% Project 1 + 15% Project 2 + 10% Engagement
 
 ##### ***Course Grading Scale***
 
@@ -101,7 +105,7 @@ We will use small portions of a few other web-based texts, as well as web resour
 
 ##### ***Software***
 
-In this course you will use the [ASU RStudio server](https://mathr.math.appstate.edu/) for statistical computing and report-writing. You can also install `R` and `Rstudio` on your own machine from the links below. You will have free access to the premium service DataCamp for six months via an educational agreement with the company. All technology used in the course is open source (free) or will be accessible to students enrolled in the course for no cost. Our AsULearn site is the central hub of information for the course.
+In this course you will use the [ASU RStudio server](https://mathr.math.appstate.edu/) for statistical computing and report-writing. You can also install R and `Rstudio` on your own machine from the links below. You will have free access to the premium service DataCamp for six months via an educational agreement with the company. All technology used in the course is open source (free) or will be accessible to students enrolled in the course for no cost. Our AsULearn site is the central hub of information for the course.
 
 * [R](https://cran.r-project.org) 
 * [RStudio](https://www.rstudio.com/products/rstudio/download/)
@@ -116,7 +120,7 @@ You must have an active internet connection and be registered in the course to a
 
 ##### ***Engage with the Content***
 
-Appalachian students are expected to make engagement with courses their first priority. Be proactive and take charge of your own learning! If you have not read/watched assigned materials or attempted problems and online programming modules before coming to class or office hours, you likely will be confused, feel lost, and have a terrible experience in this course. I DO NOT WANT THAT TO HAPPEN! Each of you has the capability to succeed. However, sometimes we must change certain behaviors, study habits, and/or emotional reactions. In this course, you will be challenged with concepts and problems you have never seen before. I do not expect you to be able to understand them all immediately. A critical first step in learning new material is seeing what you can do on your own. This may feel uncomfortable and frustrating. Success in statistics is not determined by whether it "comes naturally" to you or whether a topic seems “clear” the first time you are introduced to it. Instead, success is about learning to use mistakes and material we may be struggling with in order to grow. You will see that even I struggle at times; there is always something new to learn, especially when it comes to statistical computing in `R`. Each time we get stuck, it teaches us something about the problem we are working on and leads us to develop greater skill and better understanding of the content. 
+Appalachian students are expected to make engagement with courses their first priority. Be proactive and take charge of your own learning! If you have not read/watched assigned materials or attempted problems and online programming modules before coming to class or office hours, you likely will be confused, feel lost, and have a terrible experience in this course. I DO NOT WANT THAT TO HAPPEN! Each of you has the capability to succeed. However, sometimes we must change certain behaviors, study habits, and/or emotional reactions. In this course, you will be challenged with concepts and problems you have never seen before. I do not expect you to be able to understand them all immediately. A critical first step in learning new material is seeing what you can do on your own. This may feel uncomfortable and frustrating. Success in statistics is not determined by whether it "comes naturally" to you or whether a topic seems “clear” the first time you are introduced to it. Instead, success is about learning to use mistakes and material we may be struggling with in order to grow. You will see that even I struggle at times; there is always something new to learn, especially when it comes to statistical computing in R. Each time we get stuck, it teaches us something about the problem we are working on and leads us to develop greater skill and better understanding of the content. 
 
 ##### ***Communicate with Others***
 
@@ -148,4 +152,4 @@ As per [AppalachianState University](https://diversity.appstate.edu/) and the [D
 
 <hr>
 
-Updated Monday, January 10, 2022 @ 07:01 PM
+Updated Monday, January 10, 2022 @ 09:19 PM
