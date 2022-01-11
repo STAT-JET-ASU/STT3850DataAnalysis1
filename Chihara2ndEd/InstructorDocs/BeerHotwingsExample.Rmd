@@ -1,0 +1,167 @@
+---
+title: "Beer and Hot Wings Example"
+subtitle: "Mathematical Statistics with Resampling and R, 2nd Edition"
+author: "Created by Jill E. Thomley"
+date: '`r format(Sys.time(), "%A, %B %d, %Y @ %I:%M %p")`'
+output: 
+  html_document: 
+    theme: yeti
+    highlight: textmate
+---
+
+```{r globaloptions, include = FALSE}
+knitr::opts_chunk$set(message = FALSE, warning = FALSE, comment = NA)
+```
+
+***
+**Beer and Hot Wings Example from MSRR, 2nd Edition (pp. 9-10, 51-56, 61)**
+
+#### Packages Used
+
+```{r loadpackages}
+library(tidyverse)
+library(infer)
+```
+
+#### Load the dataset
+
+```{r loaddataset}
+Beerwings <- read_csv("https://raw.githubusercontent.com/STAT-JET-ASU/Datasets/master/Chihara/Beerwings.csv")
+glimpse(Beerwings)
+```
+
+#### Write the null and alternative hypotheses
+
+$$H_0: \mu_M = \mu_F \rightarrow \mu_M - \mu_F = 0$$
+
+$$H_a: \mu_M > \mu_F \rightarrow \mu_M - \mu_F > 0$$
+
+#### Summarize sample size, mean, and variability
+
+```{r summarystats}
+(summ <- Beerwings %>% 
+  group_by(Gender) %>% 
+  summarize(n    = n(),
+            xbar = mean(Hotwings),
+            s    = sd(Hotwings)))
+
+ggplot(Beerwings, aes(x = Gender, y = Hotwings)) +
+  geom_boxplot() +
+  labs(title = "Number of Hot Wings Consumed in a Single Evening by Gender",
+       y = "Number of Hot Wings")
+
+ggplot(Beerwings, aes(x = Hotwings, color = Gender)) +
+  stat_ecdf() +
+  labs(title = "Number of Hot Wings Consumed in a Single Evening by Gender",
+       x = "Number of Hot Wings",
+       y = "Cumulative Distribution")
+```
+
+#### Compute the observed difference between the means (the test statistic)
+
+```{r teststatcalc}
+(obs_diff <- diff(summ$xbar))
+```
+
+#### How many unique regroupings of the data are possible in this scenario?
+
+```{r regroupingscalc}
+sprintf("The number of possible unique regroupings for the data is %d.", choose(30, 15))
+```
+
+#### Permutation Resampling Test
+
+```{r resamplingsim}
+alpha <- .05 # chance of Type I error / significance level of test
+
+simdata <- pull(Beerwings, Hotwings)
+total_n <- length(simdata)
+group_n <- summ$n[2]
+
+N_sims <- 10^5-1
+
+rand_diffs <- numeric(N_sims)
+
+for (i in 1:N_sims) {
+  index <- sample(total_n, group_n)
+  rand_diffs[i] <- mean(simdata[index]) - mean(simdata[-index])
+}
+```
+
+Plot the resampling results to view the distribution
+
+```{r plotresults}
+ggplot(NULL, aes(x = rand_diffs)) +
+  geom_bar(color = "gray", fill = "lightblue") +
+  geom_vline(xintercept = obs_diff, color = "blue", linetype = "dashed")
+```
+
+Compute the p-value of the test using the resampling results
+
+```{r pvaluecalc}
+pvalue.upper <- (sum(rand_diffs >= obs_diff) + 1)/(N_sims + 1)
+sprintf("The p-value for Ho: mu_M = mu_F vs. Ha: mu_M > mu_F is %1.5f.", pvalue.upper)
+ifelse(pvalue.upper <= alpha, sprintf("Reject Ho."), sprintf("Do not reject Ho."))
+```
+
+#### Doing a two-tailed (two-sided) test
+
+In the textbook example, the authors give the appearance of basing their alternative hypothesis on the data: they observed that men appeared to consume more, then tested that assumption. Usually hypotheses are chosen before the data are collected. So here, it might have been reasonable to say that we were interested in whether the means are the same or different between the two groups. This is a two-tailed hypothesis, because a difference in either direction would be evidence against the null, versus a situation where only large or small differences would serve as sufficient evidence.
+
+$$H_0: \mu_M = \mu_F \rightarrow \mu_M - \mu_F = 0$$
+
+$$H_a: \mu_M \neq \mu_F \rightarrow \mu_M - \mu_F \neq 0$$
+
+Most components of the test will remain the exactly same: the test statistic and the resampling process do not change at all. What will change is the way we compute the p-value. we need to know the total area in both tails of the distribution that is farther away from zero (the difference in the null hypothesis) than magnitude of our test statistic, so larger than `r obs_diff` and smaller than `r -obs_diff`. This is a bit more challenging to program when we do not know ahead of time whether the observed difference will be positive (as it is here) or negative. We calculate the area on either side of the test statistic and compare them. The smaller area will be the "more extreme" part of the curve. Then we double it to account for both tails. 
+
+Notice that the value is twice the upper-tailed p-value we found above.
+ 
+```{r pvaluecalc2sided}
+pvalue.upper <- (sum(rand_diffs >= obs_diff) + 1)/(N_sims + 1)
+pvalue.lower <- (sum(rand_diffs >= obs_diff) + 1)/(N_sims + 1)
+pvalue.2side <- 2 * min(pvalue.lower, pvalue.upper)
+sprintf("The p-value for Ho: mu_M = mu_F vs. Ha: mu_M > mu_F is %1.5f.", pvalue.2side)
+ifelse(pvalue.upper <= alpha, sprintf("Reject Ho."), sprintf("Do not reject Ho."))
+```
+
+#### Using the `infer` package
+
+Compute the test statistic and generate the null distribution
+
+```{r infertest}
+(obs_diff <- Beerwings %>% 
+  specify(formula = Hotwings ~ Gender) %>% 
+  calculate(stat = "diff in means", order = c("M", "F")))
+
+null_distribution <- Beerwings %>% 
+  specify(formula = Hotwings ~ Gender) %>% 
+  hypothesize(null = "independence") %>% 
+  generate(reps = 10000, type = "permute") %>% 
+  calculate(stat = "diff in means", order = c("M", "F"))
+```
+
+Upper-tailed test p-value
+
+```{r pvalueupper}
+visualize(null_distribution) + 
+  shade_p_value(obs_stat = obs_diff, direction = "right")
+
+null_distribution %>% 
+  get_p_value(obs_stat = obs_diff, direction = "right")
+```
+
+Two-tailed test p-value
+
+```{r pvalue2side}
+visualize(null_distribution) + 
+  shade_p_value(obs_stat = obs_diff, direction = "both")
+
+null_distribution %>% 
+  get_p_value(obs_stat = obs_diff, direction = "both")
+```
+
+
+***
+```{r}
+sessionInfo()
+```

@@ -1,0 +1,345 @@
+---
+title: "Estimation Example: Speed of Light (Mean)"
+author: "Created by Jill E. Thomley"
+date: '`r format(Sys.time(), "%A, %B %d, %Y @ %I:%M %p")`'
+output: 
+  html_document: 
+    theme: yeti
+    highlight: textmate
+    toc: TRUE
+    toc_depth: 4
+---
+
+```{r globaloptions, include = FALSE}
+knitr::opts_chunk$set(
+  message = FALSE,
+  warning = FALSE,
+  comment = NA
+)
+```
+<hr>
+
+## Packages Used
+
+```{r packagesused}
+library(HistData)
+library(tidyverse)
+library(moments)
+library(infer)
+library(knitr)
+library(kableExtra)
+library(DT)
+```
+
+## Data Description
+
+Albert Michelson (1852–1931) was an American physicist known for his work on measuring the speed of light. He was the first American to win the Nobel Prize for science (1907). The `Michelson` dataset from the `HistData` package contains Michelson's measurements of the velocity of light in air, made which he made from June 5 to July 2, 1879 and reported in [Michelson (1882)](https://www.gutenberg.org/files/11753/11753-h/11753-h.htm). The data values + 299,000 are Michelson's actual esperimental measurements in km/sec. To account for potential error from his method of measurement, Michelson added 12 km/sec to the data to compensate for refraction due to air temperature when he estimated the speed of light in air. When further estimating for the speed of light in a vacuum, he added an additional refraction correction of 80 km/sec.
+
+Currently accepted values for the speed of light are 299,792.458 km/sec in a vacuum and 299,702.547 km/sec in air. The ratio of these two values is 1.0003, or three ten-thousandths of the speed of light in a vacuum.
+
+Reportedly, when asked why he chose to study light, Michelson once said, "because it’s so much fun."
+
+Reference: Michelson, A. A. (1882). "Experimental determination of the velocity of light made at the United States Naval Academy, Annapolis". *Astronomical Papers*, 1, 109-145, U. S. Nautical Almanac Office.
+
+```{r}
+glimpse(Michelson)
+```
+
+## Modify the Dataset
+
+We can create two new variables to represent Michelson's corrections to his data. 
+
+```{r}
+Michelson <- Michelson %>% 
+  mutate(vel_air = velocity + 12,
+         vel_vac = vel_air + 80)
+glimpse(Michelson)
+datatable(Michelson)
+```
+
+## Exploratory Data Analysis
+
+### Speed of Light in Air
+
+#### Summary Statistics
+
+```{r}
+summaries <- Michelson %>%
+  summarize(
+    n = n(),
+    xbar = mean(vel_air),
+    s = sd(vel_air),
+    skew = skewness(vel_air),
+    kurt_adj = kurtosis(vel_air) - 3
+  )
+
+summaries %>%
+  kable(
+    digits = 2,
+    align = "ccc"
+  ) %>%
+  kable_styling(
+    full_width = FALSE,
+    position = "left",
+    font_size = 14
+  )
+```
+
+The skewness measure is near zero and indicates a general lack of skew. The adjusted kurtosis is a little larger than 0 (the adjusted kurtosis of a normal distribution), indicating that the distribution may be a little thicker-tailed than a bell curve.
+
+#### Histogram & Boxplot
+
+```{r}
+ggplot(Michelson, aes(x = vel_air)) +
+  geom_histogram(
+    bins = 12,
+    color = "white",
+    fill = "skyblue"
+  ) +
+  geom_boxplot(aes(y = -5),
+    fill = "coral",
+    width = 5
+  ) +
+  labs(
+    title = "Michelson's Speed of Light Data (1882)",
+    x = "recorded velocity corrected for instrument refraction",
+    y = "frequency",
+    caption = "note: corrected recorded velocity + 299,000 = km/sec"
+  ) +
+  theme_linedraw()
+```
+
+The data distribution is *roughly* unimodal and symmetric. There are at least three outliers, but they are approximately balanced on either side of the plot. It is common for data from normal or approximately normal distributions to have outliers, particularly for a moderate to large sample size, since the tails of a normal distribution (theoretically) extend to infinity. 
+
+#### Normal QQ Plot
+
+```{r}
+ggplot(Michelson, aes(sample = vel_air)) +
+  geom_qq() +
+  geom_qq_line() +
+  labs(title = "Michelson's Speed of Light Data (1882)",
+       x = "standard normal quantile",
+       y = "recorded velocity corrected for instrument refraction") +
+  theme_linedraw()
+```
+
+The pattern of divergence from the straight line on the QQ plot and the calculated kurtosis value suggest that the distribution of the individual observations is somewhat heavy-tailed versus being normally distributed. However, it might be fair to say that the distribution is *approximately* normal.
+
+### Speed of Light in Vacuum
+
+#### Summary Statistics
+
+```{r}
+summaries <- Michelson %>%
+  summarize(
+    n = n(),
+    xbar = mean(vel_vac),
+    s = sd(vel_vac),
+    skew = skewness(vel_vac),
+    kurt_adj = kurtosis(vel_vac) - 3
+  )
+
+summaries %>%
+  kable(
+    digits = 2,
+    align = "ccc"
+  ) %>%
+  kable_styling(
+    full_width = FALSE,
+    position = "left",
+    font_size = 14
+  )
+```
+
+#### Histogram & Boxplot
+
+```{r}
+ggplot(Michelson, aes(x = vel_vac)) +
+  geom_histogram(
+    bins = 12,
+    color = "white",
+    fill = "skyblue"
+  ) +
+  geom_boxplot(aes(y = -5),
+    fill = "coral",
+    width = 5
+  ) +
+  labs(
+    title = "Michelson's Speed of Light Data (1882)",
+    x = "recorded velocity corrected for instrument refraction",
+    y = "frequency",
+    caption = "note: corrected recorded velocity + 299,000 = km/sec"
+  ) +
+  theme_linedraw()
+```
+
+#### Normal QQ Plot
+
+```{r}
+ggplot(Michelson, aes(sample = vel_vac)) +
+  geom_qq() +
+  geom_qq_line() +
+  labs(title = "Michelson's Speed of Light Data (1882)",
+       x = "standard normal quantile",
+       y = "recorded velocity corrected for instrument refraction") +
+  theme_linedraw()
+```
+
+The shape is identical to the previous plot, since the transformation from speed in air to speed in vacuum was linear (just adding a constant). The center has shifted upward, but the variability, skewnessm, a is also the same.
+
+## Confidence Interval Estimation
+
+### Speed of Light in Air
+
+#### Conduct Bootstrap Simulation
+
+Compute the point estimate $\bar{x}$ from the given experimental sample.
+
+```{r}
+xbar <- Michelson %>%
+  specify(response = vel_air) %>%
+  calculate(stat = "mean")
+
+xbar %>%
+  kable(
+    digits = 2,
+    align = "c"
+  ) %>%
+  kable_styling(
+    full_width = FALSE,
+    position = "left",
+    font_size = 14
+  )
+```
+
+Use bootstrap simulation to estimate the sampling distribution of $\bar{x}$.
+
+```{r}
+bootstrap_distribution <- Michelson %>%
+  specify(response = vel_air) %>%
+  generate(reps = 1000, type = "bootstrap") %>%
+  calculate(stat = "mean")
+```
+
+#### Plot the Results and Assess
+
+```{r}
+visualize(bootstrap_distribution) +
+  labs(x = "stat: xbar")
+
+ggplot(bootstrap_distribution, aes(sample = stat)) +
+  geom_qq() +
+  geom_qq_line() +
+  labs(title = "Simulation-Based Bootstrap Distribution")
+```
+
+The shape of the sampling distribution of $\bar{x}$ seems approximately normal, based on both of the plots above. This should not be surprising; the original sample seems to be approximately normal and we have a relative large sample size, so the Central Limit Theorem would seem to apply in this case.
+
+#### 95% Percentile Interval for $\mu$
+
+Find the middle 95% of the bootstrap distribution to create an interval estimate for the true mean $\mu$.
+
+```{r}
+percentile_ci <- bootstrap_distribution %>%
+  get_confidence_interval(
+    level = 0.95,
+    type = "percentile"
+  )
+
+percentile_ci %>%
+  kable(
+    digits = 2,
+    align = "cc"
+  ) %>%
+  kable_styling(
+    full_width = FALSE,
+    position = "left",
+    font_size = 14
+  )
+```
+
+#### 95% Confidence Interval Using SE
+
+Use the "plug in" method $\bar{x} \pm 1.96 \times SE$ to create an interval estimate. The original sample mean from the summaries above is $\bar{x}$ and $SE$ is the standard deviation of the bootstrap distribution. For this method to be valid, the sampling distribution if $\bar{x}$ has to be approximately normal (i.e., CLT must apply). 
+
+```{r}
+standard_error_ci <- bootstrap_distribution %>%
+  get_confidence_interval(
+    level = 0.95,
+    type = "se",
+    point_estimate = xbar
+  )
+
+standard_error_ci %>%
+  kable(
+    digits = 2,
+    align = "cc"
+  ) %>%
+  kable_styling(
+    full_width = FALSE,
+    position = "left",
+    font_size = 14
+  )
+```
+
+#### Traditional 95% Confidence Interval
+
+The traditional *t*-based confidence interval assumes that we have an independent random sample and either an approximately normal population or a large enough sample size that the sampling distribution of $\bar{x}$ is approximately normal. The plots for the bootstrap distribution suggests that the latter is true (i.e., that the CLT applies here).
+
+```{r}
+traditional_ci <- Michelson %>%
+  t_test(response = vel_air) %>%
+  select(lower_ci, upper_ci)
+
+traditional_ci %>%
+  kable(
+    digits = 2,
+    align = "cc"
+  ) %>%
+  kable_styling(
+    full_width = FALSE,
+    position = "left",
+    font_size = 14
+  )
+```
+
+#### Comparing the Estimates
+
+<details>
+```{r}
+comparison <- rbind(
+  percentile_ci,
+  standard_error_ci,
+  traditional_ci
+) %>%
+  mutate(
+    type = c("Percentile", "SE Method", "Traditional"),
+    ci_width = upper_ci - lower_ci
+  ) %>%
+  relocate(type,
+    .before = lower_ci
+  ) %>%
+  kable(
+    digits = 2,
+    align = "lcc"
+  ) %>%
+  kable_styling(
+    full_width = FALSE,
+    position = "left",
+    font_size = 14
+  )
+```
+</details>
+
+```{r}
+comparison
+```
+
+Because the sampling distribution of $\bar{x}$ is approximately normal, the three methods produce roughly the same interval estimates. If the sampling distribution was not normal, the Central Limit Theorem would not apply and only the percentile method would be appropriate to use---the other two methods would produce statistically unreliable results.
+
+Notice that the currently accepted value of 299,702.547 km/sec -- 299,000 = 702.547 in air (on the scale of Michelson's data) is *not* in the interval estimates. Michelson's experiment overestimates the speed of light in air.
+
+<hr>
+```{r}
+sessionInfo()
+```

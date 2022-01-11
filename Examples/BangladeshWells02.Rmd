@@ -1,0 +1,322 @@
+---
+title: "Estimation Example: Bangladesh Wells (Proportion)"
+author: "Created by Jill E. Thomley"
+date: '`r format(Sys.time(), "%A, %B %d, %Y @ %I:%M %p")`'
+output: 
+  html_document: 
+    theme: yeti
+    highlight: textmate
+    toc: TRUE
+    toc_depth: 4
+---
+
+```{r globaloptions, include = FALSE}
+knitr::opts_chunk$set(message = FALSE, warning = FALSE, comment = NA)
+```
+
+### **Packages Used**
+
+```{r}
+library(resampledata)
+library(tidyverse)
+library(moments)
+library(infer)
+library(knitr)
+library(kableExtra)
+```
+
+### **Problem & DataSet**
+
+### **Bangladesh Well Data**
+
+Bangladesh has suffered the largest population-level poisoning in history. Millions of people were exposed to naturally-occurring arsenic from tube-wells. Ironically, the wells had been installed to provide cleaner water than surface sources in order to reduce gastrointestinal diseases. Studies in other countries with long-term exposure to arsenic in groundwater found that 1 in 10 people who consume water containing 500 micrograms of arsenic per liter (mcg/l) may ultimately die from cancers caused by arsenic. The `Bangladesh` dataset from the textbook *Mathematical Statistics with Resampling and R* (found in the `resampledata` package) contains a sample of tested wells.
+
+**Problem #1:** What is the true proportion $p$ of Bangladesh wells that exceed 500 micrograms of arsenic per liter?
+
+**Problem #2:** What is the true proportion $p$ of wells that exceed the WHO standard of 10 micrograms of arsenic per liter?
+
+```{r}
+glimpse(Bangladesh)
+```
+
+### **Exploratory Data Analysis #1**
+
+**Problem #1:** What proportion of Bangladesh wells exceed 500 micrograms of arsenic per liter?
+
+#### **Summary Statistics**
+
+The sample proportion $\hat{p}$ is our point estimate for the true proportion $p$.
+
+```{r}
+Bangladesh <- Bangladesh %>% 
+  mutate(Over500 = ifelse(Arsenic > 500, "Does Exceed 500", "Does Not Exceed 500"))
+
+p_hat <- Bangladesh %>% 
+  specify(response = Over500, success = "Does Exceed 500") %>% 
+  calculate(stat = "prop")
+p_hat
+```
+
+#### **Barplot of Proportions**
+
+```{r}
+ggplot(Bangladesh, aes(x = Over500)) +
+  geom_bar((aes(y = (..count..)/sum(..count..))), color = "gray", fill = "skyblue") +
+  labs(title = "Arsenic Contamination of Tube Wells in Balgladesh",
+       x = "Does the arsenic concentration exceed 500 mcg/l?",
+       y = "proportion of wells") +
+  theme_linedraw()
+```
+
+### **Confidence Interval Estimation #1**
+
+**Problem #1:** What proportion of Bangladesh wells exceed 500 micrograms of arsenic per liter?
+
+#### **Conduct Bootstrap Simulation**
+
+Use bootstrap simulation to estimate the sampling distribution of $\hat{p}$.
+
+```{r}
+bootstrap_distribution <- Bangladesh %>% 
+  specify(response = Over500, success = "Does Exceed 500") %>% 
+  generate(reps = 1000, type = "bootstrap") %>% 
+  calculate(stat = "prop")
+```
+
+#### **Plot the Results and Assess**
+
+```{r}
+visualize(bootstrap_distribution) 
+
+ggplot(bootstrap_distribution, aes(sample = stat)) +
+  geom_qq() +
+  geom_qq_line() +
+  labs(title = "Simulation-Based Bootstrap Distribution")
+
+bootstrap_distribution %>% 
+  summarize(skew = skewness(stat),
+            kurt_adj = kurtosis(stat) - 3)
+```
+
+The shape of the sampling distribution of $\hat{p}$ may look mildly right-skewed on the plots, but the skewness (which is less than 0.5) and the adjusted kurtosis (approximately 0) suggest that it possibly could be considered approximately normal, despite the fact that binomial distributions with $p$ near zero tend to be right-skewed.
+
+#### **95% Percentile Interval for $p$**
+
+Find the middle 95% of the bootstrap distribution to create an interval estimate.
+
+```{r}
+percentile_ci <- bootstrap_distribution %>% 
+  get_confidence_interval(level = 0.95, type = "percentile")
+
+percentile_ci %>% 
+  kable(digits = 4, align = "ccc") %>% 
+  kable_styling(full_width = FALSE, position = "left", font_size = 14)
+```
+
+#### **95% Confidence Interval Using SE**
+
+Use the "plug in" method $\hat{p} \pm 1.96 \times SE$ to create an interval estimate. The original sample proportion (above) is $\hat{p}$ and $SE$ is the standard deviation of the generated bootstrap distribution. The sampling distribution of $\hat{p}$ must be approximately normal for this method to be valid.  
+
+```{r}
+standard_error_ci <- bootstrap_distribution %>% 
+  get_confidence_interval(level = 0.95, type = "se", point_estimate = p_hat)
+
+standard_error_ci %>% 
+  kable(digits = 4, align = "ccc") %>% 
+  kable_styling(full_width = FALSE, position = "left", font_size = 14)
+```
+
+#### **Traditional 95% Confidence Interval**
+
+The traditional *z*-based confidence interval assumes that we have an independent random sample and a large enough sample size that the sampling distribution of $\hat{p}$ is approximately normal. The plots for the bootstrap distribution suggests that might be true.
+
+```{r}
+p_hat <- pull(p_hat) # turn p_hat from a tibble into a scalar
+
+n <- Bangladesh %>% 
+  filter(!is.na(Arsenic)) %>%  
+  summarize(length(Arsenic)) %>%
+  pull()
+
+z <- 1.96
+
+CI <- p_hat + c(-1, 1) * z * sqrt(p_hat * (1 - p_hat) / n)
+CI
+```
+
+#### **Comparing the Estimates**
+
+<details>
+```{r}
+comparison <- rbind(percentile_ci, 
+                    standard_error_ci,
+                    tibble(lower_ci = CI[1],
+                           upper_ci = CI[2])) %>% 
+  mutate(type = c("Percentile", "SE Method", "Traditional"),
+         width = upper_ci - lower_ci) %>% 
+  relocate(type, .before = lower_ci) %>% 
+  kable(digits = 4, align = "lcc") %>% 
+  kable_styling(full_width = FALSE, position = "left", font_size = 14)
+
+lower <- CI[1]
+upper <- CI[2]
+
+comparison_plot <- visualize(bootstrap_distribution) +
+  shade_ci(endpoints = percentile_ci, color = "skyblue", fill = "white") +
+  shade_ci(endpoints = standard_error_ci, color = "orange", fill = "white") +
+  geom_vline(xintercept = c(lower, upper), linetype = "dashed") +
+  geom_vline(xintercept = p_hat, size = 1) +
+  labs(subtitle = "blue = percentile, orange = SE method, dashed = traditional")
+```
+</details>
+
+```{r}
+comparison
+comparison_plot
+```
+
+<hr>
+
+### **Exploratory Data Analysis #2**
+
+**Problem #2:** What proportion of Bangladesh wells exceed 10 micrograms of arsenic per liter?
+
+#### **Summary Statistics**
+
+The sample proportion $\hat{p}$ is our point estimate for the true proportion $p$.
+
+```{r}
+Bangladesh <- Bangladesh %>% 
+  mutate(Over10 = ifelse(Arsenic > 10, "Does Exceed 10", "Does Not Exceed 10"))
+
+p_hat <- Bangladesh %>% 
+  specify(response = Over10, success = "Does Exceed 10") %>% 
+  calculate(stat = "prop")
+p_hat
+```
+
+#### **Barplot of Proportions**
+
+```{r}
+ggplot(Bangladesh, aes(x = Over10)) +
+  geom_bar((aes(y = (..count..)/sum(..count..))), color = "gray", fill = "skyblue") +
+  labs(title = "Arsenic Contamination of Tube Wells in Balgladesh",
+       x = "Does the arsenic concentration exceed 500 mcg/l?",
+       y = "proportion of wells") +
+  theme_linedraw()
+```
+
+### **Confidence Interval Estimation #2**
+
+**Problem #2:** What proportion of Bangladesh wells exceed 10 micrograms of arsenic per liter?
+
+#### **Conduct Bootstrap Simulation**
+
+Use bootstrap simulation to estimate the sampling distribution of $\hat{p}$.
+
+```{r}
+bootstrap_distribution <- Bangladesh %>% 
+  specify(response = Over10, success = "Does Exceed 10") %>% 
+  generate(reps = 1000, type = "bootstrap") %>% 
+  calculate(stat = "prop")
+```
+
+#### **Plot the Results and Assess**
+
+```{r}
+visualize(bootstrap_distribution) 
+
+ggplot(bootstrap_distribution, aes(sample = stat)) +
+  geom_qq() +
+  geom_qq_line() +
+  labs(title = "Simulation-Based Bootstrap Distribution")
+
+bootstrap_distribution %>% 
+  summarize(skew = skewness(stat),
+            kurt_adj = kurtosis(stat) - 3)
+```
+
+The shape of the sampling distribution of $\hat{p}$ looks close enough to approximately normal.
+
+#### **95% Percentile Interval for $p$**
+
+Find the middle 95% of the bootstrap distribution to create an interval estimate.
+
+```{r}
+percentile_ci <- bootstrap_distribution %>% 
+  get_confidence_interval(level = 0.95, type = "percentile")
+
+percentile_ci %>% 
+  kable(digits = 4, align = "ccc") %>% 
+  kable_styling(full_width = FALSE, position = "left", font_size = 14)
+```
+
+#### **95% Confidence Interval Using SE**
+
+Use the "plug in" method $\hat{p} \pm 1.96 \times SE$ to create an interval estimate. The original sample proportion (above) is $\hat{p}$ and $SE$ is the standard deviation of the generated bootstrap distribution. The sampling distribution of $\hat{p}$ must be approximately normal for this method to be valid.  
+
+```{r}
+standard_error_ci <- bootstrap_distribution %>% 
+  get_confidence_interval(level = 0.95, type = "se", point_estimate = p_hat)
+
+standard_error_ci %>% 
+  kable(digits = 4, align = "ccc") %>% 
+  kable_styling(full_width = FALSE, position = "left", font_size = 14)
+```
+
+#### **Traditional 95% Confidence Interval**
+
+The traditional *z*-based confidence interval assumes that we have an independent random sample and a large enough sample size that the sampling distribution of $\hat{p}$ is approximately normal. The plots for the bootstrap distribution suggests that the latter is true.
+
+```{r}
+p_hat <- pull(p_hat) # turn p_hat from a tibble into a scalar
+
+n <- Bangladesh %>% 
+  filter(!is.na(Arsenic)) %>%  
+  summarize(length(Arsenic)) %>%
+  pull()
+
+z <- 1.96
+
+CI <- p_hat + c(-1, 1) * z * sqrt(p_hat * (1 - p_hat) / n)
+CI
+```
+
+#### **Comparing the Estimates**
+
+<details>
+```{r}
+comparison <- rbind(percentile_ci, 
+      standard_error_ci,
+      tibble(lower_ci = CI[1],
+             upper_ci = CI[2])) %>% 
+  mutate(type = c("Percentile", "SE Method", "Traditional"),
+         width = upper_ci - lower_ci) %>% 
+  relocate(type, .before = lower_ci) %>% 
+  kable(digits = 4, align = "lcc") %>% 
+  kable_styling(full_width = FALSE, position = "left", font_size = 14)
+
+lower <- CI[1]
+upper <- CI[2]
+
+comparison_plot <- visualize(bootstrap_distribution) +
+  shade_ci(endpoints = percentile_ci, color = "skyblue", fill = "white") +
+  shade_ci(endpoints = standard_error_ci, color = "orange", fill = "white") +
+  geom_vline(xintercept = c(lower, upper), linetype = "dashed") +
+  geom_vline(xintercept = p_hat) +
+  labs(subtitle = "blue = percentile, orange = SE method, dashed = traditional")
+```
+</details>
+
+```{r}
+comparison
+```
+
+All the values in the confidence interval(s) are above 0.500, so we can be 95% confident that more than half the wells exceed the WHO standard.
+
+
+<hr>
+```{r}
+sessionInfo()
+```
+

@@ -1,0 +1,190 @@
+---
+title: "Example 3.1: Mouse Drug Trials"
+subtitle: "Mathematical Statistics with Resampling and R, 2nd Edition"
+author: "Created by Jill E. Thomley"
+date: '`r format(Sys.time(), "%A, %B %d, %Y @ %I:%M %p")`'
+output: 
+  html_document: 
+    theme: yeti
+    highlight: textmate
+---
+
+```{r globaloptions, include = FALSE}
+knitr::opts_chunk$set(message = FALSE, warning = FALSE, comment = NA)
+```
+
+***
+**Example 3.1 from MSRR, 2nd Edition (pp. 47-51)**
+
+#### Packages Used
+
+```{r loadpackages}
+library(tidyverse)
+library(combinat)
+library(infer)
+```
+
+#### Create the dataset for the experiment
+
+```{r createdataset}
+(data <- tibble(treatment = rep(c("Drug", "Control"), each = 3),
+               maze_time = c(30, 25, 20, 18, 21, 22)))
+
+flightdelays <- read_csv("https://raw.githubusercontent.com/STAT-JET-ASU/Datasets/master/Chihara/FlightDelays.csv")
+```
+
+#### Write the null and alternative hypotheses
+
+Since `R` arranges groups alphabetically when groupings are used (or the order specified by an ordered factor), and because this order will influence subsequent calculations, it is most convenient to take this into account when writing the null and alternative hypotheses. The alphabetically second group (or the second group in the factor ordering) is on the left.
+
+$$H_0: \mu_D = \mu_C \rightarrow \mu_D - \mu_C = 0$$
+
+$$H_a: \mu_D > \mu_C \rightarrow \mu_D - \mu_C > 0$$
+
+#### Summarize sample size, mean, and variability of the experimental data
+
+We want to summarize the variable of interest, which is the amount of time required to run the maze. We group the summaries by treatment group: Drug or Control. The output is a `tibble` containing the summary statistics.
+
+```{r summarystats}
+(summ <- flightdelays %>% 
+  group_by(Month) %>% 
+  summarize(n    = n(),
+            xbar = mean(Delay),
+            s    = sd(Delay),
+            var  = var(Delay)))
+```
+
+#### Compute the observed difference between the means (the test statistic)
+
+The null and alternative hypotheses are written in terms of the difference between the population means (specifically Drug minus Control), so we need to estimate that difference using the sample means. This observed difference between the samples will serve as the test statistic in the hypothesis test.
+
+```{r teststatcalc}
+(obs_diff <- diff(summ$xbar))
+```
+
+#### How many unique regroupings of the data are possible in this scenario?
+
+Could we do an exact permutation test? Certainly. This example has a relatively small number of unique regroupings of the data.
+
+```{r regroupingscalc}
+sprintf("The number of possible unique regroupings for the data is %d.", choose(6, 3))
+```
+
+#### Permutation Resampling Test
+
+The Excel spreadsheet `MouseDrugExample.xlsx` shows all possible regroupings, as does Table 3.1 in the textbook. We could find these in `R`, but as sample sizes increase the number of unique regroupings quickly becomes too many to be feasible. Instead, we randomly sample from the possible regroupings a very large number of times. This is a permutation resampling test. Refer to the algorithm on p. 54 of the text for the general method. Since our alternative hypothesis refers to differences larger than zero, we will be conducting an upper-tail test where large differences will serve as evidence against the null.
+
+Generate a very large number of permutation resamples
+
+```{r resamplingsim}
+
+
+
+set.seed(1)  # delete or change this to see different permutations
+             # the seed determines how the random sampling behaves
+             # if no seed is set, R draws from your computer clock
+
+alpha <- .05 # chance of Type I error / significance level of test
+
+simdata <- pull(flightdelays, Delay)
+total_n <- length(simdata)        # overall number of data points
+group_n <- 2030                   # sample size of the June group
+
+N_sims <- 10^5-1                  # number of resampling loops (sims)
+
+rand_diffs <- numeric(N_sims)     # initialize vector to store results
+
+for (i in 1:N_sims) {
+  # select sampleIDs for Drug group
+  index <- sample(total_n, group_n)
+  rand_diffs[i] <- mean(simdata[index]) - mean(simdata[-index])
+}
+```
+
+Plot the resampling results to view the distribution
+
+The simulation results are the null distrubution: how the test statistic will vary if the null hypothesis is true and randomness is the only influence in the system. We can then compare the actual observed difference to that distribution. As we can see below, the test statistic is not the most rare outcome, but it is somewhat toward one extreme of the distribution.
+
+```{r plotresults}
+ggplot(NULL, aes(x = rand_diffs)) +
+  geom_bar(color = "gray", fill = "lightblue") +
+  geom_vline(xintercept = obs_diff, color = "blue", linetype = "dashed")
+```
+
+Compute the p-value of the test using the resampling results
+
+The p-value helps us measure how unusual the observed difference is if the null hypothesis is true. We calculate the probability of getting the test statistic or a difference that is even larger (which would be even stronger evidence). At the start of the test, we set a probability of 5% or less (alpha) as our cutoff for significance. In other words, the data produced a result that we would get less than 5% of the time if the null hypothesis was true and randomness was the only explanation for the difference.
+
+```{r pvaluecalc}
+pvalue.upper <- (sum(rand_diffs >= obs_diff) + 1)/(N_sims + 1)
+sprintf("The p-value for Ho: mu_D = mu_C vs. Ha: mu_D > mu_C is %1.5f.", pvalue.upper)
+ifelse(pvalue.upper <= alpha, sprintf("Reject Ho."), sprintf("Do not reject Ho."))
+```
+
+#### Data from a New Experiment
+
+Suppose the scientists ran the maze experiment a second time with a few more mice. What is similar and what is different? Can you also combine the data from the two experiments and run a hypothesis test of your own? We are using a histogram here for data visualization, as mentioned in the algorithm, since there are many more possible permutations.
+
+```{r newexperiment}
+(newdata <- tibble(treatment = rep(c("Drug", "Control"), each = 6),
+                  maze_time = c(25, 33, 24, 28, 18, 22, 18, 17, 22, 20, 18, 22)))
+
+(summ <- newdata %>% 
+  group_by(treatment) %>% 
+  summarize(n    = n(),
+            xbar = mean(maze_time),
+            s    = sd(maze_time)))
+
+(obs_diff <- diff(summ$xbar))
+
+alpha <- .05
+
+simdata <- pull(newdata, maze_time)
+total_n <- length(simdata)
+group_n <- summ$n[2]
+
+N_sims <- 10^5-1
+
+rand_diffs <- numeric(N_sims)
+
+for (i in 1:N_sims) {
+  index <- sample(total_n, group_n)
+  rand_diffs[i] <- mean(simdata[index]) - mean(simdata[-index])
+}
+
+ggplot(NULL, aes(x = rand_diffs)) +
+  geom_histogram(color = "gray", fill = "lightblue") +
+  geom_vline(xintercept = obs_diff, color = "blue", linetype = "dashed")
+
+pvalue.upper <- (sum(rand_diffs >= obs_diff) + 1)/(N_sims + 1)
+sprintf("The p-value for Ho: mu_D = mu_C vs. Ha: mu_D > mu_C is %1.5f.", pvalue.upper)
+ifelse(pvalue.upper <= alpha, sprintf("Reject Ho."), sprintf("Do not reject Ho."))
+```
+
+#### Using the `infer` package
+
+The general algorithm above works for nearly any statistic we want to test: means, medians, proportions, standard deviations, etc. For means and proportions, the `infer` package contains functions to run a permutation resampling test, though it is slower in its execution than the code above.
+
+```{r infertest}
+(obs_diff <- newdata %>% 
+  specify(formula = maze_time ~ treatment) %>% 
+  calculate(stat = "diff in means", order = c("Drug", "Control")))
+
+null_distribution <- newdata %>% 
+  specify(formula = maze_time ~ treatment) %>% 
+  hypothesize(null = "independence") %>% 
+  generate(reps = 1000, type = "permute") %>% 
+  calculate(stat = "diff in means", order = c("Drug", "Control"))
+
+visualize(null_distribution) + 
+  shade_p_value(obs_stat = obs_diff, direction = "right")
+
+null_distribution %>% 
+  get_p_value(obs_stat = obs_diff, direction = "right")
+```
+
+
+***
+```{r}
+sessionInfo()
+```

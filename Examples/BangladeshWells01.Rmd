@@ -1,0 +1,200 @@
+---
+title: "Estimation Example: Bangladesh Wells (Mean)"
+author: "Created by Jill E. Thomley"
+date: '`r format(Sys.time(), "%A, %B %d, %Y @ %I:%M %p")`'
+output: 
+  html_document: 
+    theme: yeti
+    highlight: textmate
+    toc: TRUE
+    toc_depth: 4
+---
+
+```{r globaloptions, include = FALSE}
+knitr::opts_chunk$set(message = FALSE, warning = FALSE, comment = NA)
+```
+
+### **Packages Used**
+
+```{r}
+library(resampledata)
+library(tidyverse)
+library(moments)
+library(infer)
+library(knitr)
+library(kableExtra)
+```
+
+### **Problem & DataSet**
+
+### **Bangladesh Well Data**
+
+Bangladesh has suffered the largest population-level poisoning in history. Millions of people were exposed to naturally-occurring arsenic from tube-wells. Ironically, the wells had been installed to provide cleaner water than surface sources in order to reduce gastrointestinal diseases. Studies in other countries with long-term exposure to arsenic in groundwater found that 1 in 10 people who consume water containing 500 micrograms of arsenic per liter (mcg/l) may ultimately die from cancers caused by arsenic. The `Bangladesh` dataset from the textbook *Mathematical Statistics with Resampling and R* (found in the `resampledata` package) contains a sample of tested wells.
+
+**Problem:** Estimate the true mean concentration ($\mu$) of arsenic in tube wells in Bangladesh.
+
+```{r}
+glimpse(Bangladesh)
+```
+
+### **Exploratory Data Analysis**
+
+#### **Summary Statistics**
+
+Note: See the *Statistics Terms & Concepts* glossary on AsUlearn to read more about skewness and kurtosis.
+
+```{r}
+summaries <- Bangladesh %>% 
+  summarize(n = n(),
+            xbar = mean(Arsenic),
+            s    = sd(Arsenic),
+            skew = skewness(Arsenic),
+            kurt_adj = kurtosis(Arsenic) - 3)
+
+summaries %>% 
+  kable(digits = 2, align = "ccc") %>% 
+  kable_styling(full_width = FALSE, position = "left", font_size = 14)
+
+# for use in the the SE interval
+x_bar <- Bangladesh %>% 
+  specify(response = Arsenic) %>% 
+  calculate(stat = "mean")
+```
+
+The skewness measure is well over 1, indicating strong right skew. The very large kurtosis indicates that the distribution is much thicker-tailed than a normal distribution (typical of strongly skewed data).
+
+#### **Histogram**
+
+```{r}
+ggplot(Bangladesh, aes(x = Arsenic)) +
+  geom_histogram(bins = 20, color = "white", fill = "skyblue") +
+  labs(title = "Arsenic Contamination of Tube Wells in Balgladesh",
+       x = "arsenic concentration (micrograms per liter)") +
+  theme_linedraw()
+```
+
+The distribution is unimodal and strongly right skewed.
+
+#### **Boxplot**
+
+```{r}
+ggplot(Bangladesh, aes(x = Arsenic)) +
+  geom_boxplot(fill = "skyblue") +
+  labs(title = "Arsenic Contamination of Tube Wells in Balgladesh",
+       x = "arsenic concentration (micrograms per liter)") +
+  theme_linedraw()
+
+sort(boxplot.stats(Bangladesh$Arsenic)$out)
+```
+
+There are 28 outliers on the right side of the plot, some of them quite extreme---up to about 7 or 8 standard deviations above the mean. This is typical of strongly right-skewed data.
+
+#### **Normal QQ Plot**
+
+```{r}
+ggplot(Bangladesh, aes(sample = Arsenic)) +
+  geom_qq() +
+  geom_qq_line() +
+  labs(title = "Arsenic Contamination of Tube Wells in Balgladesh") +
+  theme_linedraw()
+```
+
+The concave-up pattern of divergence from the straight line is typical of strongly right-skewed data.
+
+### **Confidence Interval Estimation**
+
+#### **Conduct Bootstrap Simulation**
+
+Use bootstrap simulation to estimate the sampling distribution of $\bar{x}$.
+
+```{r}
+bootstrap_distribution <- Bangladesh %>% 
+  specify(response = Arsenic) %>% 
+  generate(reps = 1000, type = "bootstrap") %>% 
+  calculate(stat = "mean")
+```
+
+#### **Plot the Results and Assess**
+
+```{r}
+visualize(bootstrap_distribution) 
+
+ggplot(bootstrap_distribution, aes(sample = stat)) +
+  geom_qq() +
+  geom_qq_line() +
+  labs(title = "Simulation-Based Bootstrap Distribution")
+
+bootstrap_distribution %>% 
+  summarize(skew = skewness(stat),
+            kurt_adj = kurtosis(stat) - 3)
+```
+
+The shape of the sampling distribution of $\bar{x}$ looks mildly right-skewed on the plots, but the skewness (which is less than 0.5) and the excess kurtosis (close to 0) suggest that it is not far from approximately normal---certainly more so than the population.
+
+#### **95% Percentile Interval for $\mu$**
+
+Find the middle 95% of the bootstrap distribution to create an interval estimate.
+
+```{r}
+percentile_ci <- bootstrap_distribution %>% 
+  get_confidence_interval(level = 0.95, type = "percentile")
+
+percentile_ci %>% 
+  kable(digits = 2, align = "ccc") %>% 
+  kable_styling(full_width = FALSE, position = "left", font_size = 14)
+```
+
+#### **95% Confidence Interval Using SE**
+
+Use the "plug in" method $\bar{x} \pm 1.96 \times SE$ to create an interval estimate. The original sample mean from the summaries above is $\bar{x}$ and $SE$ is the standard deviation of the bootstrap distribution. For this method to be valid, the sampling distribution of $\bar{x}$ must be approximately normal. 
+
+```{r}
+standard_error_ci <- bootstrap_distribution %>% 
+  get_confidence_interval(level = 0.95, type = "se", point_estimate = x_bar)
+
+standard_error_ci %>% 
+  kable(digits = 2, align = "ccc") %>% 
+  kable_styling(full_width = FALSE, position = "left", font_size = 14)
+```
+
+#### **Traditional 95% Confidence Interval**
+
+The traditional *t*-based confidence interval assumes that we have an independent random sample and either an approximately normal population or a large enough sample size that the sampling distribution of $\bar{x}$ is approximately normal. The plots for the bootstrap distribution suggest that the latter is close to true.
+
+```{r}
+t.test(Bangladesh$Arsenic)$conf.int
+```
+
+#### **Comparing the Estimates**
+
+<details>
+```{r}
+comparison <- rbind(percentile_ci, 
+      standard_error_ci,
+      tibble(lower_ci = t.test(Bangladesh$Arsenic)$conf.int[1],
+             upper_ci = t.test(Bangladesh$Arsenic)$conf.int[2])) %>% 
+  mutate(type = c("Percentile", "SE Method", "Traditional"),
+         width = upper_ci - lower_ci) %>% 
+  relocate(type, .before = lower_ci) %>% 
+  kable(digits = 2, align = "lccc") %>% 
+  kable_styling(full_width = FALSE, position = "left", font_size = 14)
+
+comparison_plot <- visualize(bootstrap_distribution) +
+  shade_ci(endpoints = percentile_ci, color = "skyblue", fill = "white") +
+  shade_ci(endpoints = standard_error_ci, color = "orange", fill = "white") +
+  labs(subtitle = "blue = 95% percentile interval, orange = 95% SE interval")
+```
+</details>
+
+```{r}
+comparison
+comparison_plot
+```
+
+The slight right skew in the sampling distribution means that the boundaries of the 95% percentile interval are slightly larger (to appropriately take the longer right tail of the sampling distribution into account) than the boundaries of the other two intervals, which assume an approximately normal distribution. However, they are not too dissimilar, given the overall width.
+
+<hr>
+```{r}
+sessionInfo()
+```
+

@@ -1,0 +1,218 @@
+---
+title: "Inference Example: Vietnam Draft #1"
+author: "Created by Jill E. Thomley"
+date: '`r format(Sys.time(), "%A, %B %d, %Y @ %I:%M %p")`'
+output: 
+  html_document: 
+    theme: yeti
+    highlight: textmate
+    toc: TRUE
+    toc_depth: 4
+---
+
+```{r globaloptions, include = FALSE}
+knitr::opts_chunk$set(message = FALSE, warning = FALSE, comment = NA)
+```
+
+### **Packages Used**
+
+```{r}
+library(tidyverse)
+library(moments)
+library(infer)
+library(knitr)
+library(kableExtra)
+```
+
+### **Problem & EDA**
+
+#### **The Problem**
+
+In December 1969, U.S. Selective Service System conducted a lottery to a determine draft order for eligible men in the upcoming year. The 366 days of the year (including February 29) were written on small pieces of paper. Each was placed in a plastic capsule. The capsules were hand-mixed in a shoebox and dumped in a glass jar. The capsules were pulled out one at a time until all of the dates were paired with numbers. The birthdates with draft numbers 1 through 195 were later called to serve. Theoretically, all of the possible permutations of the 366 draft numbers were equally likely---a fair process. 
+
+Some people asserted that the draft numbers were not randomly distributed throughout the year, particularly if one compared the first half of the year to the second half of the year. In a fair (random) draft lottery process, the two halves of the year should tend to have similar distributions of draft numbers, differing only by random variation in any single implementation. We cannot prove whether or not the draft selection process was biased (non-random), but we can statistically assess whether the outcome we observed seems to be consistent with randomness. 
+
+Subsequent years used a different lottery process. You can explore the draft years 1070 to 1976 by choosing the year you wish to investigate.
+
+#### **The Dataset**
+
+Choose a year to examine.
+
+```{r}
+year <- 1970
+```
+
+```{r}
+draftdata <- 
+  read_csv("https://raw.githubusercontent.com/STAT-JET-ASU/Datasets/master/Instructor/vietnamdraft.csv") %>% 
+  filter(draftyear == year)
+```
+
+#### **Summaries**
+
+```{r}
+draftdata %>% 
+  filter(draftnumber != is.na(draftnumber)) %>% 
+  group_by(halfyear) %>% 
+  summarize(n    = n(),
+            xbar = mean(draftnumber),
+            s    = sd(draftnumber))
+```
+
+#### **Boxplots**
+
+```{r}
+ggplot(draftdata, aes(x = draftnumber, y = halfyear)) +
+  geom_boxplot(fill = "skyblue") +
+  labs(title = "Distribution of Draft Numbers in the Two Halves of the Year",
+       subtitle = "First Half = January through June, Second Half = July through December",
+       x = paste("assigned draft number in", year), y = "which half of the year") +
+  theme_linedraw()
+```
+
+#### **Histograms**
+
+```{r}
+ggplot(draftdata, aes(x = draftnumber)) +
+  geom_histogram(bins = 10, color = "white", fill = "skyblue") +
+  facet_wrap(. ~ halfyear) +
+  labs(title = "Distribution of Draft Numbers in the Two Halves of the Year",
+       subtitle = "First Half = January through June, Second Half = July through December",
+       x = paste("assigned draft number in", year)) +
+  theme_linedraw()
+```
+
+#### **Density Plots**
+
+```{r}
+ggplot(draftdata, aes(x = draftnumber)) +
+  geom_density(color = "white", fill = "skyblue", alpha = 0.75) +
+  facet_wrap(. ~ halfyear) +
+  labs(title = "Distribution of Draft Numbers in the Two Halves of the Year",
+       subtitle = "First Half = January through June, Second Half = July through December",
+       x = paste("assigned draft number in", year)) +
+  theme_linedraw()
+```
+
+#### **Normality Assessment**
+
+```{r}
+ggplot(draftdata, aes(sample = draftnumber)) +
+  geom_qq() +
+  geom_qq_line() +
+  facet_wrap(. ~ halfyear) +
+  labs(title = "Distribution of Draft Numbers in the Two Halves of the Year",
+       subtitle = "First Half = January through June, Second Half = July through December") +
+  theme_linedraw()
+```
+
+```{r}
+draftdata %>% 
+  filter(draftnumber != is.na(draftnumber)) %>% 
+  group_by(halfyear) %>% 
+  summarize(skew = skewness(draftnumber),
+            kurt = kurtosis(draftnumber))
+```
+
+### **Two-Tailed Hypothesis Test**
+
+#### **Hypotheses**
+
+$H_0: \mu_{first} = \mu_{second}$ (lottery is fair)
+
+$H_0: \mu_{first} \neq \mu_{second}$ (lottery is biased in some way---the two halves have systematically different draft numbers, on average)
+
+#### **Test Statistic**
+
+```{r}
+obs_diff_mean <- draftdata %>% 
+  specify(draftnumber ~ halfyear) %>% 
+  calculate(stat = "diff in means", order = c("first", "second"))
+obs_diff_mean
+```
+
+#### **Generate Null Distribution**
+
+```{r}
+null_distribution <- draftdata %>% 
+  specify(draftnumber ~ halfyear) %>% 
+  hypothesize(null = "independence") %>% 
+  generate(reps = 1000, type = "permute") %>% 
+  calculate(stat = "diff in means", order = c("first", "second"))
+visualize(null_distribution)
+```
+
+#### **Compute the P-Value**
+
+```{r}
+pvalue <- null_distribution %>% 
+  get_p_value(obs_stat = obs_diff_mean, direction = "both")
+pvalue
+```
+
+#### **Statistical Decision**
+
+```{r}
+alpha <- 0.05
+
+paste0("Our p-value of ", pvalue, " is ", ifelse(pvalue < alpha, "less than ", "not less than "), alpha, ", so we ", ifelse(pvalue < alpha, "reject Ho", "fail to reject Ho"), ".")
+```
+
+#### **Answer the Question**
+
+If we fail to reject Ho, then we conclude that the draft lottery was fair and that any observed difference in the means of the two halves of the year is the result of random (sampling) variability. If we reject Ho, we conclude that the lottery was systematically biased in some way. 
+
+### **One-Tailed Hypothesis Test**
+
+#### **Hypotheses**
+
+$H_0: \mu_{first} = \mu_{second}$ (lottery is fair)
+
+$H_0: \mu_{first} > \mu_{second}$ (lottery is biased against the second half---the second half has systematically lower draft numbers, on average)
+
+#### **Test Statistic**
+
+```{r}
+obs_diff_mean <- draftdata %>% 
+  specify(draftnumber ~ halfyear) %>% 
+  calculate(stat = "diff in means", order = c("first", "second"))
+obs_diff_mean
+```
+
+#### **Generate Null Distribution**
+
+```{r}
+null_distribution <- draftdata %>% 
+  specify(draftnumber ~ halfyear) %>% 
+  hypothesize(null = "independence") %>% 
+  generate(reps = 1000, type = "permute") %>% 
+  calculate(stat = "diff in means", order = c("first", "second"))
+visualize(null_distribution)
+```
+
+#### **Compute the P-Value**
+
+```{r}
+pvalue <- null_distribution %>% 
+  get_p_value(obs_stat = obs_diff_mean, direction = "greater")
+pvalue
+```
+
+#### **Statistical Decision**
+
+```{r}
+alpha <- 0.05
+
+paste0("Our p-value of ", pvalue, " is ", ifelse(pvalue < alpha, "less than ", "not less than "), alpha, ", so we ", ifelse(pvalue < alpha, "reject Ho", "fail to reject Ho"), ".")
+```
+
+#### **Answer the Question**
+
+If we fail to reject Ho, then we conclude that the draft lottery was fair and that any observed difference in the means of the two halves of the year is the result of random (sampling) variability. If we reject Ho, we conclude that the lottery was systematically biased against the second half of the year. 
+
+
+<hr>
+```{r}
+sessionInfo()
+```
+
