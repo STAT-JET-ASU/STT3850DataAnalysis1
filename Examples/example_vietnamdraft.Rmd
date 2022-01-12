@@ -1,0 +1,57 @@
+---
+title: "Example_Vietnam Draft"
+author: "YOUR NAME HERE"
+date: "1/12/2022"
+output: html_document
+---
+
+choose a draft year and summarize draft numbers for the two halves of the year
+https://stat-jet-asu.github.io/Datasets/InstructorDescriptions/vietnamdraft.html
+created: 2022-01-12
+updated: 2022-01-12
+changes: ---
+
+```{r}
+library(tidyverse)
+```
+
+```{R}
+draft <- read_csv("https://raw.githubusercontent.com/STAT-JET-ASU/Datasets/master/Instructor/vietnamdraft.csv")
+```
+
+Choose a draft year (1970 through 1976)
+
+```{r}
+year <- 1970
+```
+
+Subset the data for the selected year
+
+```{r}
+draft_sub <- draft %>%
+  filter(draftyear == year, !is.na(draftnumber))
+```
+
+Summarize and visualize draft numbers
+
+```{r}
+draft_sub %>%
+  group_by(halfyear) %>%
+  summarize(
+    n = n(),
+    xbar = mean(draftnumber),
+    s = sd(draftnumber),
+    prop = mean(draftnumber <= 195)
+  )
+```
+
+```{r}
+ggplot(draft_sub, aes(x = draftnumber, y = halfyear)) +
+  geom_boxplot()
+```
+
+```{r}
+ggplot(draft_sub, aes(x = draftnumber)) +
+  geom_histogram(bins = 10) +
+  facet_grid(halfyear ~ .)
+```
