@@ -5,11 +5,11 @@ date: "1/12/2022"
 output: html_document
 ---
 
-choose a draft year and summarize draft numbers for the two halves of the year
-https://stat-jet-asu.github.io/Datasets/InstructorDescriptions/vietnamdraft.html
-created: 2022-01-12
-updated: 2022-01-12
-changes: ---
+* choose a draft year and summarize draft numbers for the two halves of the year
+* https://stat-jet-asu.github.io/Datasets/InstructorDescriptions/vietnamdraft.html
+* created: 2022-01-12
+* updated: 2022-01-12
+* changes: ---
 
 ```{r}
 library(tidyverse)
