@@ -1,0 +1,151 @@
+---
+title: "EDA ⯈ Categorical Data Worksheet"
+author: "Jill E. Thomley"
+date: 'Last rendered on `r format(Sys.time(), "%A, %B %d, %Y @ %I:%M %p")`'
+output: 
+  html_document: 
+    theme: yeti
+    highlight: textmate
+---
+
+```{r globaloptions, include = FALSE}
+knitr::opts_chunk$set(
+  message = FALSE,
+  warning = FALSE,
+  comment = NA
+)
+```
+***
+
+## Packages Used
+
+```{r packages}
+library(tidyverse)
+library(waffle)
+```
+
+## DataSets Used
+
+### Popular Kids Study
+
+You can read more about this dataset on its [description page](https://stat-jet-asu.github.io/Datasets/InstructorDescriptions/popular.html).
+
+```{r datasets}
+kids <- read_csv("https://raw.githubusercontent.com/STAT-JET-ASU/Datasets/master/Instructor/popular.csv")
+glimpse(kids)
+```
+
+### STT3850 Students
+
+This dataset contains information about students in Dr. Thomley’s past STT3850 classes.
+
+```{r}
+students <- read_csv("https://raw.githubusercontent.com/STAT-JET-ASU/Datasets/master/Instructor/stt3850majors.csv")
+glimpse(students)
+```
+
+## Tabulating Data
+
+### Frequency 
+
+I want to take the kids dataset *and then* count how many kids are in each grade. The pipe can be read as *and then* in this process. The counts produced by the `count()` function go into a column labeled `n`. The output  of this process is another dataset (tibble). This is good, because we can use other dplyr verbs to manipulate this output.
+
+```{r}
+kids %>% 
+  count(grade)
+```
+
+### Relative Frequency
+
+The way we add a new column or variable to a dataset is with the `mutate()` function. I mathematically manipulate the `n` column into the `rel_freq` column using the function `prop.table()`.
+
+```{r}
+kids %>%
+  count(grade) %>%
+  mutate(rel_freq = prop.table(n))
+```
+
+### Cumulative Frequency
+
+Using `mutate()` and the cumulative sum function `cumsum()`, I can manipulate the `n` and `rel_freq` columns to add cumulative frequency and cumulative relative frequency columns.
+
+```{r}
+kids %>%
+  count(grade) %>%
+  mutate(
+    cum_freq = cumsum(n),
+    rel_freq = prop.table(n),
+    cum_rel_freq = cumsum(rel_freq)
+  )
+```
+
+### New Example!
+
+To plot a different variable from the same dataset, just change the variable name!
+
+What are kids' top goals?
+
+```{r}
+kids %>%
+  count(top_goal) %>%
+  mutate(rel_freq = prop.table(n))
+```
+
+Where do kids rank grades in terms of contributing to popularity (1 = most important)?
+
+```{r}
+kids %>%
+  count(grades_rank) %>%
+  mutate(
+    cum_freq = cumsum(n),
+    rel_freq = prop.table(n),
+    cum_rel_freq = cumsum(rel_freq)
+  )
+```
+
+### Using Base R
+
+## Plotting Data
+
+### Barplot for One Variable
+
+These are the same plot *geometry*, except the *aesthetic* (`aes`) variable is on the x axis in one plot and the y axis in the other. The `+` sign in ggplot works much like the `%>%`---it adds another layer to the plot. 
+
+```{r}
+ggplot(kids, aes(x = top_goal)) +
+  geom_bar()
+
+ggplot(kids, aes(y = top_goal)) +
+  geom_bar()
+```
+
+### Barplot for Two Variables
+
+```{r}
+
+```
+
+### Barplot for Three Variables
+
+```{r}
+
+```
+
+### Waffle Plot
+
+```{r}
+
+```
+
+## Creating Factors
+
+### *create your own subheader here*
+
+```{r}
+
+```
+
+***
+```{r}
+sessionInfo()
+```
