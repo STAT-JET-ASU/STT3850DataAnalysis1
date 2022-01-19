@@ -1,0 +1,104 @@
+---
+title: "EDA ⯈ Categorical Data Worksheet"
+author: "YOUR NAME HERE"
+date: 'Last rendered on `r format(Sys.time(), "%A, %B %d, %Y @ %I:%M %p")`'
+output: 
+  html_document: 
+    theme: yeti
+    highlight: textmate
+---
+
+```{r globaloptions, include = FALSE}
+knitr::opts_chunk$set(
+  message = FALSE,
+  warning = FALSE,
+  comment = NA
+)
+```
+***
+
+## Packages Used
+
+```{r packages}
+library(tidyverse)
+library(waffle)
+```
+
+## DataSets Used
+
+### Popular Kids Study
+
+You can read more about this dataset on its [description page](https://stat-jet-asu.github.io/Datasets/InstructorDescriptions/popular.html).
+
+```{r datasets}
+kids <- read_csv("https://raw.githubusercontent.com/STAT-JET-ASU/Datasets/master/Instructor/popular.csv")
+```
+
+### STT3850 Students
+
+This dataset contains information about students in Dr. Thomley’s past STT3850 classes.
+
+```{r}
+students <- read_csv("https://raw.githubusercontent.com/STAT-JET-ASU/Datasets/master/Instructor/stt3850majors.csv")
+```
+
+## Tabulating Data
+
+### Frequency 
+
+```{r}
+
+```
+
+### Relative Frequency
+
+```{r}
+
+```
+
+### Cumulative Frequency
+
+```{r}
+
+```
+
+### Using Base R
+
+## Plotting Data
+
+### Barplot for One Variable
+
+```{r}
+
+```
+
+### Barplot for Two Variables
+
+```{r}
+
+```
+
+### Barplot for Three Variables
+
+```{r}
+
+```
+
+### Waffle Plot
+
+```{r}
+
+```
+
+## Creating Factors
+
+### *create your own subheader here*
+
+```{r}
+
+```
+
+***
+```{r}
+sessionInfo()
+```
