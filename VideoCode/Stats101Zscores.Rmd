@@ -1,0 +1,114 @@
+---
+title: "Understanding Z-Scores"
+subtitle: "Companion `R` Code for Stats 101 Video Lesson"
+author: "Created by Jill E. Thomley"
+date: '`r format(Sys.time(), "%A, %B %d, %Y @ %I:%M %p")`'
+output: 
+  html_document: 
+    theme: yeti
+    highlight: textmate
+    toc: TRUE
+    toc_depth: 4
+---
+
+```{r globaloptions, include = FALSE}
+knitr::opts_chunk$set(
+  message = FALSE,
+  warning = FALSE,
+  comment = NA
+)
+```
+
+▶ [GO TO VIDEO](https://youtu.be/bUu5HIHIrRw)
+
+<hr>
+
+## Packages Used
+
+```{r loadpackages}
+library(tidyverse)
+```
+
+## Datasets Used
+
+### Class 1 Scores
+
+```{r}
+class1 <- tibble(Score = sort(c(85, 95, 75, 80, 90)))
+```
+
+### Class 2 Scores
+
+```{r}
+class2 <- tibble(Score = sort(c(88, 79, 91, 85, 82)))
+```
+
+## Calculations
+
+### Summary Statistics
+
+Class 2 has the same mean but a smaller standard deviation than Class 1.
+
+```{r}
+class1 %>%
+  summarize(
+    mean_class1 = mean(Score),
+    sd_class1 = sd(Score)
+  )
+class2 %>%
+  summarize(
+    mean_class2 = mean(Score),
+    sd_class2 = sd(Score)
+  )
+```
+
+### Z-Scores for Class 1
+
+This example works out the math like the table in the video. `Difference` is the non-standardized distance from the mean.
+
+```{r}
+class1 %>%
+  mutate(
+    Mean = mean(Score),
+    Difference = Score - Mean,
+    Z = Difference / sd(Score)
+  )
+```
+
+We can do this directly using the `scale()` function in `R`. If you look at `class1_zscores` in the Environment pane, you will see the mean and standard deviation saved as *attributes* of the Z column (properties explain what an object represents and how it should be interpreted by R --- in this case the values used for scaling). 
+
+```{r}
+class1_zscores <- class1 %>% 
+  mutate(Z = scale(Score))
+class1_zscores
+attributes(class1_zscores$Z)
+```
+
+### Z-Scores for Class 2
+
+Notice that the z-scores here are the same as Class 1, but the individual scores are closer to the mean than Class 1 (`Difference` is smaller). This is because the standard deviation (our unit of measure or "ruler") is smaller in Class 2.
+
+```{r}
+class2 %>%
+  mutate(
+    Mean = mean(Score),
+    Difference = Score - Mean,
+    Z = Difference / sd(Score)
+  )
+```
+
+```{r}
+class2_zscores <- class2 %>% 
+  mutate(Z = scale(Score))
+class2_zscores
+```
+
+```{r}
+cbind(class1_zscores, class2_zscores)
+```
+
+
+<hr>
+```{r}
+sessionInfo()
+```
