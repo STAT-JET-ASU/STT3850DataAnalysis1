@@ -1,0 +1,819 @@
+---
+title: "DataCamp: Introduction to R"
+subtitle: "Course Exercises and Notes"
+author: "YOUR NAME HERE"
+date: 'Last rendered on `r format(Sys.time(), "%A, %B %d, %Y @ %I:%M %p")`'
+output: 
+  html_document: 
+    theme: yeti
+    highlight: textmate
+    toc: true
+    toc_depth: 3
+    toc_float: true
+---
+
+```{r globaloptions, include = FALSE}
+knitr::opts_chunk$set(
+  message = FALSE,
+  warning = FALSE,
+  comment = NA
+)
+```
+
+***
+
+### Course Information
+
+**Course Description**
+
+In Introduction to R, you will master the basics of this widely used open source language, including factors, lists, and data frames. With the knowledge gained in this course, you will be ready to undertake your first very own data analysis. Oracle estimated over 2 million R users worldwide in 2012, cementing R as a leading programming language in statistics and data science. Every year, the number of R users grows by about 40%, and an increasing number of organizations are using it in their day-to-day activities. Begin your journey to learn R with us today!
+
+**Course Link:** [Introduction to R](https://www.datacamp.com/courses/free-introduction-to-r)
+
+**Prerequisites:** None
+
+**Packages Used:** None
+
+**Datasets Used:** None
+
+***
+
+### Intro to Basics
+
+How it works
+
+```{r}
+# Calculate 3 + 4
+3 + 5
+
+# Calculate 
+6 + 12
+```
+
+Arithmetic with R
+
+```{r}
+# An addition
+5 + 5 
+
+# A subtraction
+5 - 5 
+
+# A multiplication
+3 * 5
+
+ # A division
+(5 + 5) / 2 
+
+# Exponentiation
+2^5
+
+# Modulo
+28 %% 6
+```
+
+Variable assignment
+
+Objects we create and store in code chunks will go to the environment.
+
+```{r}
+# Assign the value 42 to x
+
+
+# Print out the value of the variable x
+ 
+```
+
+Variable assignment (2)
+
+```{r}
+# Assign the value 5 to the variable my_apples
+
+
+# Print out the value of the variable my_apples
+
+```
+
+Variable assignment (3)
+
+```{r}
+# Assign a value to the variables my_apples and my_oranges
+
+
+# Add these two variables together
+
+
+# Create the variable my_fruit
+
+```
+
+Apples and oranges
+
+```{r}
+# Assign a value to the variable my_apples
+
+
+# Fix the assignment of my_oranges
+
+
+# Create the variable my_fruit and print it out
+
+```
+
+Basic data types in R
+
+```{r}
+# Change my_numeric to be 42
+
+
+# Change my_character to be "universe"
+
+
+# Change my_logical to be FALSE
+
+```
+
+What's that data type?
+
+```{r}
+# Declare variables of different types
+
+
+# Check class of my_numeric
+
+
+# Check class of my_character
+
+
+# Check class of my_logical
+
+```
+
+### Vectors
+
+Create a vector
+
+```{r}
+# Define the variable vegas
+
+```
+
+Create a vector (2)
+
+```{r}
+numeric_vector <- c(1, 10, 49)
+character_vector <- c("a", "b", "c")
+
+# Complete the code for boolean_vector
+
+```
+
+Create a vector (3)
+
+```{r}
+# Poker winnings from Monday to Friday
+
+
+# Roulette winnings from Monday to Friday
+
+```
+
+Naming a vector
+
+```{r}
+# Poker winnings from Monday to Friday
+
+
+# Roulette winnings from Monday to Friday
+
+
+# Assign days as names of poker_vector
+
+
+# Assign days as names of roulette_vectors
+
+```
+
+Naming a vector (2)
+
+```{r}
+# Poker winnings from Monday to Friday
+
+
+# Roulette winnings from Monday to Friday
+
+
+# The variable days_vector
+
+ 
+# Assign the names of the day to roulette_vector and poker_vector
+
+```
+
+Calculating total winnings
+
+```{r}
+A_vector <- c(1, 2, 3)
+B_vector <- c(4, 5, 6)
+
+# Take the sum of A_vector and B_vector
+
+  
+# Print out total_vector
+
+```
+
+Calculating total winnings (2)
+
+```{r}
+# Poker and roulette winnings from Monday to Friday:
+
+
+# Assign to total_daily how much you won/lost on each day
+
+```
+
+Calculating total winnings (3)
+
+```{r}
+# Poker and roulette winnings from Monday to Friday:
+
+
+# Total winnings with poker
+
+
+# Total winnings with roulette
+
+
+# Total winnings overall
+
+
+# Print out total_week
+
+```
+
+Comparing total winnings
+
+```{r}
+# Poker and roulette winnings from Monday to Friday:
+
+
+# Calculate total gains for poker and roulette
+
+
+# Check if you realized higher total gains in poker than in roulette 
+
+```
+
+Vector selection: the good times
+
+```{r}
+# Poker and roulette winnings from Monday to Friday:
+
+
+# Define a new variable based on a selection
+
+```
+
+Vector selection: the good times (2)
+
+```{r}
+# Poker and roulette winnings from Monday to Friday:
+
+
+# Define a new variable based on a selection
+
+```
+
+Vector selection: the good times (3)
+
+```{r}
+# Poker and roulette winnings from Monday to Friday:
+
+
+# Define a new variable based on a selection
+
+```
+
+Vector selection: the good times (4)
+
+```{r}
+# Poker and roulette winnings from Monday to Friday:
+
+
+# Select poker results for Monday, Tuesday and Wednesday
+
+  
+# Calculate the average of the elements in poker_start
+
+```
+
+Selection by comparison - Step 1
+
+```{r}
+# Poker and roulette winnings from Monday to Friday:
+
+
+# Which days did you make money on poker?
+
+  
+# Print out selection_vector
+
+```
+
+Selection by comparison - Step 2
+
+```{r}
+# Poker and roulette winnings from Monday to Friday:
+
+
+# Which days did you make money on poker?
+
+
+# Select from poker_vector these days
+
+```
+
+Advanced selection
+
+```{r}
+# Poker and roulette winnings from Monday to Friday:
+
+
+# Which days did you make money on roulette?
+
+
+# Select from roulette_vector these days
+
+```
+
+### Matrices
+
+What's a matrix?
+
+```{r}
+# Construct a matrix with 3 rows that contain the numbers 1 up to 9
+
+```
+
+Analyzing matrices, you shall
+
+```{r}
+# Box office Star Wars (in millions!)
+
+
+# Create box_office
+
+
+# Construct star_wars_matrix
+
+```
+
+Naming a matrix
+
+```{r}
+# Box office Star Wars (in millions!)
+
+
+# Construct matrix
+
+
+# Vectors region and titles, used for naming
+
+
+# Name the columns with region
+
+
+# Name the rows with titles
+
+
+# Print out star_wars_matrix
+
+```
+
+Calculating the worldwide box office
+
+```{r}
+# Construct star_wars_matrix
+
+
+# Calculate worldwide box office figures
+
+```
+
+Adding a column for the Worldwide box office
+
+```{r}
+# Construct star_wars_matrix
+
+
+# The worldwide box office figures
+
+
+# Bind the new variable worldwide_vector as a column to star_wars_matrix
+
+```
+
+Adding a row
+
+```{r}
+# CREATING star_wars_matrix2 (provided in the DC course)
+box_office2 <- c(474.5, 552.5, 310.7, 338.7, 380.3, 468.5)
+star_wars_matrix2 <- matrix(box_office2, nrow = 3, byrow = TRUE,
+                            dimnames = list(c("A New Hope", 
+                                              "The Empire Strikes Back", 
+                                              "Return of the Jedi"), 
+                                            c("US", "non-US")))
+```
+
+```{r}
+# star_wars_matrix and star_wars_matrix2 are available in your workspace
+
+
+# Combine both Star Wars trilogies in one matrix
+
+```
+
+The total box office revenue for the entire saga
+
+```{r}
+# all_wars_matrix is available in your workspace
+
+
+# Total revenue for US and non-US
+
+  
+# Print out total_revenue_vector
+
+```
+
+Selection of matrix elements
+
+```{r}
+# all_wars_matrix is available in your workspace
+
+
+# Select the non-US revenue for all movies
+
+  
+# Average non-US revenue
+
+  
+# Select the non-US revenue for first two movies
+
+  
+# Average non-US revenue for first two movies
+
+```
+
+A little arithmetic with matrices
+
+```{r}
+# all_wars_matrix is available in your workspace
+
+
+# Estimate the visitors
+
+  
+# Print the estimate to the console
+
+```
+
+A little arithmetic with matrices (2)
+
+```{r}
+# CREATING ticket_prices_matrix (provided in the DC course)
+box_office3 <- c(5.0, 5.0, 6.0, 6.0, 7.0, 7.0, 4.0, 4.0, 4.5, 4.5, 4.9, 4.9)
+ticket_prices_matrix <- matrix(box_office3, nrow = 6, byrow = TRUE,
+                               dimnames = list(c("A New Hope", 
+                                                 "The Empire Strikes Back", 
+                                                 "Return of the Jedi",
+                                                 "The Phantom Menace",
+                                                 "Attack of the Clones",
+                                                 "Revenge of the Sith"), 
+                                               c("US", "non-US")))
+```
+
+```{r}
+# all_wars_matrix and ticket_prices_matrix are available in your workspace
+
+
+# Estimated number of visitors
+
+
+# US visitors
+
+
+# Average number of US visitors
+
+```
+
+### Factors
+
+What's a factor and why would you use it?
+
+```{r}
+# Assign to the variable theory what this chapter is about!
+
+```
+
+What's a factor and why would you use it? (2)
+
+```{r}
+# Sex vector
+
+
+# Convert sex_vector to a factor
+
+
+# Print out factor_sex_vector
+
+```
+
+What's a factor and why would you use it? (3)
+
+```{r}
+# Animals
+
+
+# Temperature
+
+```
+
+Factor levels
+
+```{r}
+# Code to build factor_survey_vector
+
+
+# Specify the levels of factor_survey_vector
+
+```
+
+Summarizing a factor
+
+```{r}
+# Build factor_survey_vector with clean levels
+
+
+# Generate summary for survey_vector
+
+
+# Generate summary for factor_survey_vector
+
+```
+
+Battle of the sexes
+
+```{r}
+# Build factor_survey_vector with clean levels
+
+
+# Male
+
+
+# Female
+
+
+# Battle of the sexes: Male 'larger' than female?
+
+```
+
+Ordered factors
+
+```{r}
+# Create speed_vector
+
+```
+
+Ordered factors (2)
+
+```{r}
+# Create speed_vector
+
+
+# Convert speed_vector to ordered factor vector
+
+
+# Print factor_speed_vector
+
+```
+
+Comparing ordered factors
+
+```{r}
+# Create factor_speed_vector
+
+
+# Factor value for second data analyst
+
+
+# Factor value for fifth data analyst
+
+
+# Is data analyst 2 faster than data analyst 5?
+
+```
+
+### Data Frames
+
+What's a data frame?
+
+```{r}
+# Print out built-in R data frame
+
+```
+
+Quick, have a look at your data set
+
+```{r}
+# Call head() on mtcars
+
+```
+
+Have a look at the structure
+
+```{r}
+# Investigate the structure of mtcars
+
+```
+
+Creating a data frame
+
+```{r}
+# Definition of vectors
+
+
+# Create a data frame from the vectors
+
+```
+
+Creating a data frame (2)
+
+```{r}
+# Check the structure of planets_df
+
+```
+
+Selection of data frame elements
+
+```{r}
+# Print out diameter of Mercury (row 1, column 3)
+
+
+# Print out data for Mars (entire fourth row)
+
+```
+
+Selection of data frame elements (2)
+
+```{r}
+# Select first 5 values of diameter column
+
+```
+
+Only planets with rings
+
+```{r}
+# Select the rings variable from planets_df
+
+  
+# Print out rings_vector
+
+```
+
+Only planets with rings (2)
+
+```{r}
+# Adapt the code to select all columns for planets with rings
+
+```
+
+Only planets with rings but shorter
+
+```{r}
+# Select planets with diameter < 1
+
+```
+
+Sorting
+
+```{r}
+# Play around with the order function in the console
+
+```
+
+Sorting your data frame
+
+```{r}
+# Use order() to create positions
+
+
+# Use positions to sort planets_df
+
+```
+
+### Lists
+
+Lists, why would you need them?
+
+```{r}
+# There is no code in this section.
+```
+
+Lists, why would you need them? (2)
+
+```{r}
+# There is no code in this section.
+```
+
+Creating a list
+
+```{r}
+# Vector with numerics from 1 up to 10
+
+
+# Matrix with numerics from 1 up to 9
+
+
+# First 10 elements of the built-in data frame mtcars
+
+
+# Construct list with these different elements:
+
+```
+
+Creating a named list
+
+```{r}
+# Vector with numerics from 1 up to 10
+
+
+# Matrix with numerics from 1 up to 9
+
+
+# First 10 elements of the built-in data frame mtcars
+
+
+# Adapt list() call to give the components names
+
+
+# Print out my_list
+
+```
+
+Creating a named list (2)
+
+```{r}
+# CREATE mov, act, and rev (provided in the DC course)
+
+# Define the vectors mov and act
+mov <- "The Shining"
+act <- c("Jack Nicholson", "Shelley Duvall", "Danny Lloyd", "Scatman Crothers", "Barry Nelson")
+
+# Define the vectors scores, sources, comments
+scores <- c(4.5, 4.0, 5.0)
+sources <- c("IMDb1", "IMDB2", "IMDB3")
+comments <- c("Best Horror Film I Have Ever Seen",
+              "A truly brilliant and scary film from Stanley Kubrick",
+              "A masterpiece of psychological horror")
+
+# Create a data frame rev from the vectors
+rev <- data.frame(scores, sources, comments)
+```
+
+```{r}
+# Finish the code to build shining_list
+
+```
+
+Selecting elements from a list
+
+```{r}
+# Print out the vector representing the actors
+
+
+# Print the second element of the vector representing the actors
+
+```
+
+Creating a new list for another movie
+
+```{r}
+# Use the table from the exercise to define the comments and scores vectors
+ 
+
+# Save the average of the scores vector as avg_review  
+
+
+# Combine scores and comments into the reviews_df data frame
+
+
+# Create and print out a list, called departed_list
+
+```
+
+***
+```{r}
+sessionInfo()
+```
