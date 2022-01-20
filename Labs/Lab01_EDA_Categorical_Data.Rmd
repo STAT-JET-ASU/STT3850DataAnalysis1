@@ -1,0 +1,172 @@
+---
+title: "Lab 01: EDA ⯈ Categorical Data"
+author: "YOUR NAME HERE"
+date: 'Last rendered on `r format(Sys.time(), "%A, %B %d, %Y @ %I:%M %p")`'
+output: 
+  html_document: 
+    theme: yeti
+    highlight: textmate
+    code_folding: hide
+---
+
+```{r globaloptions, include = FALSE}
+knitr::opts_chunk$set(
+  message = FALSE,
+  warning = FALSE,
+  comment = NA
+)
+```
+***
+
+## Packages Used
+
+```{r packages}
+library(tidyverse)
+library(waffle)
+```
+
+## DataSet Used
+
+### Load the Data
+
+The `stt3850majors` dataset contains information about students in Dr. Thomley’s past and present STT3850 classes.
+
+```{r}
+students <- read_csv("https://raw.githubusercontent.com/STAT-JET-ASU/Datasets/master/Instructor/stt3850majors.csv")
+glimpse(students)
+```
+
+* `College`: college to which the student belonged (based on major)
+* `Year`: student's academic level/year as listed in the Banner system
+* `BannerMajor`: student's major as listed in the Banner system
+* `CodedMajor`: student's major recoded into four categories
+* `Semester`: semester in which the student took STT3850
+* `AY`: academic year for `Semester`, e.g., 2014-2015 (F14, S15, Sum 15)
+
+All of Dr. Thomley's sections prior to Spring 2020 were taught in person. Spring 2020 began in person and moved to 100% online. All sections after Spring 2020 have been taught 100% online.
+
+### Prepare the Data
+
+* Filter the data to remove the one student whose `Year` is Graduate Certificate Program (hint: use `!=`).
+* Mutate the variable `Year` into a factor so the categories Freshman, Sophomore, Junior, and Senior are in order. 
+* Mutate the variable `CodedMajor` into a factor so the categories are in the order shown below.
+    * Computer Science
+    * Mathematical Sciences
+    * Other Sciences
+    * Other
+* Run `glimpse()` to show the new structure.
+
+```{r}
+students <- students %>% 
+  filter(...) %>% 
+  mutate(...) 
+```
+
+## Frequency Tables
+
+### Table 1: Coded Major
+
+Create a table showing the frequency and relative frequency of `CodedMajor`. 
+
+```{r}
+
+```
+
+### Table 2: Class Year
+
+Create a table showing the frequency, relative frequency, cumulative frequency, and cumulative relative frequency of `Year`.
+
+```{r}
+
+```
+
+## Contingency Tables
+
+### Tables 3 and 4: Coded Major by Class Year
+
+Create a contingency table of `CodedMajor` (rows) by `Year` (columns). Use `pivot_wider()` to spread it out for easier interpretation (hint: save the output of your `count()` as an object before using `pivot_wider()`, then use it as input for the next table as well.)
+
+```{r}
+
+```
+
+Create a contingency table of `CodedMajor` (rows) by `Year` (columns) and compute relative frequencies of `Year` grouped by `CodedMajor` (i.e., relative frequencies within each row). Use `pivot_wider()` to spread it out for easier interpretation.
+
+```{r}
+
+```
+
+### Tables 5 and 6: Academic Year by Coded Major
+
+Create a contingency table of `AY` (rows) by `CodedMajor` (columns). Use `pivot_wider()` to spread it out for easier interpretation (hint: save the output of your `count()` as an object before using `pivot_wider()`, then use it as input for the next table as well.)
+
+```{r}
+
+```
+
+Create a contingency table of `AY` (rows) by `CodedMajor` (columns) and compute relative frequencies of `CodedMajor` grouped by `AY` (i.e., relative frequencies within each row). Use `pivot_wider()` to spread it out for easier interpretation.
+
+```{r}
+
+```
+
+## Barplots
+
+### Plot 1: Class Year
+
+Create a barplot of `Year`. Include an informative title and axis labels using `labs()`. Other colors/formatting are optional.
+
+```{r}
+
+```
+
+### Plot 2: Coded Major by Class Year
+
+Create a barplot of `CodedMajor` with each bar filled according to `Year`. Use the `geom_bar()` option `position = "dodge"` to unstack the bars. Include an informative title and axis labels using `labs()`. Other colors/formatting are optional.
+
+```{r}
+
+```
+
+### Plot 3: Academic Year by Coded Major
+
+Create a horizontal barplot of `AY` with each bar filled according to `CodedMajor`. Use the `geom_bar()` option `position = "fill"` so the bars show relative frequencies. Include an informative title and axis labels using `labs()`. Other colors/formatting are optional.
+
+```{r}
+
+```
+
+## Plot 4: Waffle Plot
+
+Create a waffle plot to show the proportions of `CodedMajor`. Use the `title =` argument in `waffle()` to add an appropriate title.
+
+```{r}
+
+```
+
+## Questions
+
+Your answers should reference specific tables, plots, and/or quantitative values to support your statements. Avoid vague phrases like "the numbers show". Use appropriate statistical vocabulary such as "counts", "frequencies", or "relative frequencies".
+
+1) Overall, what has been the most common major for students in Dr. Thomley's STT3850 sections? Has this been consistently true across all academic years in the dataset?
+
+ANSWER: *erase this and type your answer here*
+
+2) Overall, what has been the most common class year (or years) for students in Dr. Thomley's STT3850 sections? Is this similar across all majors, or do some take the course earlier/later?
+
+ANSWER: *erase this and type your answer here*
+
+3) Using your own knowledge and what is available in the data, can you speculate on a cause or explanation for your findings in Questions 1 and 2? What other information would you like to have to help explain what you observed?
+
+ANSWER: *erase this and type your answer here*
+
+## Reference Materials
+
+* [EDA ⯈ Categorical Data: Tabulating Data](https://stat-jet-asu.github.io/Slides/STT3850/EDACategoricalTables.html#1)
+* [EDA ⯈ Categorical Data: Basics of Barplots](https://stat-jet-asu.github.io/Slides/STT3850/EDACategoricalPlots.html#1)
+* [EDA ⯈ Categorical Data: Introducing Factors](https://stat-jet-asu.github.io/Slides/STT3850/EDACategoricalFactors.html#1)
+
+***
+```{r}
+sessionInfo()
+```
