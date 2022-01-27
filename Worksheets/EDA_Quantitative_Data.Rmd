@@ -1,0 +1,118 @@
+---
+title: "EDA ⯈ Numerical Data Worksheet"
+author: "YOUR NAME HERE"
+date: 'Last rendered on `r format(Sys.time(), "%A, %B %d, %Y @ %I:%M %p")`'
+output: 
+  html_document: 
+    theme: yeti
+    highlight: textmate
+---
+
+```{r globaloptions, include = FALSE}
+knitr::opts_chunk$set(
+  message = FALSE,
+  warning = FALSE,
+  comment = NA
+)
+```
+***
+
+## Packages Used
+
+```{r packages}
+library(tidyverse)
+library(resampledata) # needed for wells dataset
+```
+
+## DataSets Used
+
+### Mileage Data
+
+You can read more about this dataset on its [description page](https://stat-jet-asu.github.io/Datasets/InstructorDescriptions/popular.html).
+
+```{r datasets}
+mileage <- read_csv("https://raw.githubusercontent.com/STAT-JET-ASU/Datasets/master/Instructor/gasmileage.csv")
+```
+
+### Geyser Data
+
+This dataset contains information about students in Dr. Thomley’s past STT3850 classes.
+
+```{r}
+geyser <- read_csv("https://raw.githubusercontent.com/STAT-JET-ASU/Datasets/master/Instructor/oldfaithful.csv")
+```
+
+### Wells Data
+
+```{r}
+wells <- Bangladesh
+```
+
+### Happy Face Data
+
+```{r}
+geyser <- read_csv("https://raw.githubusercontent.com/STAT-JET-ASU/Datasets/master/Instructor/happyface.csv")
+```
+
+## Exploratory Data Analysis (EDA)
+
+### Mileage Data
+
+#### Plots
+
+```{r}
+
+```
+
+#### Summaries
+
+```{r}
+
+```
+
+### Geyser Data
+
+#### Plots
+
+```{r}
+
+```
+
+#### Summaries
+
+```{r}
+
+```
+
+### Wells Data
+
+#### Plots
+
+```{r}
+
+```
+
+#### Summaries
+
+```{r}
+
+```
+
+### Happy Face Data
+
+#### Plots
+
+```{r}
+
+```
+
+#### Summaries
+
+```{r}
+
+```
+
+***
+```{r}
+sessionInfo()
+```
