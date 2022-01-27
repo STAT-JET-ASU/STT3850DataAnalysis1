@@ -28,10 +28,9 @@ library(resampledata) # needed for wells dataset
 
 ### Mileage Data
 
-You can read more about this dataset on its [description page](https://stat-jet-asu.github.io/Datasets/InstructorDescriptions/popular.html).
-
 ```{r datasets}
 mileage <- read_csv("https://raw.githubusercontent.com/STAT-JET-ASU/Datasets/master/Instructor/gasmileage.csv")
+glimpse(mileage)
 ```
 
 ### Geyser Data
@@ -40,18 +39,21 @@ This dataset contains information about students in Dr. Thomley’s past STT3850
 
 ```{r}
 geyser <- read_csv("https://raw.githubusercontent.com/STAT-JET-ASU/Datasets/master/Instructor/oldfaithful.csv")
+glimpse(geyser)
 ```
 
 ### Wells Data
 
 ```{r}
 wells <- Bangladesh
+glimpse(wells)
 ```
 
 ### Happy Face Data
 
 ```{r}
-geyser <- read_csv("https://raw.githubusercontent.com/STAT-JET-ASU/Datasets/master/Instructor/happyface.csv")
+happyf <- read_csv("https://raw.githubusercontent.com/STAT-JET-ASU/Datasets/master/Instructor/happyface.csv")
+glimpse(happyf)
 ```
 
 ## Exploratory Data Analysis (EDA)
