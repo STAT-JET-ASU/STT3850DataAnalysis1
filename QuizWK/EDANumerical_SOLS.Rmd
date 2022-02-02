@@ -1,0 +1,251 @@
+---
+title: "Numerical EDA Quiz Worksheet"
+date: '`r format(Sys.time(), "%A, %B %d, %Y @ %I:%M %p")`'
+output: 
+  html_document: 
+    theme: yeti
+    highlight: textmate
+    toc: true
+    toc_depth: 5
+---
+
+```{r globaloptions, include = FALSE}
+knitr::opts_chunk$set(
+  message = FALSE,
+  warning = FALSE,
+  comment = NA
+)
+```
+<hr>
+
+## Setup
+
+### Packages Used
+
+```{r}
+library(tidyverse)
+```
+
+### Datasets Used
+
+#### NFL Players Data
+
+The `NFLplayers2016.csv` dataset contains data about all National Football League (NFL) players in 2016. You can read more about the variables on its [description page](https://stat-jet-asu.github.io/Datasets/InstructorDescriptions/NFLplayers2016.html). 
+
+```{r}
+nfl <- read_csv("https://raw.githubusercontent.com/STAT-JET-ASU/Datasets/master/Instructor/NFLplayers2016.csv")
+glimpse(nfl)
+```
+
+#### Monopoly Data
+
+The `monopolygame.csv` dataset contains data about properties in the game of Monopoly. You can read more about the variables on its [description page](https://stat-jet-asu.github.io/Datasets/InstructorDescriptions/monopoly.html) 
+
+```{r}
+game <- read_csv("https://raw.githubusercontent.com/STAT-JET-ASU/Datasets/master/Instructor/monopolygame.csv")
+glimpse(game)
+```
+
+#### Smallpox Data
+
+[William Watson](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4109147/) (1717-1787) conducted one of the earliest known examples of the type of research we now call a clinical trial. The `smallpox.csv` dataset contains data from three studies in which he tested various pre-treatments that were believed to improve the effectiveness of smallpox inoculations. 
+
+```{r}
+pox <- read_csv("https://raw.githubusercontent.com/STAT-JET-ASU/Datasets/master/Instructor/smallpox.csv")
+glimpse(pox)
+```
+
+## Problems
+
+### NFL Players Data
+
+#### Descriptive Summaries
+
+Summarize n, mean, standard deviation, median, and IQR for `Weight` grouped by `Side` to create **Table 1**.
+
+```{r}
+nfl %>% 
+  group_by(Side) %>% 
+  summarize(n     = n(),
+            xbar  = mean(Weight),
+            s     = sd(Weight),
+            xmed  = median(Weight),                  
+            iqr   = IQR(Weight))
+```
+
+Summarize the deciles for `Weight` (10th, 20th, 30th, ..., 90th quantiles) grouped by `Side` to create **Table 2**.
+
+```{r}
+nfl %>% 
+  group_by(Side) %>% 
+  summarize(
+    Quantile = c("10th", "20th", "30th", "40th", "50th", "60th", "70th", "80th", "90th"),
+    Deciles = quantile(Weight, probs = seq(0.1, 0.9, 0.1))) %>% 
+  pivot_wider(names_from = Side, values_from = Deciles)
+```
+
+Compute the lower and upper fences for `Weight` grouped by `Side` to create **Table 3**.
+
+```{r}
+nfl %>% 
+  group_by(Side) %>%
+  summarize(LF = quantile(Weight, 0.25) - 1.5 * IQR(Weight),
+            UF = quantile(Weight, 0.75) + 1.5 * IQR(Weight))
+```
+
+Create density plots of `Weight` for each category of `Side` to observe the distribution shape.
+
+```{r}
+nfl %>% 
+  filter(Side == "Offense") %>% 
+  ggplot(aes(x = Weight)) +
+  geom_density()
+
+nfl %>% 
+  filter(Side == "Defense") %>% 
+  ggplot(aes(x = Weight)) +
+  geom_density()
+
+nfl %>% 
+  filter(Side == "Special Teams") %>% 
+  ggplot(aes(x = Weight)) +
+  geom_density()
+```
+
+```{r}
+nfl %>% 
+  ggplot(aes(x = Weight)) +
+  geom_density() +
+  facet_grid(. ~ Side)
+```
+
+#### Questions
+
+A player weighing 225 pounds would be heavier than about _____  % of offense and defense players, whereas they'd be heavier than about _____ % of special teams players.
+
+Answer 1:
+
+Answer 2:
+
+Based on the this initial exploration, the _____ group(s) is/are most likely to need a more detailed breakdown and in-depth investigation to really understand the distribution of weight among those players. 
+
+(A) defense
+(B) offense
+(C) special teams
+(D) defense and offense
+(E) defense and special teams
+(F) offense and special teams
+
+### Monopoly Data
+
+#### Descriptive Summaries
+
+Summarize n, mean, and standard deviation for property `cost` grouped by `type` to create part of **Table 4**.
+
+```{r}
+
+```
+
+Summarize n, mean, and standard deviation for property `cost` (all the properties) to create part of **Table 4**.
+
+```{r}
+
+```
+
+Create plots to visualize the shapes of the distributions.
+
+```{r}
+ggplot(game, aes(x = cost)) +
+  geom_density()
+
+ggplot(game, aes(x = cost)) +
+  geom_histogram(bins = 8)
+
+game %>% 
+  filter(type == "street") %>% 
+  ggplot(aes(x = cost)) +
+  geom_density()
+```
+
+#### Questions
+
+The group with the greatest variability in prices is _____ properties.
+
+(A) street
+(B) railroad
+(C) utility
+(D) all
+
+The distribution of street property costs is _____ .
+
+(A) strongly left skewed
+(B) somewhat left skewed
+(C) approximately symmetric
+(D) somewhat right skewed
+(E) strongly right skewed
+(F) not applicable because there is no variability
+
+The distribution of railroad property costs is _____ .
+
+(A) strongly left skewed
+(B) somewhat left skewed
+(C) approximately symmetric
+(D) somewhat right skewed
+(E) strongly right skewed
+(F) not applicable because there is no variability
+ 
+The distribution of utility property costs is _____ .
+
+(A) strongly left skewed
+(B) somewhat left skewed
+(C) approximately symmetric
+(D) somewhat right skewed
+(E) strongly right skewed
+(F) not applicable because there is no variability
+
+The distribution of all property costs is _____ .
+
+(A) strongly left skewed
+(B) somewhat left skewed
+(C) approximately symmetric
+(D) somewhat right skewed
+(E) strongly right skewed
+(F) not applicable because there is no variability
+
+### Smallpox Data
+
+#### Descriptive Summaries
+
+For Experiment 1 only, compute the five-number summary for `pocks` by `pretreatment` group to create **Table 5**.
+
+```{r}
+pox %>% 
+  filter(experiment == 1) %>% 
+  group_by(pretreatment) %>% 
+  summarize(n     = n(),
+            min   = min(pocks),
+            Q1    = quantile(pocks, 0.25),
+            xmed  = median(pocks),                  
+            Q3    = quantile(pocks, 0.75),
+            max   = max(pocks))
+```
+
+Calculate the upper fence for all observations that received no pretreatment, regardless of experiment number. 
+
+```{r}
+pox %>% 
+  filter(pretreatment == "none") %>%
+  summarize(UF = round(quantile(pocks, 0.75) + 1.5 * IQR(pocks), 2))
+```
+
+#### Questions
+
+Based on this criteria (i.e., the upper fence), the max number of pocks observed in the control group in Experiment 1 _____ be an outlier.
+
+(A) would
+(B) would not
+
+<hr>
+```{r}
+sessionInfo()
+```

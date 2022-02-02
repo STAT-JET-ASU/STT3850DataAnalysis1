@@ -63,7 +63,7 @@ glimpse(pox)
 
 #### Table of `Side`
 
-Create a table of frequencies and relative frequencies for the variable `Side`.
+Create **Table 1** of frequencies and relative frequencies for the variable `Side`.
 
 ```{r}
 
@@ -71,7 +71,7 @@ Create a table of frequencies and relative frequencies for the variable `Side`.
 
 #### Table of `PositionGrp`
 
-Create a table of frequencies and relative frequencies for the variable `PositionGrp`. Use `arrange()` to sort the rows in descending order (i.e., the most frequent category at the top).
+Create **Table 2** of frequencies and relative frequencies for the variable `PositionGrp`. Use `arrange()` to sort the rows in descending order (i.e., the most frequent category at the top).
 
 ```{r}
 
@@ -79,7 +79,7 @@ Create a table of frequencies and relative frequencies for the variable `Positio
 
 #### Table of `Playtime`
 
-Tabulate frequencies, cumulative frequencies, relative frequencies, and cumulative relative frequencies for the variable `Playtime`. 
+Tabulate frequencies, cumulative frequencies, relative frequencies, and cumulative relative frequencies for the variable `Playtime` to make **Table 3**. 
 
 ```{r}
 
@@ -87,13 +87,9 @@ Tabulate frequencies, cumulative frequencies, relative frequencies, and cumulati
 
 #### Tables of `Side` x `Playtime`
 
-```{r}
-
-```
-
 ##### Frequencies
 
-Create a contingency table of counts for `Side` by `Playtime`.
+Create a contingency table of counts for `Side` by `Playtime` (**Table 4**).
 
 ```{r}
 
@@ -101,7 +97,7 @@ Create a contingency table of counts for `Side` by `Playtime`.
 
 ##### Row Relative Frequencies
 
-Create a contingency table of the relative frequencies of `Playtime` within each category (row) of `Side`.
+Create a contingency table of the relative frequencies of `Playtime` within each category (row) of `Side` (**Table 5**).
 
 ```{r}
 
@@ -142,7 +138,7 @@ Players in the _____ group(s) seem to be more likely than other players to have 
 
 #### Table of `experiment` x `pretreatment`
 
-Create a contingency table of counts for `experiment` by `pretreatment`.
+Create a contingency table of counts for `experiment` by `pretreatment` (**Table 6**).
 
 ```{r}
 
