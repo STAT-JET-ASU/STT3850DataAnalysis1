@@ -1,0 +1,178 @@
+---
+title: "Lab 02: Was the draft fair?" 
+subtitle: "EDA ⯈ Numerical Data"
+author: "YOUR NAME HERE"
+date: 'Last rendered on `r format(Sys.time(), "%A, %B %d, %Y @ %I:%M %p")`'
+output: 
+  html_document: 
+    theme: yeti
+    highlight: textmate
+    code_folding: hide
+---
+
+```{r globaloptions, include = FALSE}
+knitr::opts_chunk$set(
+  message = FALSE,
+  warning = FALSE,
+  comment = NA
+)
+```
+***
+
+Collaborators: *add the names of anyone you worked with here*
+
+## Packages Used
+
+```{r packages}
+
+```
+
+## Vietnam Draft Data
+
+### The Context
+
+In December of 1969, the U.S. Selective Service System conducted a lottery to a determine draft order for all eligible men in 1970. The 366 days of the year (including February 29) were written on small pieces of paper. Each date was placed in a plastic capsule, then the capsules were hand-mixed in a box and dumped in a glass jar. Capsules were pulled out one at a time. The first birthday chosen was September 14. Anyone born on that day in the years 1944--1950 was assigned draft lottery number 1. They would be the first group of men drafted. Throughout 1970, men assigned draft numbers 1 through 195 were called to serve, in the order in which their numbers had been drawn during the lottery (draft number 1, then 2, and so on until 195). 
+
+You can watch a bit of the CBS News coverage of the process [HERE](https://youtu.be/aS3-HdthMVo) and some additional commentary on the process [HERE](https://youtu.be/OkJH6sapQMA). Would your number have been called if you were born in 1950? You can find out [HERE](https://www.usatoday.com/vietnam-war/draft-picker/).
+
+### Was the Lottery Fair?
+
+The draft numbers for 1970 were drawn without replacement from the set $x = \{1, 2, 3, ..., 366\}$. The probability of drawing any draft number remaining in the jar at each step of the process was believed to be equal for all numbers, which would mean that all possible permutations of the 366 integers were equally likely---a fair process. Theoretically, the two halves of the year should tend to have similar distributions of numbers. It is impossible to prove whether the selection process was biased (non-random), but we can assess whether the outcome appears to be consistent with randomness. You will use EDA to examine the question of fairness for the 1969 drawing of numbers for the 1970 draft.
+
+### Process the Dataset
+
+The [vietnamdraft](https://raw.githubusercontent.com/STAT-JET-ASU/Datasets/master/Instructor/vietnamdraft.csv) contains the draft number assignments from the 1969--1975 drawings. Its [description](https://stat-jet-asu.github.io/Datasets/InstructorDescriptions/vietnamdraft.html) page defines the variables.
+
+#### Load the Dataset
+
+Use `read_cvs()` to import the `vietnamdraft` dataset and store it as `draftdata`. Use `glimpse()` to visualize the dataset structure.
+
+```{r}
+
+```
+
+#### Your Draft Numbers
+
+Apply a `filter()` to `draftdata` so that it contains only observations corresponding to your birthday. Store it as `mydraft` and print out the results. 
+
+```{r}
+
+```
+
+#### Analysis Dataset
+
+Process `draftdata` to create the new dataset `draft1969`, which you will explore below to investigate the question of "fairness" in the draft lottery process. 
+
+* Use `filter()` to choose only the observations from `drawyear` 1969.
+* Use `select()` to choose the variables `month`, `halfyear` and `draftnumber`.
+* Use `glimpse()` to visualize the structure of the `draft1969` dataset.
+
+```{r}
+
+```
+
+## Overall Distribution for 1969
+
+### Summary Statistics
+
+Use `summarize()` to find mean, standard deviation, five-number summary, IQR, range, and total for the set of 366 draft numbers.
+
+```{r}
+
+```
+
+### Distribution Plots
+
+Create a histogram for the 366 draft numbers. Inside `geom_histogram()`, specify `breaks = seq(from = 0, to = 366, by = 6)` to set the boundaries for the bins. Add a descriptive title and give the x-axis a better name.
+
+```{r}
+
+```
+
+Create a density plot for the 366 draft numbers. Note that the smoothing (averaging) function will make the sides appear sloped as compared to the histogram. Add a descriptive title and give the x-axis a better name.
+
+```{r}
+
+```
+
+Create a boxplot plot for the 366 draft numbers. Add the layer `scale_y_continuous(breaks = NULL)` to turn off tick marks for the unneeded y axis in this plot. Add a descriptive title and give the x-axis a better name.
+
+```{r}
+
+```
+
+## Halfyear Summaries for 1969
+
+### Summary Statistics
+
+Use `summarize()` to find n, mean, standard deviation, five-number summary, IQR, range, and total for the draft numbers grouped by `halfyear`. 
+
+```{r}
+
+```
+
+### Distribution Plots
+
+Use `facet_wrap()` or `facet_grid()` to create side-by-side histograms to compare the distributions of draft numbers in each half of the year. Use an appropriate number of bins. Add a descriptive title and give the x-axis a better name.
+
+```{r}
+
+```
+
+Use `color =` and `fill =` (both set to the same variable) in the plot aesthetics to create overlapping density plots to compare the distributions of draft numbers in each half of the year. Use an appropriate `alpha` (transparency). Add a descriptive title and give the x-axis a better name.
+
+```{r}
+
+```
+
+Create boxplots (on one set of axes) to compare the distributions of draft numbers in each half of the year. Add a descriptive title and give both axes better names.
+
+```{r}
+
+```
+
+## Monthly Summaries for 1969
+
+### Monthly Averages
+
+A contemporary newspaper article (<a href="https://www.nytimes.com/1970/01/04/archives/statisticians-charge-draft-lottery-was-not-random.html">“Statisticians Charge Draft Lottery Was Not Random,”</a> New York Times, January. 4, 1970), which examined the draft lottery results, included the following summary: "the average number for men born in January is 201, while the average number for December is 122...The average numbers for other months are: February, 203; March, 226; April, 204; May, 208; June, 196; July, 180; August, 173; September, 157; October, 182, and November, 149." Verify the values by using `summarize()` to compute the monthly means from your data. 
+
+```{r}
+
+```
+
+### Plot Of Averages
+
+Use `geom_col()` to create a barplot of the monthly means you calculated. Use `geom_hline()` to add a layer  that draws a horizontal line at the overall mean value for the 366 draft numbers. Give the plot an appropriate title and axis labels.
+
+```{r}
+
+```
+
+## Questions
+
+Your answers should reference specific tables, plots, and/or quantitative values to support your statements. Avoid vague phrases like "the numbers show". Use appropriate statistical vocabulary such as "counts", "frequencies", or "relative frequencies".
+
+1) As stated above, if the lottery is fair, then "...the two halves of the year should tend to have similar distributions of numbers." Furthermore, the two distributions should resemble the overall distribution, give or take some random variation. Compare the shape, center, and spread of the overall distribution of draft numbers and the distributions of draft numbers in the first and second halves of the year. Are they all similar?
+
+ANSWER: *erase this and type your answer here*
+
+2) According to the statisticians in the New York Times, "If the system were random, each month could he expected to have an average around 183 or 184." Again, we would expect some random (non-patterned) variation. What do you observe in your summary and plot of the averages for each month? 
+
+ANSWER: *erase this and type your answer here*
+
+3) Based on your analysis and what you have read/watched about the process, was the 1969 Vietnam draft lottery fair? Discuss.
+
+ANSWER: *erase this and type your answer here*
+
+## Reference Materials
+
+* [EDA ⯈ Categorical Data: Basics of Barplots](https://stat-jet-asu.github.io/Slides/STT3850/EDACategoricalPlots.html#1)
+* [EDA ⯈ Numerical Data: Distribution Shape](https://stat-jet-asu.github.io/Slides/STT3850/EDANumericalShape.html#1)
+* [EDA ⯈ Numerical Data: Center and Spread](https://stat-jet-asu.github.io/Slides/STT3850/EDANumericalCenterSpread.html#1)
+* [EDA ⯈ Numerical Data: Boxplots](https://stat-jet-asu.github.io/Slides/STT3850/EDANumericalBox.html#1)
+
+***
+```{r}
+sessionInfo()
+```
