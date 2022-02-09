@@ -1,5 +1,5 @@
 ---
-title: "Lab 02: Was the draft fair?" 
+title: "Lab 02: Was the Draft Fair?" 
 subtitle: "EDA ⯈ Numerical Data"
 author: "YOUR NAME HERE"
 date: 'Last rendered on `r format(Sys.time(), "%A, %B %d, %Y @ %I:%M %p")`'
@@ -27,7 +27,7 @@ Collaborators: *add the names of anyone you worked with here*
 
 ```
 
-## Vietnam Draft Data
+## Vietnam Draft Lottery
 
 ### The Context
 
