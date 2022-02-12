@@ -31,7 +31,7 @@ Collaborators: *add the names of anyone you worked with here*
 
 ### The Context
 
-In December of 1969, the U.S. Selective Service System conducted a lottery to a determine draft order for all eligible men in 1970. The 366 days of the year (including February 29) were written on small pieces of paper. Each date was placed in a plastic capsule, then the capsules were hand-mixed in a box and dumped in a glass jar. Capsules were pulled out one at a time. The first birthday chosen was September 14. Anyone born on that day in the years 1944--1950 was assigned draft lottery number 1. They would be the first group of men drafted. Throughout 1970, men assigned draft numbers 1 through 195 were called to serve, in the order in which their numbers had been drawn during the lottery (draft number 1, then 2, and so on until 195). 
+In December of 1969, the U.S. Selective Service System conducted a lottery to a determine draft order for all eligible men in 1970. The 366 days of the year (including February 29) were written on small pieces of paper. Each date was placed in a plastic capsule, then the capsules were hand-mixed in a box and dumped in a glass jar. Capsules were pulled out one at a time. The first birthday chosen was September 14. Anyone born on that day in the years 1944--1950 was assigned draft lottery number 1. They would be the first group of men drafted. Throughout 1970, men assigned draft numbers 1 through 195 were called to serve, in the order in which their numbers had been drawn during the lottery (draft number 1, then 2, and so on until 195). Not long after the drawing, some people asserted that the numbers were not randomly distributed through the year, in particular when you compared the first half of the year to the second half of the year.
 
 You can watch a bit of the CBS News coverage of the process [HERE](https://youtu.be/aS3-HdthMVo) and some additional commentary on the process [HERE](https://youtu.be/OkJH6sapQMA). Would your number have been called if you were born in 1950? You can find out [HERE](https://www.usatoday.com/vietnam-war/draft-picker/).
 
@@ -45,7 +45,7 @@ The [vietnamdraft](https://raw.githubusercontent.com/STAT-JET-ASU/Datasets/maste
 
 #### Load the Dataset
 
-Use `read_cvs()` to import the `vietnamdraft` dataset and store it as `draftdata`. Use `glimpse()` to visualize the dataset structure.
+Use `read_csv()` to import the `vietnamdraft` dataset and store it as `draftdata`. Use `glimpse()` to visualize the dataset structure.
 
 ```{r}
 
