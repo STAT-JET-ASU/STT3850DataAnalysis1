@@ -1,0 +1,123 @@
+---
+title: "STT3850 S22 Binge-Watch Recommendations"
+output: 
+  html_document: 
+    theme: yeti
+    highlight: textmate
+---
+
+The percentage is the average audience score found on [Rotten Tomatoes](https://www.rottentomatoes.com/) and a 👍 means Dr. Thomley has watched the show.
+
+* **Arcane** (Netflix) --- 96%
+
+    "The animated origins of two iconic League champions, set in the utopian Piltover and the oppressed underground of Zaun."
+
+* **Black Mirror** (Netflix) --- 85%
+
+    "A sci-fi anthology series set in a twisted future in which humanity's greatest innovations and darkest instincts collide."
+
+* **Breaking Bad** (Netflix) --- 96%
+
+    "A high school chemistry with cancer makes a desperate bid to earn money by turning an old RV into a meth lab."
+
+* **Brooklyn Nine-Nine** (Hulu, Peacock) --- 87% 👍
+
+    "The detectives of Brooklyn's 99th Precinct are a loveable/offbeat squad has to get its act together to bust bad guys."
+    
+* **Castle** (Hulu) --- 87%
+
+    "Mystery novelist Rick Castle teams with NYPD Detective Kate Beckett to investigate strange homicides in New York."
+
+* **Cheer**	(Netflix) --- 87%
+
+    "In the small town of Corsicana, TX, a hard-driving coach demands perfection from her competitive college team."
+
+* **Cobra Kai**	(Netflix) --- 92% 👍
+
+    "Thirty four years after *The Karate Kid*, down-and-out Johnny Lawrence seeks redemption by reopening the Cobra Kai dojo."
+
+* **Community**	(Netflix) --- 88% 👍
+
+    "When fast-talking lawyer's degree is revoked, he takes classes and forms a "study group" at a local community college."
+
+* **Daredevil**	(Netflix) --- 89% 👍
+
+    "Blind lawyer Matt Murdock is an attorney by day and notorious vigilante Daredevil at night in Hell's Kitchen, New York."
+
+* **Emily in Paris** (Netflix) --- 47%
+
+    "Chicago marketing exec Emily Cooper is hired to provide an American perspective at a marketing firm in Paris."
+
+* **The Expanse**	(Amazon Prime Video) --- 92% 👍
+
+    "In the future, citizens of Earth, Mars, and the solar system's asteroid belt hover on the brink of war and alien encounters."
+
+* **Foundation** (Apple TV+) --- 57%
+
+    "Based on novels by Isaac Asimov, a band of exiles makes a monumental journey to save humanity and rebuild civilization."
+
+* **The Good Place** (Netflix) --- 89% 👍
+
+    "Ne'er-do-well Eleanor finds herself (mistakenly, she believes?) in a good afterlife, and tries to shed her old ways...kind of."
+
+* **The IT Crowd** (Netflix) --- 89% 👍
+
+    "A quirky three-person IT group tries to keep fictional Reynholm Industries running with minimal effort or social contact."
+
+* **King of the Hill** (Hulu) --- 53% 👍
+
+    "This animated series follows the life of Texas propane salesman Hank Hill and his quirky family, friends, and neighbors."
+
+* **Lucifer**	(Netflix) --- 72%
+
+    "Lucifer is dissatisfied with his life in hell and heads to LA for fun, but there he starts to wonder if there's hope for his soul."
+
+* **The Mandalorian** (Disney+) --- 91% 👍
+
+    "After the fall of the Empire, a lone gunfighter makes his way through the lawless galaxy, making both friends and enemies."
+
+* **Money Heist**	(Netflix) --- 78%
+
+    "A criminal mastermind plans to pull off the biggest heist in history: printing billions of euros in the Royal Mint of Spain."
+
+* **New Girl** (Netflix) --- 84%
+
+    "After a bad breakup, a woman moves in with three single guys with different personalities, who become an unlikely family."
+
+* **The Office** (Peacock) --- 89% (US version) 👍
+
+    "A documentary crew tracks the interactions/shenanigans of workers at a Dunder Mifflin paper company in Scranton, PA."
+
+* **Orange is the New Black**	(Netflix) --- 82% 👍
+
+    "A naive PR executive navigates prison life and relationships with the eccentric, unusual, and/or dangerous people there."
+
+* **Reacher** (Amazon Prime Video) --- 91% 👍
+
+    "Veteran military investigator Jack Reacher is falsely accused of murder in a small town and helps uncover a larger crime."
+
+* **Schitt's Creek** (Netflix) --- 92%
+
+    "A video store magnate and wife suddenly find themselves broke, their only remaining asset the small town Schitt's Creek."
+
+* **Squid Game** (Netflix) --- 83%
+
+    "Hundreds of cash-strapped contestants agree to compete in children's games for a large prize, but the stakes are deadly."
+
+* **Survivor** (Hulu, Netflix) --- No Rating 👍
+
+    "Castaways inhabit a remote destination and attempt to outwit, outlast and outplay each other for a prize of $1 million."
+
+* **Trailer Park Boys**	(Netflix) --- 92%
+
+    "Three trailer park residents plan mad capers, usually get-rich-quick schemes, with plenty of screw-ups along the way."
+
+* **The Wire** (HBO) --- 97%
+
+    "This series looks at the narcotics scene in Baltimore through the eyes of law enforcers as well as the drug dealers/users."
+
+* **The Witcher**	(Netflix) --- 75% 👍
+
+    "Mutated monster hunter Geralt struggles to find his place in a world where people often prove to be even more wicked."
+    
+    
