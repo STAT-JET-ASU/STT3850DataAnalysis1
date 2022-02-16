@@ -1,0 +1,68 @@
+---
+title: "Correlation & Regression"
+author: "YOUR NAME HERE"
+date: 'Last rendered on `r format(Sys.time(), "%A, %B %d, %Y @ %I:%M %p")`'
+output: 
+  html_document: 
+    theme: yeti
+    highlight: textmate
+---
+
+```{r globaloptions, include = FALSE}
+knitr::opts_chunk$set(
+  message = FALSE,
+  warning = FALSE,
+  comment = NA
+)
+```
+***
+
+## Packages Used
+
+```{r packages}
+library(tidyverse)
+library(moderndive)
+```
+
+## DataSets Used
+
+### Anscombe Data
+
+```{r}
+glimpse(anscombe)
+```
+
+### Anthropometric Data
+
+You can read about the dataset on its [description page](https://stat-jet-asu.github.io/Datasets/InstructorDescriptions/anthropometric.html).
+
+```{r datasets}
+anthro <- read_csv("https://raw.githubusercontent.com/STAT-JET-ASU/Datasets/master/Instructor/anthropometric.csv")
+glimpse(anthro)
+```
+
+```{r}
+set.seed(1)
+anthro_sample <- sample_n(anthro, 20)
+glimpse(anthro_sample)
+```
+
+### Monopoly Game Data
+
+```{r}
+monopoly <- read_csv("https://raw.githubusercontent.com/STAT-JET-ASU/Datasets/master/Instructor/monopolygame.csv")
+glimpse(monopoly)
+```
+
+## Examples
+
+```{r}
+
+```
+
+
+
+***
+```{r}
+sessionInfo()
+```
