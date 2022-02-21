@@ -1,0 +1,129 @@
+---
+title: "Project 1A: Fast Food, Fat Food?"
+author: "PUT YOUR NAME HERE"
+date: '`r format(Sys.time(), "%A, %B %d, %Y @ %I:%M %p")`'
+output: 
+  html_document: 
+    theme: cosmo
+    highlight: textmate
+---
+
+```{r globaloptions, include = FALSE}
+knitr::opts_chunk$set(
+  message = FALSE,
+  warning = FALSE,
+  comment = NA
+)
+```
+<hr>
+
+**Names of Collaborators**
+
+Names: --erase this and put the names of anyone you worked with here; if there was no one, put NONE-- 
+
+### Setup
+
+#### Packages Used
+
+Load all packages used in this project.
+
+```{r loadpackages}
+
+```
+
+#### Dataset Used
+
+Read about the Fast Food 2017 dataset on its [description page](https://stat-jet-asu.github.io/Datasets/InstructorDescriptions/fastfood2017.html). Load the dataset using `read_csv()`, and `glimpse()` to examine its structure. You can get the URL for the dataset from the description page.
+
+Load the dataset.
+
+```{r fastfoodload}
+
+```
+
+Glimpse the dataset.
+
+```{r fastfoodglimpse}
+
+```
+
+### Analysis
+
+#### **The Context**
+
+Nutritionists recommend against eating fast food because it is high in sodium, saturated fat, trans fat, and cholesterol. Eating too much fast food over a long period of time can lead to health problems, such as high blood pressure, heart disease, or obesity. Many fast-food meals contain more than an entire day's worth of recommended calories and fat! Websites such as [Fast Food Nutrition](https://fastfoodnutrition.org/) track fast food nutrition information.
+
+#### **The Problem**
+
+How much total fat, saturated fat, and trans fat are in some common fast food items? Let's find out!
+
+#### **Exploration 1**
+
+Create a frequency table of `restaurant` to discover which fast food restaurants are included in the dataset. Since each row is a food item, it will also show you how many items there are from each restaurant.
+
+```{r}
+
+```
+
+#### **Exploration 2**
+
+Create a frequency and relative frequency (proportion) table of `type` to discover which categories of fast food items are included in the dataset, how many there are of each, and their relative representation.
+
+```{r}
+
+```
+
+#### **Exploration 3**
+
+Create a horizontal barplot of `type` to visualize the types and frequencies of different fast food items in the dataset.
+
+```{r}
+
+```
+
+#### **Exploration 4**
+
+Compute n, mean, standard deviation, median, and IQR for `totalfat` by `type` and sort the results by descending mean. Do the same for both `saturatedfat` and `transfat`.
+
+##### Total Fat
+
+```{r}
+
+```
+
+##### Saturated Fat
+
+```{r}
+
+```
+
+##### Trans Fat
+
+```{r}
+
+```
+
+#### **Exploration 5**
+
+If we consider the mean of `totalfat` to be the "typical" amount of fat in each type of item, what would be the typical amount of fat in a fast food meal consisting of a burger, fries, and a shake? What would be the standard deviation?
+
+Hint: If variable X = A + B + C, where A, B, and C are also random variables, then mean(X) is the sum of the individual means and var(X) is the sum of the individual variances.
+
+```{r}
+
+```
+
+### Discussion
+
+Question 1: According to US dietary guidelines, if you are following a standard 2000-calorie per day diet, your target range for total fat is 44 to 78 grams, with no more than 22 grams of saturated fat and no more than 2 grams of trans fat. Consider your summaries of the different kinds of fat in the different types of foods included in this sample. Fat values for each item were recorded on a per-serving basis. Which type of food item seems to be the most unhealthy per serving when considering all three kinds of fat? How does it compare to the daily recommendations?
+
+**ANSWER:** --erase this and type your answer here--
+
+Question 2: In terms of number of US locations, McDonalds, Burger King, and Wendy's are the largest burger-selling chains in the United States. However, it is also true that Hardee's and Carl's Jr. were essentially the same chain with roughly the same menu in 2017, just with different names in the eastern versus western United States. Given the restaurants and items included, do you feel this sample is representative of the population of ALL fast food items that are common in the United States? If not, what population can we say this sample of data represents?
+
+**ANSWER:** --erase this and type your answer here--
+
+<hr>
+```{r}
+sessionInfo()
+```

@@ -1,0 +1,125 @@
+---
+title: "Project 1C: Transmutant X"
+author: "PUT YOUR NAME HERE"
+date: '`r format(Sys.time(), "%A, %B %d, %Y @ %I:%M %p")`'
+output: 
+  html_document: 
+    theme: cosmo
+    highlight: textmate
+---
+
+```{r globaloptions, include = FALSE}
+knitr::opts_chunk$set(
+  message = FALSE,
+  warning = FALSE,
+  comment = NA
+)
+```
+<hr>
+
+**Names of Collaborators**
+
+Names: --erase this and put the names of anyone you worked with here; if there was no one, put NONE--
+
+### Setup
+
+#### Packages Used
+
+Load all packages used in this project.
+
+```{r loadpackages}
+
+```
+
+#### Dataset Used
+
+Read about the Galton Height---Main Dataset datasets on the [description page](https://stat-jet-asu.github.io/Datasets/InstructorDescriptions/galtonheightdata.html). You can get the URL for the `galtonfamiliesmain` dataset from the description page.
+
+Load the dataset.
+
+```{r galtonload}
+
+```
+
+Glimpse the dataset.
+
+```{r galtonglimpse}
+
+```
+
+### Analysis
+
+#### **The Context**
+
+Francis Galton, a cousin of Charles Darwin, studied the relationship between parent heights and the heights of their offspring. His pioneering [1886 article](https://galton.org/essays/1880-1889/galton-1886-jaigi-regression-stature.pdf) is the first appearance of regression analysis in print. He originated many statistical terms and concepts, including regression, correlation, deviate, quartile, and percentile, plus median for the midpoint of a distribution. His colleague and frequent collaborator Karl Pearson developed the Pearson product-moment correlation coefficient from the work of Galton and Auguste Bravais. 
+
+#### **The Problem**
+
+As one of his many genetic studies, Galton compared the heights of children to the heights of their parents. Before this analysis, he multiplied all measurements of mothers' heights and female children's heights by 1.08. About this data transformation, Galton said, "In every case I transmuted the female statures to their corresponding male equivalents and used them in their transmuted form, so that no objection grounded on the sexual difference of stature need be raised when I speak of averages." What is the effect on the distributions when his "transmutation" is used?
+
+#### **Data Transformation**
+
+Create a new variable named `HeightT` using `mutate` and `if_else()` to perform Galton's "transmutation" of the `Height` data. The measured heights of daughters should be multipled by `1.08` while the heights of the sons should remain the same. Remember to store your changes! (Hint: Check out the [syntax](https://rdrr.io/cran/dplyr/man/if_else.html) for the `ifelse()` function).
+
+```{r}
+
+```
+
+#### **Exploration 1**
+
+Compute summary statistics (n, mean, standard deviation, five-number summary, IQR, and range) for `Height` grouped by `Child` to compare the distributions of measured son and daughter heights.
+
+```{r}
+
+```
+
+#### **Exploration 2**
+
+Create a density plot with `color = Child` in the aesthetics to show overlapping densities for measured heights of sons and daughters. Be sure to use an appropriate transparency.
+
+```{r}
+
+```
+
+#### **Exploration 3**
+
+Create a boxplot with `y = Child` in the aesthetics to compare the measured heights of sons and daughters.
+
+```{r}
+
+```
+
+#### **Exploration 4**
+
+Compute summary statistics (n, mean, standard deviation, five-number summary, IQR, and range) for `HeightT` grouped by `Child` to compare the distributions of "transmuted" son and daughter heights.
+
+```{r}
+
+```
+
+#### **Exploration 5**
+
+Create a density plot with `color = Child` in the aesthetics to show overlapping densities for "transmuted" heights of sons and daughters. Be sure to use an appropriate transparency.
+
+```{r}
+
+```
+
+#### **Exploration 6**
+
+Create a boxplot with `y = Child` in the aesthetics to compare the "transmuted" heights of sons and daughters.
+
+```{r}
+
+```
+
+### Discussion
+
+Was Galton's "transmutation" successful in essentially eliminating "the sexual difference of stature" in his dataset? Consider shape, center, and variability. Explain using information from **both** the summaries and the plots. 
+
+**ANSWER:** --erase this and type your answer here--
+
+<hr>
+```{r}
+sessionInfo()
+```
