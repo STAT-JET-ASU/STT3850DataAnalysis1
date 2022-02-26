@@ -1,0 +1,247 @@
+---
+title: "E(X) and Var(X) of Discrete Random Variables"
+subtitle: "Companion `R` Code for JB Statistics Video Lesson"
+author: "Created by Jill E. Thomley"
+date: '`r format(Sys.time(), "%A, %B %d, %Y @ %I:%M %p")`'
+output: 
+  html_document: 
+    theme: yeti
+    highlight: textmate
+    toc: TRUE
+    toc_depth: 4
+---
+
+```{r globaloptions, include = FALSE}
+knitr::opts_chunk$set(
+  message = FALSE,
+  warning = FALSE,
+  comment = NA
+)
+```
+
+&#9654; [GO TO VIDEO](https://youtu.be/Vyk8HQOckIE)
+
+<hr>
+
+### **Packages Used**
+
+<details>
+```{r loadpackages}
+library(tidyverse)
+library(kableExtra)
+```
+</details>
+
+### **The Formulas**
+
+To find the parameters $\mu$ and $\sigma^2$ for discrete random variables, we perform the following calculations.
+
+$$E(X) = \mu = \sum_{\text{all }x} x \cdot p(x)$$
+
+
+$$Var(X) = \sigma^2 = E[(X - \mu)^2] = \sum_{\text{all }x} (x - \mu)^2 \cdot p(x)$$
+
+For a function $g(X)$, we perform the following calculations, since the function impacts the value of $x$ but not the probability of $x$.
+
+$$E(X) = \sum_{\text{all }x} g(x) \cdot p(x)$$
+
+This leads to the following shortcut for finding variance (you can watch a video of the proof for this [here](https://youtu.be/gVVyPzvZHC4))...
+
+$$Var(X) = \sigma^2 = E(X^2) - E(X)^2 = E(X^2) - \mu^2 $$
+
+### **Example of E(X)**
+
+This example comes from [An Introduction to Discrete Random Variables and Discrete Probability Distributions](https://stat-jet-asu.github.io/STT3850DataAnalysis1/VideoCode/JBStatsDiscreteRV.html).
+
+```{r}
+pmf <- tibble(
+  x = 0:2,
+  probability = c(0.16, 0.48, 0.36)
+)
+```
+
+```{r echo = FALSE}
+tibble(
+  x = 0:2,
+  prob = c(0.16, 0.48, 0.36),
+  prod = x * prob
+) %>%
+  rbind(tibble(
+    x = "sum",
+    prob = "",
+    prod = 1.2
+  )) %>%
+  kable(
+    col.names = c("x", "p(x)", "x • p(x)"),
+    align = "ccc"
+  ) %>%
+  kable_styling(
+    full_width = FALSE,
+    position = "left",
+    font_size = 14
+  )
+```
+
+$$E(X) = \sum x \cdot p(x) = 0 \cdot 0.16 + 1 \cdot 0.48 + 2 \cdot 0.36 = 0 + 0.48 + 0.72 = 1.2$$
+
+<details>
+```{r}
+pmfplot <- ggplot(pmf, aes(x = x, y = probability)) +
+  geom_col(
+    width = 0.1,
+    color = "black",
+    fill = "orange"
+  ) +
+  geom_vline(
+    xintercept = 1.2,
+    linetype = "dashed"
+  ) +
+  scale_x_continuous(breaks = c(0:2, 1.2)) +
+  labs(
+    x = "x",
+    y = "p(x)"
+  ) +
+  theme_linedraw()
+```
+</details>
+
+```{r}
+pmfplot
+```
+
+### **Via Simulation**
+
+#### Draw the Random Sample of 1,000,000
+
+```{r}
+random_sample <- sample_n(
+  pmf,
+  size = 10^6,
+  replace = TRUE,
+  weight = probability
+)
+```
+
+#### Tabulate the 1,000,000 Simulated Values
+
+The relative frequencies estimate the theoretical probabilities.
+
+```{r}
+random_sample %>% 
+  count(x) %>% 
+  mutate(rel_freq = prop.table(n)) %>% 
+  kable() %>%
+  kable_styling(
+    full_width = FALSE,
+    position = "left",
+    font_size = 14
+  )
+```
+
+
+#### Plot the 1,000,000 Simulated Values
+
+The relative frequencies approximate the plot of the variables pmf.
+
+```{r}
+ggplot(random_sample, aes(x = x)) +
+  geom_bar(
+    aes(y = (..count..) / sum(..count..)), # scale to relative frequencies
+    width = 0.1,
+    color = "black",
+    fill = "orange"
+  ) +
+  scale_x_continuous(breaks = 0:2) +
+  labs(
+    x = "x",
+    y = "simulated p(x)"
+  ) +
+  theme_linedraw()
+```
+
+
+#### Find the Mean of 1,000,000 Simulated Values
+
+The mean of the simulated values estimates the expected value E(X).
+
+```{r}
+random_sample %>% 
+  summarize(xbar = mean(x)) %>% 
+  kable() %>%
+  kable_styling(
+    full_width = FALSE,
+    position = "left",
+    font_size = 14
+  )
+```
+
+### **Example of E(X^2^)**
+
+```{r echo = FALSE}
+tibble(
+  x = 0:2,
+  prob = c(0.16, 0.48, 0.36),
+  x_sq = x^2,
+  prod = x_sq * prob
+) %>%
+  rbind(tibble(
+    x = "sum",
+    prob = "",
+    x_sq = "",
+    prod = 1.92
+  )) %>%
+  kable(
+    col.names = c("x", "p(x)", "x^2", "x^2 • p(x)"),
+    align = "cccc"
+  ) %>%
+  kable_styling(
+    full_width = FALSE,
+    position = "left",
+    font_size = 14
+  )
+```
+
+$$E(X) = \sum x \cdot p(x) = (0^2 \cdot 0.16) + (1^2 \cdot 0.48) + (2^2 \cdot 0.36) = 0 + 0.48 + 1.44 = 1.92$$
+
+### **Example of Var(X)**
+
+Recall from the calculations above that $E(X) = \mu = 1.2$.
+
+```{r echo = FALSE}
+tibble(
+  x = 0:2,
+  prob = c(0.16, 0.48, 0.36),
+  diff = (x - 1.2)^2,
+  prod = diff^2 * prob
+) %>%
+  rbind(tibble(
+    x = "sum",
+    prob = "",
+    diff = "",
+    prod = 0.48
+  )) %>%
+  kable(
+    col.names = c("x", "p(x)", "(x - mu)^2", "(x - mu)^2 • p(x)"),
+    align = "cccc"
+  ) %>%
+  kable_styling(
+    full_width = FALSE,
+    position = "left",
+    font_size = 14
+  )
+```
+
+$$\sigma^2 = E[(X - \mu)^2] = \sum_{\text{all }x} (x - \mu)^2 \cdot p(x) =$$
+
+$$(0 - 1.2)^2 \cdot 0.16 + (1 - 1.2)^2 \cdot 0.48 + (2 - 1.2)^2 \cdot 0.36 = 0.48$$
+
+Alternatively, we can calculate the variance using the two expected values found above...
+
+$$\sigma^2 = E[(X - \mu)^2] = E(X^2) - [E(X)]^2 =$$
+
+$$1.92 - (1.2)^2 = 1.92 - 1.44 = 0.48$$
+
+***
+```{r}
+sessionInfo()
+```

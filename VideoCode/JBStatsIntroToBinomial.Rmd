@@ -297,7 +297,7 @@ pmf %>%
 
 ### **Babies with Jaundice Example**
 
-The babies with jaundice example from [An Introduction to Discrete Random Variables and Discrete Probability Distributions](https://youtu.be/oHcrna8Fk18) can be modeled with the binomial distribution, because it is a series of independent Bernoulli trials with a constant probability.
+The babies with jaundice example from [An Introduction to Discrete Random Variables and Discrete Probability Distributions](https://stat-jet-asu.github.io/STT3850DataAnalysis1/VideoCode/JBStatsDiscreteRV.html) can be modeled with the binomial distribution, because it is a series of independent Bernoulli trials with a constant probability.
 
 ```{r}
 n <- 2
