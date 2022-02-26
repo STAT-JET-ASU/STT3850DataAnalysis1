@@ -97,10 +97,6 @@ Create a frequency polygon with 8 bins and boxplot for `totalfat`. Use `geom_vli
 
 Create a frequency polygon with 8 bins and boxplot for `pctfromfat`. Use `geom_vline()` to add vertical lines to the polygon at 20% and 35%, the boundaries of the target range for calories from fat. Compute the upper and lower fences for the boxplot and the deciles of the distribution. 
 
-```{r}
-
-```
-
 ##### Polygon
 
 ```{r}
