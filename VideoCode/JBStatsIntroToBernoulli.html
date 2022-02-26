@@ -167,7 +167,7 @@ pre code {
 <h1 class="title toc-ignore">An Introduction to the Bernoulli Distribution</h1>
 <h3 class="subtitle">Companion <code>R</code> Code for JB Statistics Video Lesson</h3>
 <h4 class="author">Created by Jill E. Thomley</h4>
-<h4 class="date">Saturday, February 26, 2022 @ 01:50 PM</h4>
+<h4 class="date">Saturday, February 26, 2022 @ 02:14 PM</h4>
 
 </div>
 
@@ -179,7 +179,7 @@ pre code {
 </ul>
 </div>
 
-<p>▶<a href="https://youtu.be/bT1p5tJwn_0">GO TO VIDEO</a></p>
+<p>▶ <a href="https://youtu.be/bT1p5tJwn_0">GO TO VIDEO</a></p>
 <hr>
 <div id="packages-used" class="section level3">
 <h3><strong>Packages Used</strong></h3>
@@ -203,16 +203,16 @@ p = probability of success
 <h3><strong>Simulating Bernoulli Trials</strong></h3>
 <p>You can simulate Bernoulli trials using the function <code>rbernoulli(n, p)</code> from the purrr package. The parameter <span class="math inline">\(n\)</span> in this case is the number of times you want to repeat the Bernoulli process. For example, suppose we want twenty flips of a fair coin. The output is a logical vector with <code>TRUE</code> for a success and <code>FALSE</code> for a failure.</p>
 <pre class="r"><code>(fifty_flips &lt;- rbernoulli(50, 0.5))</code></pre>
-<pre><code> [1] FALSE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE FALSE FALSE  TRUE FALSE FALSE
-[13] FALSE  TRUE  TRUE FALSE  TRUE FALSE FALSE  TRUE  TRUE FALSE  TRUE FALSE
-[25]  TRUE FALSE FALSE  TRUE FALSE FALSE  TRUE FALSE  TRUE FALSE FALSE FALSE
-[37] FALSE  TRUE FALSE  TRUE FALSE FALSE  TRUE FALSE FALSE  TRUE FALSE FALSE
-[49] FALSE  TRUE</code></pre>
+<pre><code> [1] FALSE  TRUE FALSE  TRUE FALSE  TRUE FALSE  TRUE FALSE  TRUE  TRUE  TRUE
+[13] FALSE  TRUE FALSE FALSE  TRUE FALSE FALSE FALSE  TRUE FALSE  TRUE  TRUE
+[25]  TRUE  TRUE  TRUE FALSE  TRUE  TRUE FALSE  TRUE FALSE FALSE  TRUE FALSE
+[37] FALSE FALSE FALSE  TRUE FALSE FALSE FALSE  TRUE FALSE  TRUE  TRUE FALSE
+[49]  TRUE  TRUE</code></pre>
 <p>The mean and variance of the sample will approximate the theoretical values of E[X] = 0.5 and Var[X] = 0.25. As a reminder, we can perform mathematical operations on logical vectors because <code>TRUE</code> is stored as <code>1</code> and <code>FALSE</code> as <code>0</code>.</p>
 <pre class="r"><code>mean(fifty_flips)</code></pre>
-<pre><code>[1] 0.42</code></pre>
+<pre><code>[1] 0.5</code></pre>
 <pre class="r"><code>var(fifty_flips)</code></pre>
-<pre><code>[1] 0.2485714</code></pre>
+<pre><code>[1] 0.255102</code></pre>
 <p>Another (and better) way to perform this kind of simulation is with the <code>rbinom()</code> function. You will learn more about the Binomial distribution and its relationship to the Bernoulli in another video.</p>
 <hr />
 <pre class="r"><code>sessionInfo()</code></pre>
