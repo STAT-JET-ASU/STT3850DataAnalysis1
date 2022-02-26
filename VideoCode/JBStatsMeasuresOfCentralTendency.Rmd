@@ -11,7 +11,7 @@ output:
     toc_depth: 4
 ---
 
-▶ [GO TO VIDEO](https://youtu.be/NM_iOLUwZFA)
+&#9654; [GO TO VIDEO](https://youtu.be/NM_iOLUwZFA)
 
 <hr>
 

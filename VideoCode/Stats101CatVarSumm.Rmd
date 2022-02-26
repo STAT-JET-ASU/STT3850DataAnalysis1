@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-▶ [GO TO VIDEO](https://youtu.be/vrWYw8d2830)
+&#9654; [GO TO VIDEO](https://youtu.be/vrWYw8d2830)
 
 <hr>
 
