@@ -7,6 +7,14 @@ output:
     theme: cosmo
     highlight: textmate
 ---
+
+```{r globaloptions, include = FALSE}
+knitr::opts_chunk$set(
+  message = FALSE,
+  warning = FALSE,
+  comment = NA
+)
+```
 <hr>
 
 **Names of Collaborators**
