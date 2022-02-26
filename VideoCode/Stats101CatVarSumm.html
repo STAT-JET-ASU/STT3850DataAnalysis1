@@ -167,7 +167,7 @@ pre code {
 <h1 class="title toc-ignore">Describing a Categorical Variable</h1>
 <h3 class="subtitle">Companion <code>R</code> Code for Stats 101 Video Lesson</h3>
 <h4 class="author">Created by Jill E. Thomley</h4>
-<h4 class="date">Saturday, February 26, 2022 @ 01:52 PM</h4>
+<h4 class="date">Saturday, February 26, 2022 @ 04:35 PM</h4>
 
 </div>
 
@@ -349,7 +349,7 @@ phonedist1</code></pre>
 6 Other       11     0.11</code></pre>
 <p>We also could have used the distribution we saved above to avoid re-typing the same code. You should think about these kinds of things when planning your workflow. We can also rename <code>n</code> to be <code>frequency</code>.</p>
 <pre class="r"><code>phonedist2 &lt;- phonedist1 %&gt;%
-  mutate(rel_freq = prop.table(n)) %&gt;% 
+  mutate(rel_freq = prop.table(n)) %&gt;%
   rename(frequency = n)
 phonedist2</code></pre>
 <pre><code># A tibble: 6 × 3

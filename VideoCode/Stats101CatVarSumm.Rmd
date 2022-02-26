@@ -148,7 +148,7 @@ We also could have used the distribution we saved above to avoid re-typing the s
 
 ```{r}
 phonedist2 <- phonedist1 %>%
-  mutate(rel_freq = prop.table(n)) %>% 
+  mutate(rel_freq = prop.table(n)) %>%
   rename(frequency = n)
 phonedist2
 
@@ -209,4 +209,3 @@ Tidyverse: [Bar Charts](https://ggplot2.tidyverse.org/reference/geom_bar.html)
 ```{r}
 sessionInfo()
 ```
-

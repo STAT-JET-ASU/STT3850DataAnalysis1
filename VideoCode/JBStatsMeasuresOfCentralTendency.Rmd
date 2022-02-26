@@ -201,4 +201,3 @@ Tidyverse: [Histograms and Frequency Polygons](https://ggplot2.tidyverse.org/ref
 ```{r}
 sessionInfo()
 ```
-

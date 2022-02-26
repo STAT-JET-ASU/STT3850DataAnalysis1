@@ -214,4 +214,3 @@ Tidyverse: [Smoothed Density Estimates](https://ggplot2.tidyverse.org/reference/
 ```{r}
 sessionInfo()
 ```
-

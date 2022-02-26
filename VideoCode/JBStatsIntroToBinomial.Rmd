@@ -65,7 +65,7 @@ What is the probability that a five comes up exactly 2 times in 3 rolls? Solve f
 $$f(2) = P(X = 2) = {3 \choose 2}\left(\frac{1}{6}\right)^2\left(1-\frac{1}{6}\right)^{3-2}$$
 
 ```{r}
-dbinom(2, 3, 1/6)   # dbinom(x, n, p)
+dbinom(2, 3, 1 / 6) # dbinom(x, n, p)
 ```
 
 #### Using a Tree Diagram 
@@ -75,38 +75,39 @@ We can visualize the various combinations of flips leading to two successes with
 <details>
 ```{r}
 rolltree <- Node$new("Sequence of 3 Trials")
-   FA <- rolltree$AddChild("Success")
-      FC <- FA$AddChild("Success")
-         FG <- FC$AddChild("Success")
-            SSS <- FG$AddChild("S S S")
-         FH <- FC$AddChild("Failure")
-            SSF <- FH$AddChild("S S F")
-                SSF2 <- SSF$AddChild("2 Successes")
-     FD <- FA$AddChild("Failure")
-         FI <- FD$AddChild("Success")
-            SFS <- FI$AddChild("S F S")
-                SFS2 <- SFS$AddChild("2 Successes")
-         FJ <- FD$AddChild("Failure")
-            SFF <- FJ$AddChild("S F F")
-   FB <- rolltree$AddChild("Failure")
-      FE <- FB$AddChild("Success")
-         FG <- FE$AddChild("Success")
-            FSS <- FG$AddChild("F S S")
-                FSS2 <- FSS$AddChild("2 Successes")
-         FH <- FE$AddChild("Failure")
-            FSF <- FH$AddChild("F S F")
-      FF <- FB$AddChild("Failure")
-         FG <- FF$AddChild("Success")
-            FFS <- FG$AddChild("F F S")
-         FH <- FF$AddChild("Failure")
-            FFF <- FH$AddChild("F F F")
+FA <- rolltree$AddChild("Success")
+FC <- FA$AddChild("Success")
+FG <- FC$AddChild("Success")
+SSS <- FG$AddChild("S S S")
+FH <- FC$AddChild("Failure")
+SSF <- FH$AddChild("S S F")
+SSF2 <- SSF$AddChild("2 Successes")
+FD <- FA$AddChild("Failure")
+FI <- FD$AddChild("Success")
+SFS <- FI$AddChild("S F S")
+SFS2 <- SFS$AddChild("2 Successes")
+FJ <- FD$AddChild("Failure")
+SFF <- FJ$AddChild("S F F")
+FB <- rolltree$AddChild("Failure")
+FE <- FB$AddChild("Success")
+FG <- FE$AddChild("Success")
+FSS <- FG$AddChild("F S S")
+FSS2 <- FSS$AddChild("2 Successes")
+FH <- FE$AddChild("Failure")
+FSF <- FH$AddChild("F S F")
+FF <- FB$AddChild("Failure")
+FG <- FF$AddChild("Success")
+FFS <- FG$AddChild("F F S")
+FH <- FF$AddChild("Failure")
+FFF <- FH$AddChild("F F F")
 
 SetGraphStyle(rolltree, rankdir = "TB")
-SetNodeStyle(rolltree, 
-             style = "filled, rounded", 
-             shape = "box", 
-             fillcolor = "lightblue",
-             fontcolor = "black")
+SetNodeStyle(rolltree,
+  style = "filled, rounded",
+  shape = "box",
+  fillcolor = "lightblue",
+  fontcolor = "black"
+)
 ```
 </details>
 
@@ -127,7 +128,7 @@ What is the probability that exactly 18 out of 20 survive? Solve for $x = 18$.
 $$f(18) = P(X = 18) = {20 \choose 18}(0.82)^18(1-0.82)^{20-18}$$
 
 ```{r}
-dbinom(18, 20, 0.82)   # dbinom(x, n, p)
+dbinom(18, 20, 0.82) # dbinom(x, n, p)
 ```
 
 #### Visualize in a Plot
@@ -143,27 +144,31 @@ pmf <- tibble(x = 0:n, probability = dbinom(0:n, n, p))
 ```{r}
 # probabilities for large digits are shown in scientific notation
 
-probdigits <- 20   # specify display digits for the probabilities
+probdigits <- 20 # specify display digits for the probabilities
 
 pmf %>%
-  kable(digits = probdigits) %>% 
-  kable_styling(full_width = FALSE, 
-                position = "left", 
-                font_size = 14,
-                bootstrap_options = c("striped"))
+  kable(digits = probdigits) %>%
+  kable_styling(
+    full_width = FALSE,
+    position = "left",
+    font_size = 14,
+    bootstrap_options = c("striped")
+  )
 ```
 
 <details>
 ```{r}
-breakby <- 2   # choose spacing for the x-axis tick marks
+breakby <- 2 # choose spacing for the x-axis tick marks
 
 pmfplot <- ggplot(pmf, aes(x = x, y = probability)) +
   geom_col(width = 1, color = "black", fill = "lightblue") +
   scale_x_continuous(breaks = seq(from = 0, to = n, by = breakby)) +
-  labs(title = "How many 90-year old Canadian men will survive at least another year?",
-       subtitle = "number of survivors from a random sample of 20 men = X ~ Bin(20, 0.82)",
-       x = "Number That Survive for at Least Another Year", 
-       y = "Probability") +
+  labs(
+    title = "How many 90-year old Canadian men will survive at least another year?",
+    subtitle = "number of survivors from a random sample of 20 men = X ~ Bin(20, 0.82)",
+    x = "Number That Survive for at Least Another Year",
+    y = "Probability"
+  ) +
   theme_linedraw()
 ```
 </details>
@@ -174,16 +179,20 @@ pmfplot
 
 <details>
 ```{r}
-breakby <- 2   # choose spacing of x-axis tick marks
+breakby <- 2 # choose spacing of x-axis tick marks
 
 pmfplot <- ggplot(pmf, aes(x = x, y = probability)) +
-  geom_col(width = 1, color = "black", 
-           fill = c(rep("lightblue", 18), "red", rep("lightblue", 2))) +  # bar shading
+  geom_col(
+    width = 1, color = "black",
+    fill = c(rep("lightblue", 18), "red", rep("lightblue", 2))
+  ) + # bar shading
   scale_x_continuous(breaks = seq(from = 0, to = n, by = breakby)) +
-  labs(title = "How many 90-year old Canadian men will survive at least another year?",
-       subtitle = "X ~ Bin(20, 0.82), with P(X = 18) shaded in red",
-       x = "Number That Survive for at Least Another Year", 
-       y = "Probability") +
+  labs(
+    title = "How many 90-year old Canadian men will survive at least another year?",
+    subtitle = "X ~ Bin(20, 0.82), with P(X = 18) shaded in red",
+    x = "Number That Survive for at Least Another Year",
+    y = "Probability"
+  ) +
   theme_linedraw()
 ```
 </details>
@@ -195,15 +204,17 @@ pmfplot
 ```{r}
 # probabilities for large digits are shown in scientific notation
 
-probdigits <- 20   # specify display digits for the probabilities
+probdigits <- 20 # specify display digits for the probabilities
 
-pmf %>% 
-  kable(digits = probdigits) %>% 
-  row_spec(row = 19, color = "white", background = "red", bold = TRUE) %>% 
-  kable_styling(full_width = FALSE, 
-                position = "left", 
-                font_size = 14,
-                bootstrap_options = c("striped"))
+pmf %>%
+  kable(digits = probdigits) %>%
+  row_spec(row = 19, color = "white", background = "red", bold = TRUE) %>%
+  kable_styling(
+    full_width = FALSE,
+    position = "left",
+    font_size = 14,
+    bootstrap_options = c("striped")
+  )
 ```
 
 #### Expected Value and Variance
@@ -253,7 +264,7 @@ $$P(X \geq 18) = P(X > 17) = 1 - P(X \leq 17)$$
 Thus we can use the cumulative distribution function...
 
 ```{r}
-pbinom(17, 20, 0.82, lower.tail = FALSE)   # pbinom(x, n, p, lower.tail = FALSE)
+pbinom(17, 20, 0.82, lower.tail = FALSE) # pbinom(x, n, p, lower.tail = FALSE)
 ```
 
 #### Visualize in a Plot
@@ -263,13 +274,17 @@ Here we use the same pmf we calculated and stored above.
 <details>
 ```{r}
 pmfplot <- ggplot(pmf, aes(x = x, y = probability)) +
-  geom_col(width = 1, color = "black", 
-           fill = c(rep("lightblue", 18), rep("red", 3))) +
+  geom_col(
+    width = 1, color = "black",
+    fill = c(rep("lightblue", 18), rep("red", 3))
+  ) +
   scale_x_continuous(breaks = seq(from = 0, to = n, by = 2)) +
-  labs(title = "How many 90-year old Canadian men will survive at least another year?",
-       subtitle = "X ~ Bin(20, 0.82), with P(X > 17) shaded in red",
-       x = "Number That Survive for at Least Another Year", 
-       y = "Probability") +
+  labs(
+    title = "How many 90-year old Canadian men will survive at least another year?",
+    subtitle = "X ~ Bin(20, 0.82), with P(X > 17) shaded in red",
+    x = "Number That Survive for at Least Another Year",
+    y = "Probability"
+  ) +
   theme_linedraw()
 ```
 </details>
@@ -280,18 +295,20 @@ pmfplot
 
 ```{r}
 # the probabilities are in scientific notation
-pmf %>% 
-  kable(digits = 20) %>% 
-  row_spec(row = 19:21, color = "white", background = "red", bold = TRUE) %>% 
-  kable_styling(full_width = FALSE, 
-                position = "left", 
-                font_size = 14,
-                bootstrap_options = c("striped"))
+pmf %>%
+  kable(digits = 20) %>%
+  row_spec(row = 19:21, color = "white", background = "red", bold = TRUE) %>%
+  kable_styling(
+    full_width = FALSE,
+    position = "left",
+    font_size = 14,
+    bootstrap_options = c("striped")
+  )
 ```
 
 ```{r}
-pmf %>% 
-  filter(x >=18) %>% 
+pmf %>%
+  filter(x >= 18) %>%
   summarize(prob_greq18 = sum(probability))
 ```
 
@@ -306,25 +323,29 @@ pmf <- tibble(x = 0:n, probability = dbinom(0:n, n, p))
 ```
 
 ```{r}
-probdigits <- 2   # specify display digits for the probabilities
+probdigits <- 2 # specify display digits for the probabilities
 
-pmf %>% 
-  kable(digits = probdigits) %>% 
-  kable_styling(full_width = FALSE, 
-                position = "left", 
-                font_size = 14,
-                bootstrap_options = c("striped"))
+pmf %>%
+  kable(digits = probdigits) %>%
+  kable_styling(
+    full_width = FALSE,
+    position = "left",
+    font_size = 14,
+    bootstrap_options = c("striped")
+  )
 ```
 
 <details>
 ```{r}
-breakby <- 1   # choose spacing of x-axis tick marks
+breakby <- 1 # choose spacing of x-axis tick marks
 
 pmfplot <- ggplot(pmf, aes(x = x, y = probability)) +
   geom_col(width = 1, color = "black", fill = "lightblue") +
   scale_x_continuous(breaks = 0:2) +
-  labs(x = "x", 
-       y = "p(x)") +
+  labs(
+    x = "x",
+    y = "p(x)"
+  ) +
   theme_linedraw()
 ```
 </details>

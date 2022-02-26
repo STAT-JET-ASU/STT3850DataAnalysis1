@@ -167,7 +167,7 @@ pre code {
 <h1 class="title toc-ignore">Understanding Z-Scores</h1>
 <h3 class="subtitle">Companion <code>R</code> Code for Stats 101 Video Lesson</h3>
 <h4 class="author">Created by Jill E. Thomley</h4>
-<h4 class="date">Saturday, February 26, 2022 @ 01:55 PM</h4>
+<h4 class="date">Saturday, February 26, 2022 @ 04:36 PM</h4>
 
 </div>
 
@@ -247,7 +247,7 @@ pre code {
 4    90    85          5  0.632
 5    95    85         10  1.26 </code></pre>
 <p>We can do this directly using the <code>scale()</code> function in <code>R</code>. If you look at <code>class1_zscores</code> in the Environment pane, you will see the mean and standard deviation saved as <em>attributes</em> of the Z column (properties explain what an object represents and how it should be interpreted by R — in this case the values used for scaling).</p>
-<pre class="r"><code>class1_zscores &lt;- class1 %&gt;% 
+<pre class="r"><code>class1_zscores &lt;- class1 %&gt;%
   mutate(Z = scale(Score))
 class1_zscores</code></pre>
 <pre><code># A tibble: 5 × 2
@@ -285,7 +285,7 @@ $`scaled:scale`
 3    85    85          0  0    
 4    88    85          3  0.632
 5    91    85          6  1.26 </code></pre>
-<pre class="r"><code>class2_zscores &lt;- class2 %&gt;% 
+<pre class="r"><code>class2_zscores &lt;- class2 %&gt;%
   mutate(Z = scale(Score))
 class2_zscores</code></pre>
 <pre><code># A tibble: 5 × 2

@@ -78,7 +78,7 @@ class1 %>%
 We can do this directly using the `scale()` function in `R`. If you look at `class1_zscores` in the Environment pane, you will see the mean and standard deviation saved as *attributes* of the Z column (properties explain what an object represents and how it should be interpreted by R --- in this case the values used for scaling). 
 
 ```{r}
-class1_zscores <- class1 %>% 
+class1_zscores <- class1 %>%
   mutate(Z = scale(Score))
 class1_zscores
 attributes(class1_zscores$Z)
@@ -98,7 +98,7 @@ class2 %>%
 ```
 
 ```{r}
-class2_zscores <- class2 %>% 
+class2_zscores <- class2 %>%
   mutate(Z = scale(Score))
 class2_zscores
 ```
