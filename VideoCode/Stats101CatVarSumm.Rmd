@@ -1,8 +1,8 @@
 ---
 title: "Describing a Categorical Variable"
 subtitle: "Companion `R` Code for Stats 101 Video Lesson"
-author: "Created by Jill E. Thomley"
-date: '`r format(Sys.time(), "%A, %B %d, %Y @ %I:%M %p")`'
+author: "Created by Jill E. Thomley, Appalachian State University"
+date: "Last updated on `r format(Sys.time(), '%A, %B %d, %Y @ %I:%M %p')`"
 output: 
   html_document: 
     theme: yeti
@@ -21,7 +21,7 @@ knitr::opts_chunk$set(
 
 &#9654; [GO TO VIDEO](https://youtu.be/vrWYw8d2830)
 
-<hr>
+***
 
 ## Packages Used
 
@@ -205,7 +205,7 @@ ggplot(phonedist2, aes(x = brand, y = rel_freq)) +
 
 Tidyverse: [Bar Charts](https://ggplot2.tidyverse.org/reference/geom_bar.html)
 
-<hr>
+***
 ```{r}
 sessionInfo()
 ```

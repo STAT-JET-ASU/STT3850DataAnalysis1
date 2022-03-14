@@ -9,7 +9,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content="Created by Jill E. Thomley" />
+<meta name="author" content="Created by Jill E. Thomley, Appalachian State University" />
 
 
 <title>An Introduction to the Bernoulli Distribution</title>
@@ -61,6 +61,7 @@ if (window.hljs) {
 
 
 
+
 <style type="text/css">
 .main-container {
   max-width: 940px;
@@ -81,6 +82,9 @@ button.code-folding-btn:focus {
 }
 summary {
   display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
 }
 pre code {
   padding: 0;
@@ -166,54 +170,53 @@ pre code {
 
 <h1 class="title toc-ignore">An Introduction to the Bernoulli Distribution</h1>
 <h3 class="subtitle">Companion <code>R</code> Code for JB Statistics Video Lesson</h3>
-<h4 class="author">Created by Jill E. Thomley</h4>
-<h4 class="date">Saturday, February 26, 2022 @ 04:33 PM</h4>
+<h4 class="author">Created by Jill E. Thomley, Appalachian State University</h4>
+<h4 class="date">Last updated on Monday, March 14, 2022 @ 07:44 PM</h4>
 
 </div>
 
 <div id="TOC">
 <ul>
-<li><a href="#packages-used"><strong>Packages Used</strong></a></li>
-<li><a href="#the-bernoulli-distribution"><strong>The Bernoulli Distribution</strong></a></li>
-<li><a href="#simulating-bernoulli-trials"><strong>Simulating Bernoulli Trials</strong></a></li>
+<li><a href="#packages-used">Packages Used</a></li>
+<li><a href="#the-bernoulli-distribution">The Bernoulli Distribution</a></li>
+<li><a href="#simulating-bernoulli-trials">Simulating Bernoulli Trials</a></li>
 </ul>
 </div>
 
 <p>▶ <a href="https://youtu.be/bT1p5tJwn_0">GO TO VIDEO</a></p>
-<hr>
+<hr />
 <div id="packages-used" class="section level3">
-<h3><strong>Packages Used</strong></h3>
-<details>
+<h3>Packages Used</h3>
 <pre class="r"><code>library(tidyverse)
 library(purrr)</code></pre>
-</details>
 </div>
 <div id="the-bernoulli-distribution" class="section level3">
-<h3><strong>The Bernoulli Distribution</strong></h3>
+<h3>The Bernoulli Distribution</h3>
 <p>A Bernoulli trial is a single random event that has only two possible outcomes. These are often called “success” and “failure”. Classic examples include one coin flip where a head is considered a success and a tail is considered a failure, or one roll of a standard 6-sided die where 1 is considered a success and any other number 2-6 is considered a failure.</p>
 <p><span class="math display">\[X \sim Bernoulli(p)\]</span></p>
 <pre><code>x = number of successes = {0, 1}
 p = probability of success
 1 - p = probability of failure</code></pre>
-<p><span class="math display">\[f(x) = P(X = x) = p^x(1-p)^{n-x}\]</span></p>
-<p><span class="math display">\[F(x)=P(X \leq x) = \sum\limits_{i=0}^x f(x) = \sum\limits_{i=0}^x p^i(1-p)^{n-i}\]</span></p>
-<p><span class="math display">\[E[X] = p \text{ and } Var[X] = p(1-p)\]</span></p>
+<p><span class="math display">\[f(x) = P(X = x) = p^x(1-p)^{1-x}\]</span></p>
+<p><span class="math display">\[F(x)=P(X \leq x) = \sum\limits_{i=0}^x f(x) = \sum\limits_{i=0}^x p^i(1-p)^{1-i}\]</span></p>
+<p><span class="math display">\[E[X] = p\]</span></p>
+<p><span class="math display">\[Var[X] = p(1-p)\]</span></p>
 </div>
 <div id="simulating-bernoulli-trials" class="section level3">
-<h3><strong>Simulating Bernoulli Trials</strong></h3>
-<p>You can simulate Bernoulli trials using the function <code>rbernoulli(n, p)</code> from the purrr package. The parameter <span class="math inline">\(n\)</span> in this case is the number of times you want to repeat the Bernoulli process. For example, suppose we want twenty flips of a fair coin. The output is a logical vector with <code>TRUE</code> for a success and <code>FALSE</code> for a failure.</p>
+<h3>Simulating Bernoulli Trials</h3>
+<p>You can simulate Bernoulli trials using the function <code>rbernoulli(n, p)</code> from the <strong>purrr</strong> package. The parameter <span class="math inline">\(n\)</span> in this case is the number of times you want to repeat the Bernoulli process. For example, suppose we want twenty flips of a fair coin. The output is a logical vector with <code>TRUE</code> for a success and <code>FALSE</code> for a failure.</p>
 <pre class="r"><code>(fifty_flips &lt;- rbernoulli(50, 0.5))</code></pre>
-<pre><code> [1] FALSE  TRUE  TRUE FALSE FALSE  TRUE  TRUE  TRUE  TRUE FALSE  TRUE FALSE
-[13]  TRUE FALSE FALSE  TRUE FALSE FALSE  TRUE FALSE  TRUE  TRUE FALSE  TRUE
-[25] FALSE  TRUE  TRUE FALSE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE FALSE
-[37]  TRUE  TRUE  TRUE FALSE  TRUE FALSE FALSE FALSE  TRUE  TRUE FALSE  TRUE
-[49]  TRUE FALSE</code></pre>
+<pre><code> [1]  TRUE  TRUE  TRUE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE  TRUE
+[13]  TRUE FALSE FALSE  TRUE FALSE FALSE FALSE  TRUE  TRUE FALSE  TRUE FALSE
+[25]  TRUE  TRUE FALSE  TRUE FALSE FALSE  TRUE  TRUE FALSE FALSE FALSE  TRUE
+[37]  TRUE  TRUE FALSE FALSE FALSE  TRUE FALSE  TRUE FALSE  TRUE FALSE  TRUE
+[49] FALSE  TRUE</code></pre>
 <p>The mean and variance of the sample will approximate the theoretical values of E[X] = 0.5 and Var[X] = 0.25. As a reminder, we can perform mathematical operations on logical vectors because <code>TRUE</code> is stored as <code>1</code> and <code>FALSE</code> as <code>0</code>.</p>
 <pre class="r"><code>mean(fifty_flips)</code></pre>
-<pre><code>[1] 0.58</code></pre>
+<pre><code>[1] 0.44</code></pre>
 <pre class="r"><code>var(fifty_flips)</code></pre>
-<pre><code>[1] 0.2485714</code></pre>
-<p>Another (and better) way to perform this kind of simulation is with the <code>rbinom()</code> function. You will learn more about the Binomial distribution and its relationship to the Bernoulli in another video.</p>
+<pre><code>[1] 0.2514286</code></pre>
+<p>Another (and better) way to perform this kind of simulation is with the <code>rbinom()</code> function. You will learn more about the binomial distribution and its relationship to the Bernoulli in another video.</p>
 <hr />
 <pre class="r"><code>sessionInfo()</code></pre>
 <pre><code>R version 3.6.0 (2019-04-26)
@@ -240,19 +243,19 @@ other attached packages:
 [9] tidyverse_1.3.1
 
 loaded via a namespace (and not attached):
- [1] tidyselect_1.1.1 xfun_0.29        bslib_0.3.1      haven_2.4.3     
- [5] colorspace_2.0-2 vctrs_0.3.8      generics_0.1.2   htmltools_0.5.2 
- [9] yaml_2.3.4       utf8_1.2.2       rlang_1.0.1      jquerylib_0.1.4 
-[13] pillar_1.7.0     withr_2.4.3      glue_1.6.1       DBI_1.1.2       
+ [1] tidyselect_1.1.2 xfun_0.30        bslib_0.3.1      haven_2.4.3     
+ [5] colorspace_2.0-3 vctrs_0.3.8      generics_0.1.2   htmltools_0.5.2 
+ [9] yaml_2.3.5       utf8_1.2.2       rlang_1.0.2      jquerylib_0.1.4 
+[13] pillar_1.7.0     withr_2.5.0      glue_1.6.2       DBI_1.1.2       
 [17] dbplyr_2.1.1     modelr_0.1.8     readxl_1.3.1     lifecycle_1.0.1 
 [21] cellranger_1.1.0 munsell_0.5.0    gtable_0.3.0     rvest_1.0.2     
 [25] evaluate_0.15    knitr_1.37       tzdb_0.2.0       fastmap_1.1.0   
-[29] fansi_1.0.2      broom_0.7.12     Rcpp_1.0.8       backports_1.4.1 
-[33] scales_1.1.1     jsonlite_1.7.3   fs_1.5.2         hms_1.1.1       
+[29] fansi_1.0.2      broom_0.7.12     Rcpp_1.0.8.2     backports_1.4.1 
+[33] scales_1.1.1     jsonlite_1.8.0   fs_1.5.2         hms_1.1.1       
 [37] digest_0.6.29    stringi_1.7.6    grid_3.6.0       cli_3.2.0       
 [41] tools_3.6.0      magrittr_2.0.2   sass_0.4.0       crayon_1.5.0    
 [45] pkgconfig_2.0.3  ellipsis_0.3.2   xml2_1.3.3       reprex_2.0.1    
-[49] lubridate_1.8.0  assertthat_0.2.1 rmarkdown_2.11   httr_1.4.2      
+[49] lubridate_1.8.0  assertthat_0.2.1 rmarkdown_2.13   httr_1.4.2      
 [53] rstudioapi_0.13  R6_2.5.1         compiler_3.6.0  </code></pre>
 </div>
 

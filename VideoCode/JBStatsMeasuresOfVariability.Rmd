@@ -1,8 +1,8 @@
 ---
 title: "Measures of Variability"
 subtitle: "Companion `R` Code for JB Statistics Video Lesson"
-author: "Created by Jill E. Thomley"
-date: '`r format(Sys.time(), "%A, %B %d, %Y @ %I:%M %p")`'
+author: "Created by Jill E. Thomley, Appalachian State University"
+date: "Last updated on `r format(Sys.time(), '%A, %B %d, %Y @ %I:%M %p')`"
 output: 
   html_document: 
     theme: yeti
@@ -13,7 +13,7 @@ output:
 
 &#9654; [GO TO VIDEO](https://youtu.be/Cx2tGUze60s)
 
-<hr>
+***
 
 ```{r globaloptions, include = FALSE}
 knitr::opts_chunk$set(
@@ -27,7 +27,6 @@ knitr::opts_chunk$set(
 
 ```{r loadpackages}
 library(tidyverse)
-library(knitr)
 library(kableExtra)
 ```
 
@@ -161,7 +160,7 @@ Tidyverse: [Summarise each group to fewer rows](https://dplyr.tidyverse.org/refe
 
 [KableExtra Tutorial](https://rstudio-pubs-static.s3.amazonaws.com/444395_76727eaf9c774fa8bf932bed16500a00.html)
 
-<hr>
+***
 ```{r}
 sessionInfo()
 ```

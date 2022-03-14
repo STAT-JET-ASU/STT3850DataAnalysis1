@@ -1,8 +1,8 @@
 ---
 title: "Binomial/Not Binomial Examples"
 subtitle: "Companion `R` Code for JB Statistics Video Lesson"
-author: "Created by Jill E. Thomley"
-date: '`r format(Sys.time(), "%A, %B %d, %Y @ %I:%M %p")`'
+author: "Created by Jill E. Thomley, Appalachian State University"
+date: "Last updated on `r format(Sys.time(), '%A, %B %d, %Y @ %I:%M %p')`"
 output:
   html_document:
     theme: yeti
@@ -21,9 +21,9 @@ knitr::opts_chunk$set(
 
 &#9654; [GO TO VIDEO](https://youtu.be/UJFIZY0xx_s)
 
-<hr>
+***
 
-### **Packages Used**
+### Packages Used
 
 <details>
 ```{r loadpackages}
@@ -31,7 +31,7 @@ knitr::opts_chunk$set(
 ```
 </details>
 
-### **The Binomial PMF**
+### The Binomial PMF
 
 The binomial distribution is a discrete probability distribution. It mathematically models the *number of successes* in a sequence of independent Bernoulli trials. The probability for a given number of successes $x$ is found using the *probability mass function* (pmf).
 
@@ -43,7 +43,7 @@ $$X \sim Bin(n,p)$$
 
 $$f(x) = P(X = x) = {n \choose x}p^x(1-p)^{n-x}$$
 
-### **Binomial Examples**
+### Binomial Examples
 
 #### Chance of Fetal Down Syndrome
 

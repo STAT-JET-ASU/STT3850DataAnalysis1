@@ -9,7 +9,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content="Created by Jill E. Thomley" />
+<meta name="author" content="Created by Jill E. Thomley, Appalachian State University" />
 
 
 <title>Understanding Z-Scores</title>
@@ -61,6 +61,7 @@ if (window.hljs) {
 
 
 
+
 <style type="text/css">
 .main-container {
   max-width: 940px;
@@ -81,6 +82,9 @@ button.code-folding-btn:focus {
 }
 summary {
   display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
 }
 pre code {
   padding: 0;
@@ -166,8 +170,8 @@ pre code {
 
 <h1 class="title toc-ignore">Understanding Z-Scores</h1>
 <h3 class="subtitle">Companion <code>R</code> Code for Stats 101 Video Lesson</h3>
-<h4 class="author">Created by Jill E. Thomley</h4>
-<h4 class="date">Saturday, February 26, 2022 @ 04:36 PM</h4>
+<h4 class="author">Created by Jill E. Thomley, Appalachian State University</h4>
+<h4 class="date">Last updated on Monday, March 14, 2022 @ 07:37 PM</h4>
 
 </div>
 
@@ -189,7 +193,7 @@ pre code {
 </div>
 
 <p>▶ <a href="https://youtu.be/bUu5HIHIrRw">GO TO VIDEO</a></p>
-<hr>
+<hr />
 <div id="packages-used" class="section level2">
 <h2>Packages Used</h2>
 <pre class="r"><code>library(tidyverse)</code></pre>
@@ -303,7 +307,7 @@ class2_zscores</code></pre>
 3    85  0.0000000    85  0.0000000
 4    90  0.6324555    88  0.6324555
 5    95  1.2649111    91  1.2649111</code></pre>
-<hr>
+<hr />
 <pre class="r"><code>sessionInfo()</code></pre>
 <pre><code>R version 3.6.0 (2019-04-26)
 Platform: x86_64-redhat-linux-gnu (64-bit)
@@ -329,19 +333,19 @@ other attached packages:
 [9] tidyverse_1.3.1
 
 loaded via a namespace (and not attached):
- [1] tidyselect_1.1.1 xfun_0.29        bslib_0.3.1      haven_2.4.3     
- [5] colorspace_2.0-2 vctrs_0.3.8      generics_0.1.2   htmltools_0.5.2 
- [9] yaml_2.3.4       utf8_1.2.2       rlang_1.0.1      jquerylib_0.1.4 
-[13] pillar_1.7.0     withr_2.4.3      glue_1.6.1       DBI_1.1.2       
+ [1] tidyselect_1.1.2 xfun_0.30        bslib_0.3.1      haven_2.4.3     
+ [5] colorspace_2.0-3 vctrs_0.3.8      generics_0.1.2   htmltools_0.5.2 
+ [9] yaml_2.3.5       utf8_1.2.2       rlang_1.0.2      jquerylib_0.1.4 
+[13] pillar_1.7.0     withr_2.5.0      glue_1.6.2       DBI_1.1.2       
 [17] dbplyr_2.1.1     modelr_0.1.8     readxl_1.3.1     lifecycle_1.0.1 
 [21] cellranger_1.1.0 munsell_0.5.0    gtable_0.3.0     rvest_1.0.2     
 [25] evaluate_0.15    knitr_1.37       tzdb_0.2.0       fastmap_1.1.0   
-[29] fansi_1.0.2      broom_0.7.12     Rcpp_1.0.8       backports_1.4.1 
-[33] scales_1.1.1     jsonlite_1.7.3   fs_1.5.2         hms_1.1.1       
+[29] fansi_1.0.2      broom_0.7.12     Rcpp_1.0.8.2     backports_1.4.1 
+[33] scales_1.1.1     jsonlite_1.8.0   fs_1.5.2         hms_1.1.1       
 [37] digest_0.6.29    stringi_1.7.6    grid_3.6.0       cli_3.2.0       
 [41] tools_3.6.0      magrittr_2.0.2   sass_0.4.0       crayon_1.5.0    
 [45] pkgconfig_2.0.3  ellipsis_0.3.2   xml2_1.3.3       reprex_2.0.1    
-[49] lubridate_1.8.0  assertthat_0.2.1 rmarkdown_2.11   httr_1.4.2      
+[49] lubridate_1.8.0  assertthat_0.2.1 rmarkdown_2.13   httr_1.4.2      
 [53] rstudioapi_0.13  R6_2.5.1         compiler_3.6.0  </code></pre>
 </div>
 </div>

@@ -1,8 +1,8 @@
 ---
 title: "Understanding Z-Scores"
 subtitle: "Companion `R` Code for Stats 101 Video Lesson"
-author: "Created by Jill E. Thomley"
-date: '`r format(Sys.time(), "%A, %B %d, %Y @ %I:%M %p")`'
+author: "Created by Jill E. Thomley, Appalachian State University"
+date: "Last updated on `r format(Sys.time(), '%A, %B %d, %Y @ %I:%M %p')`"
 output: 
   html_document: 
     theme: yeti
@@ -21,7 +21,7 @@ knitr::opts_chunk$set(
 
 &#9654; [GO TO VIDEO](https://youtu.be/bUu5HIHIrRw)
 
-<hr>
+***
 
 ## Packages Used
 
@@ -107,8 +107,7 @@ class2_zscores
 cbind(class1_zscores, class2_zscores)
 ```
 
-
-<hr>
+***
 ```{r}
 sessionInfo()
 ```

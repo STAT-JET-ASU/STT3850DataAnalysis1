@@ -1,8 +1,8 @@
 ---
 title: "An Introduction to the Binomial Distribution"
 subtitle: "Companion `R` Code for JB Statistics Video Lesson"
-author: "Created by Jill E. Thomley"
-date: '`r format(Sys.time(), "%A, %B %d, %Y @ %I:%M %p")`'
+author: "Created by Jill E. Thomley, Appalachian State University"
+date: "Last updated on `r format(Sys.time(), '%A, %B %d, %Y @ %I:%M %p')`"
 output:
   html_document:
     theme: yeti
@@ -21,21 +21,18 @@ knitr::opts_chunk$set(
 
 &#9654; [GO TO VIDEO](https://youtu.be/qIzC1-9PwQo)
 
-<hr>
+***
 
+### Packages Used
 
-### **Packages Used**
-
-<details>
 ```{r loadpackages}
 library(tidyverse)
-library(data.tree)
-library(knitr)
 library(kableExtra)
+library(data.tree)
 ```
-</details>
 
-### **The Binomial Distribution**
+
+### The Binomial Distribution
 
 The binomial distribution is a discrete probability distribution. It mathematically models the *number of successes* in a sequence of independent Bernoulli trials. The probability for a given number of successes $x$ is found using the *probability mass function* (pmf).
 
@@ -52,7 +49,7 @@ $$F(x)=P(X \leq x) = \sum\limits_{i=0}^x f(x) = \sum\limits_{i=0}^x {n \choose i
 
 $$E[X] = np \text{ and } Var[X] = np(1-p)$$
 
-### **Rolling a 6-sided Die Example**
+### Rolling a 6-sided Die Example
 
 #### Calculating P(X = 2)
 
@@ -115,7 +112,7 @@ SetNodeStyle(rolltree,
 plot(rolltree)
 ```
 
-### **Canadian Life Tables Example**
+### Canadian Life Tables Example
 
 #### Calculating P(X = 18)
 
@@ -312,7 +309,7 @@ pmf %>%
   summarize(prob_greq18 = sum(probability))
 ```
 
-### **Babies with Jaundice Example**
+### Babies with Jaundice Example
 
 The babies with jaundice example from [An Introduction to Discrete Random Variables and Discrete Probability Distributions](https://stat-jet-asu.github.io/STT3850DataAnalysis1/VideoCode/JBStatsDiscreteRV.html) can be modeled with the binomial distribution, because it is a series of independent Bernoulli trials with a constant probability.
 
@@ -354,7 +351,7 @@ pmfplot <- ggplot(pmf, aes(x = x, y = probability)) +
 pmfplot
 ```
 
-### **Simulating Bernoulli Trials**
+### Simulating Bernoulli Trials
 
 Previously you saw that you can simulate Bernoulli trials using the function `rbernoulli(n, p)` (purrr package). The parameter `n` in this case is the number of times you want to repeat the Bernoulli process. In other words, it is the number of flips. For example, if we want fifty flips of a fair coin, we could use the following code. The output is a logical vector with `TRUE` for a success.
 

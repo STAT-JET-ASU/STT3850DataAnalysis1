@@ -1,8 +1,8 @@
 ---
 title: "Histograms"
 subtitle: "Companion `R` Code for Stats 101 Video Lesson"
-author: "Created by Jill E. Thomley"
-date: '`r format(Sys.time(), "%A, %B %d, %Y @ %I:%M %p")`'
+author: "Created by Jill E. Thomley, Appalachian State University"
+date: "Last updated on `r format(Sys.time(), '%A, %B %d, %Y @ %I:%M %p')`"
 output: 
   html_document: 
     theme: yeti
@@ -21,7 +21,7 @@ knitr::opts_chunk$set(
 
 &#9654; [GO TO VIDEO](https://youtu.be/zC3GaPBJ4c4)
 
-<hr>
+***
 
 ## Packages Used
 
@@ -210,7 +210,7 @@ Tidyverse: [Histograms and Frequency Polygons](https://ggplot2.tidyverse.org/ref
 
 Tidyverse: [Smoothed Density Estimates](https://ggplot2.tidyverse.org/reference/geom_density.html)
 
-<hr>
+***
 ```{r}
 sessionInfo()
 ```

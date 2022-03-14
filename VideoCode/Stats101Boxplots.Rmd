@@ -1,8 +1,8 @@
 ---
 title: "IQR and Boxplots"
 subtitle: "Companion `R` Code for Stats 101 Video Lesson"
-author: "Created by Jill E. Thomley"
-date: '`r format(Sys.time(), "%A, %B %d, %Y @ %I:%M %p")`'
+author: "Created by Jill E. Thomley, Appalachian State University"
+date: "Last updated on `r format(Sys.time(), '%A, %B %d, %Y @ %I:%M %p')`"
 output: 
   html_document: 
     theme: yeti
@@ -21,13 +21,12 @@ knitr::opts_chunk$set(
 
 &#9654; [GO TO VIDEO](https://youtu.be/k6Nm8sGXNaQ)
 
-<hr>
+***
 
 ## Packages Used
 
 ```{r loadpackages}
 library(tidyverse)
-library(knitr)
 library(kableExtra)
 ```
 
@@ -222,14 +221,13 @@ fences <- gp %>%
 fences
 ```
 
-
 ### References
 
 Tidyverse: [Summarise each group to fewer rows](https://dplyr.tidyverse.org/reference/summarise.html)
 
 Tidyverse: [A Box and Whiskers Plot (in the style of Tukey)](https://ggplot2.tidyverse.org/reference/geom_boxplot.html)
 
-<hr>
+***
 ```{r}
 sessionInfo()
 ```

@@ -1,8 +1,8 @@
 ---
 title: "An Introduction to Discrete Random Variables and Discrete Probability Distributions"
 subtitle: "Companion `R` Code for JB Statistics Video Lesson"
-author: "Created by Jill E. Thomley"
-date: '`r format(Sys.time(), "%A, %B %d, %Y @ %I:%M %p")`'
+author: "Created by Jill E. Thomley, Appalachian State University"
+date: "Last updated on `r format(Sys.time(), '%A, %B %d, %Y @ %I:%M %p')`"
 output: 
   html_document: 
     theme: yeti
@@ -21,20 +21,17 @@ knitr::opts_chunk$set(
 
 &#9654; [GO TO VIDEO](https://youtu.be/0P5WRKihQ4E)
 
-<hr>
+***
 
-### **Packages Used**
+### Packages Used
 
-<details>
 ```{r loadpackages}
 library(tidyverse)
-library(data.tree)
-library(knitr)
 library(kableExtra)
+library(data.tree)
 ```
-</details>
 
-### **Babies with Jaundice Example**
+### Babies with Jaundice Example
 
 #### Visualize the Possibilities 
 
@@ -125,7 +122,6 @@ ggplot(distribution_x, aes(x = x, y = probability)) +
   scale_x_continuous(breaks = 0:2) +
   labs(x = "x", y = "p(x)")
 ```
-
 
 ***
 ```{r}

@@ -9,7 +9,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content="Created by Jill E. Thomley" />
+<meta name="author" content="Created by Jill E. Thomley, Appalachian State University" />
 
 
 <title>Binomial/Not Binomial Examples</title>
@@ -61,6 +61,7 @@ if (window.hljs) {
 
 
 
+
 <style type="text/css">
 .main-container {
   max-width: 940px;
@@ -81,6 +82,9 @@ button.code-folding-btn:focus {
 }
 summary {
   display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
 }
 pre code {
   padding: 0;
@@ -166,16 +170,16 @@ pre code {
 
 <h1 class="title toc-ignore">Binomial/Not Binomial Examples</h1>
 <h3 class="subtitle">Companion <code>R</code> Code for JB Statistics Video Lesson</h3>
-<h4 class="author">Created by Jill E. Thomley</h4>
-<h4 class="date">Saturday, February 26, 2022 @ 04:34 PM</h4>
+<h4 class="author">Created by Jill E. Thomley, Appalachian State University</h4>
+<h4 class="date">Last updated on Monday, March 14, 2022 @ 07:43 PM</h4>
 
 </div>
 
 <div id="TOC">
 <ul>
-<li><a href="#packages-used"><strong>Packages Used</strong></a></li>
-<li><a href="#the-binomial-pmf"><strong>The Binomial PMF</strong></a></li>
-<li><a href="#binomial-examples"><strong>Binomial Examples</strong></a>
+<li><a href="#packages-used">Packages Used</a></li>
+<li><a href="#the-binomial-pmf">The Binomial PMF</a></li>
+<li><a href="#binomial-examples">Binomial Examples</a>
 <ul>
 <li><a href="#chance-of-fetal-down-syndrome">Chance of Fetal Down Syndrome</a></li>
 <li><a href="#chance-of-3-or-4-on-a-die-roll">Chance of 3 or 4 on a Die Roll</a></li>
@@ -184,15 +188,15 @@ pre code {
 </div>
 
 <p>▶ <a href="https://youtu.be/UJFIZY0xx_s">GO TO VIDEO</a></p>
-<hr>
+<hr />
 <div id="packages-used" class="section level3">
-<h3><strong>Packages Used</strong></h3>
+<h3>Packages Used</h3>
 <details>
 <pre class="r"><code># no packages are required</code></pre>
 </details>
 </div>
 <div id="the-binomial-pmf" class="section level3">
-<h3><strong>The Binomial PMF</strong></h3>
+<h3>The Binomial PMF</h3>
 <p>The binomial distribution is a discrete probability distribution. It mathematically models the <em>number of successes</em> in a sequence of independent Bernoulli trials. The probability for a given number of successes <span class="math inline">\(x\)</span> is found using the <em>probability mass function</em> (pmf).</p>
 <p><span class="math display">\[X \sim Bin(n,p)\]</span></p>
 <pre><code>x = number of successes = {0, 1, 2, ..., n}
@@ -201,7 +205,7 @@ p = probability of success on a single trial</code></pre>
 <p><span class="math display">\[f(x) = P(X = x) = {n \choose x}p^x(1-p)^{n-x}\]</span></p>
 </div>
 <div id="binomial-examples" class="section level3">
-<h3><strong>Binomial Examples</strong></h3>
+<h3>Binomial Examples</h3>
 <div id="chance-of-fetal-down-syndrome" class="section level4">
 <h4>Chance of Fetal Down Syndrome</h4>
 <p>The probability a randomly selected 40-year-old pregnant woman is carrying a fetus with Down syndrome is approximately 0.01. Suppose we have an independent random sample of 25 40-year-old women. What is the probability exactly 2 women are carrying a fetus with Down syndrome?</p>
@@ -252,10 +256,10 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 loaded via a namespace (and not attached):
- [1] digest_0.6.29   R6_2.5.1        jsonlite_1.7.3  magrittr_2.0.2 
- [5] evaluate_0.15   stringi_1.7.6   rlang_1.0.1     cli_3.2.0      
- [9] rstudioapi_0.13 jquerylib_0.1.4 bslib_0.3.1     rmarkdown_2.11 
-[13] tools_3.6.0     stringr_1.4.0   xfun_0.29       yaml_2.3.4     
+ [1] digest_0.6.29   R6_2.5.1        jsonlite_1.8.0  magrittr_2.0.2 
+ [5] evaluate_0.15   stringi_1.7.6   rlang_1.0.2     cli_3.2.0      
+ [9] rstudioapi_0.13 jquerylib_0.1.4 bslib_0.3.1     rmarkdown_2.13 
+[13] tools_3.6.0     stringr_1.4.0   xfun_0.30       yaml_2.3.5     
 [17] fastmap_1.1.0   compiler_3.6.0  htmltools_0.5.2 knitr_1.37     
 [21] sass_0.4.0     </code></pre>
 </div>

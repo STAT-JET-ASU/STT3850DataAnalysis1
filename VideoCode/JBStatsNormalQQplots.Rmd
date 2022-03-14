@@ -1,34 +1,34 @@
 ---
 title: "Normal Quantile-Quantile Plots"
 subtitle: "Companion `R` Code for JB Statistics Video Lesson"
-author: "Created by Jill E. Thomley"
-date: '`r format(Sys.time(), "%A, %B %d, %Y @ %I:%M %p")`'
-output: 
+author: "Created by Jill E. Thomley, Appalachian State University"
+date: "Last updated on `r format(Sys.time(), '%A, %B %d, %Y @ %I:%M %p')`"
+output:
   html_document:
     theme: yeti
     highlight: textmate
     toc: true
     toc_depth: 4
-    self_contained: false
 ---
 
 ```{r globaloptions, include = FALSE}
-knitr::opts_chunk$set(message = FALSE, warning = FALSE, comment = NA)
+knitr::opts_chunk$set(
+  message = FALSE,
+  warning = FALSE,
+  comment = NA
+)
 ```
 
-***
-<iframe width="560" height="315" src="https://www.youtube.com/embed/X9_ISJ0YpGw" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+&#9654; [GO TO VIDEO](https://youtu.be/X9_ISJ0YpGw)
+
 ***
 
 ### Packages Used
 
-<details>
 ```{r loadpackages}
 library(tidyverse)
-library(readr)
 library(kableExtra)
 ```
-</details>
 
 ### Example 1: Sample of 9 Data Points
 
@@ -39,7 +39,8 @@ The Sample
 The basic example contains nine data points from an unknown population.
 
 ```{r}
-(sample <- c(3.89, 4.75, 4.75, 5.20, 5.78, 5.80, 6.33, 7.21, 7.90))
+sample <- c(3.89, 4.75, 4.75, 5.20, 5.78, 5.80, 6.33, 7.21, 7.90)
+sample
 ```
 
 The Quantiles
@@ -49,24 +50,28 @@ Find the nine values that split the standard normal distribution into 10 equal a
 ```{r}
 # standard normal is N(0, 1)
 # function qnorm(p, mean, SD)
+# default mean = 0 and sd = 1
+# we can omit them in the code
 
 # long way for illustration
-(deciles <- qnorm(c(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9), 0, 1))
+deciles <- qnorm(p = c(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9))
+deciles
 
 # this is a better coding strategy
 # it scales up for larger problems
-decile <- qnorm(seq(from = 0.1, to = 0.9, by = 0.1), 0, 1)
+decile <- qnorm(p = seq(from = 0.1, to = 0.9, by = 0.1))
 ```
 
 As a Tibble
 
-When using `ggplot2` it is often better to create a dataset versus stand-alone vectors.
+When using **ggplot2** it is often better to create a dataset versus stand-alone vectors.
 
 ```{r}
 plotdata1 <- tibble(
   sample = c(3.89, 4.75, 4.75, 5.20, 5.78, 5.80, 6.33, 7.21, 7.90),
-  deciles = qnorm(seq(from = 0.1, to = 0.9, by = 0.1), 0, 1)
+  deciles = qnorm(seq(from = 0.1, to = 0.9, by = 0.1))
 )
+
 plotdata1 %>%
   kable(digits = 2) %>%
   kable_styling(
@@ -120,6 +125,8 @@ plotdata2
 ### Using Statistical Software
 
 #### Sample from a Normal Population
+
+Notice that the aesthetics for QQ plots in ggplot2 use `sample =` rather than `x =` like our other EDA plots.
 
 ```{r}
 normal_sample <- tibble(x = rnorm(50, 0, 1))
@@ -246,7 +253,6 @@ ggplot(norm_samples, aes(sample = sample_values)) +
   facet_wrap(. ~ sample_number) +
   theme_classic()
 ```
-
 
 ***
 ```{r}
