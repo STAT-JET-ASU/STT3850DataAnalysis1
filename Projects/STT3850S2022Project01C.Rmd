@@ -59,7 +59,7 @@ As one of his many genetic studies, Galton compared the heights of children to t
 
 #### **Data Transformation**
 
-Create a new variable named `HeightT` using `mutate` and `if_else()` to perform Galton's "transmutation" of the `Height` data. The measured heights of daughters should be multipled by `1.08` while the heights of the sons should remain the same. Remember to store your changes! (Hint: Check out the [syntax](https://rdrr.io/cran/dplyr/man/if_else.html) for the `ifelse()` function).
+Create a new variable named `HeightT` using `mutate` and `if_else()` to perform Galton's "transmutation" of the `Height` data. The measured heights of daughters should be multipled by `1.08` while the heights of the sons should remain the same. Remember to store your changes! (Hint: Check out the [syntax](https://rdrr.io/cran/dplyr/man/if_else.html) for the `if_else()` function).
 
 ```{r}
 
