@@ -66,13 +66,12 @@ normalplot <- ggplot() +
     breaks = seq(from = -3, to = 3, by = 1),
     labels = c("μ - 3σ", "μ - 2σ", "μ - 1σ", "μ", "μ + 1σ", "μ + 2σ", "μ + 3σ")
   ) +
-  scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
   labs(
     title = "The Normal Distribution",
     x = "x",
     y = "f(x)"
   ) +
-  theme_linedraw()
+  theme_minimal()
 ```
 </details>
 
@@ -106,14 +105,13 @@ normalplot_1sigma <- ggplot() +
     breaks = seq(from = -3, to = 3, by = 1),
     labels = c("μ - 3σ", "μ - 2σ", "μ - 1σ", "μ", "μ + 1σ", "μ + 2σ", "μ + 3σ")
   ) +
-  scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
   labs(
     title = "The Normal Distribution",
     x = "x",
     y = "f(x)",
     caption = sprintf("More precisely, the area is %g.", pnorm(1) - pnorm(-1))
   ) +
-  theme_linedraw()
+  theme_minimal()
 ```
 </details>
 
@@ -147,14 +145,13 @@ normalplot_2sigma <- ggplot() +
     breaks = seq(from = -3, to = 3, by = 1),
     labels = c("μ - 3σ", "μ - 2σ", "μ - 1σ", "μ", "μ + 1σ", "μ + 2σ", "μ + 3σ")
   ) +
-  scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
   labs(
     title = "The Normal Distribution",
     x = "x",
     y = "f(x)",
     caption = sprintf("More precisely, the area is %g.", pnorm(2) - pnorm(-2))
   ) +
-  theme_linedraw()
+  theme_minimal()
 ```
 </details>
 
@@ -185,14 +182,13 @@ normalplot_3sigma <- ggplot() +
     breaks = seq(from = -3, to = 3, by = 1),
     labels = c("μ - 3σ", "μ - 2σ", "μ - 1σ", "μ", "μ + 1σ", "μ + 2σ", "μ + 3σ")
   ) +
-  scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
   labs(
     title = "The Normal Distribution",
     x = "x",
     y = "f(x)",
     caption = sprintf("More precisely, the area is %g.", pnorm(3) - pnorm(-3))
   ) +
-  theme_linedraw()
+  theme_minimal()
 ```
 </details>
 
@@ -221,14 +217,13 @@ normalplot_2curves <- ggplot() +
     limits = c(-6, 6),
     breaks = NULL
   ) +
-  scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
   scale_color_manual(values = c("σ1" = "blue", "σ2 = 2σ1" = "orange")) +
   labs(
     title = "Two Normal Distributions",
     x = "x",
     y = "f(x)"
   ) +
-  theme_linedraw()
+  theme_minimal()
 ```
 </details>
 
@@ -266,13 +261,12 @@ ggplot() +
     breaks = seq(from = LB, to = UB, by = sigma),
     labels = number_format(accuracy = decimals)
   ) +
-  scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
   labs(
     title = sprintf("X ~ N(%g, %g)", mu, sigma^2),
     x = "x",
     y = "f(x)"
   ) +
-  theme_linedraw()
+  theme_minimal()
 ```
 
 #### Shading an Area---Between
@@ -318,13 +312,12 @@ ggplot() +
     breaks = seq(from = LB, to = UB, by = sigma),
     labels = number_format(accuracy = decimals)
   ) +
-  scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
   labs(
     title = sprintf("X ~ N(%g, %g)", mu, sigma^2),
     x = "x",
     y = "f(x)"
   ) +
-  theme_linedraw()
+  theme_minimal()
 ```
 
 #### Shading an Area---Outside
@@ -375,13 +368,12 @@ ggplot() +
     breaks = seq(from = LB, to = UB, by = sigma),
     labels = number_format(accuracy = decimals)
   ) +
-  scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
   labs(
     title = sprintf("X ~ N(%g, %g)", mu, sigma^2),
     x = "x",
     y = "f(x)"
   ) +
-  theme_linedraw()
+  theme_minimal()
 ```
 
 ***
