@@ -3,33 +3,34 @@ title: "Sampling Distributions: Introduction to the Concept"
 subtitle: "Companion `R` Code for JB Statistics Video Lesson"
 author: "Created by Jill E. Thomley"
 date: '`r format(Sys.time(), "%A, %B %d, %Y @ %I:%M %p")`'
-output: 
-  html_document: 
+output:
+  html_document:
     theme: yeti
     highlight: textmate
     toc: true
     toc_depth: 4
-    self_contained: false
 ---
 
 ```{r globaloptions, include = FALSE}
-knitr::opts_chunk$set(message = FALSE, warning = FALSE, comment = NA)
+knitr::opts_chunk$set(
+  message = FALSE,
+  warning = FALSE,
+  comment = NA
+)
 ```
 
-***
-<iframe width="560" height="315" src="https://www.youtube.com/embed/Zbw-YvELsaM" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+&#9654; [GO TO VIDEO](https://youtu.be/Zbw-YvELsaM)
+
 ***
 
 ### Packages Used
 
-<details>
 ```{r loadpackages}
 library(tidyverse)
 library(knitr)
 library(kableExtra)
 library(combinat) # required for combn() function
 ```
-</details>
 
 ### University Class Population
 
@@ -108,20 +109,20 @@ ggplot(NULL, aes(x = sim_means)) +
   geom_histogram(
     bins = 15,
     color = "white",
-    fill = "lightblue"
+    fill = "skyblue"
   ) +
   geom_vline(
     xintercept = mu,
     color = "orange",
     linetype = "dashed",
-    size = 1
+    size = 1.5
   ) +
   labs(
     title = "Means of Simulated Samples of n = 3 from the Population of Class Ages",
     subtitle = "the dashed orange line represents the population mean",
     x = "Mean Age in Months"
   ) +
-  theme_linedraw()
+  theme_minimal()
 ```
 
 ```{r simstats}
@@ -163,15 +164,14 @@ ggplot(NULL, aes(x = all_means)) +
     xintercept = mu,
     color = "orange",
     linetype = "dashed",
-    size = 1
+    size = 1.5
   ) +
-  scale_y_continuous(NULL, expand = c(0, 0)) +
   labs(
     title = "Means of All Possible Samples of n = 3 from the Population of Class Ages",
     subtitle = "the dashed orange line represents the population mean",
     x = "Mean Age in Months"
   ) +
-  theme_linedraw()
+  theme_minimal()
 ```
 
 Notice that the average of all possible sample means is exactly the the same as the population mean.
@@ -226,14 +226,14 @@ ggplot(NULL, aes(x = sim_means)) +
     xintercept = mu,
     color = "orange",
     linetype = "dashed",
-    size = 1
+    size = 1.5
   ) +
   labs(
     title = "Means of Simulated Samples of n = 3 from the Population of Class Ages",
     subtitle = "the dashed orange line represents the population mean",
     x = "Mean Age in Months"
   ) +
-  theme_linedraw()
+  theme_minimal()
 ```
 
 We can use `summarize()` if we make our simulation output a `tibble` first.
