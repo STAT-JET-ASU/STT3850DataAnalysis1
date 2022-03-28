@@ -9,32 +9,32 @@ output:
     highlight: textmate
     toc: true
     toc_depth: 4
-    self_contained: false
 ---
 
 ```{r globaloptions, include = FALSE}
-knitr::opts_chunk$set(message = FALSE, warning = FALSE, comment = NA)
+knitr::opts_chunk$set(
+  message = FALSE,
+  warning = FALSE,
+  comment = NA
+)
 ```
 
-***
-<iframe width="560" height="315" src="https://www.youtube.com/embed/q50GpTdFYyI" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+&#9654; [GO TO VIDEO](https://youtu.be/q50GpTdFYyI)
+
 ***
 
 #### Packages Used
 
-<details>
 ```{r loadpackages}
 library(tidyverse)
 library(knitr)
 library(kableExtra)
 library(gridExtra)
 ```
-</details>
 
 #### The Sampling Distribution of $\bar{X}$
 
 Let $\mu$ be the mean and $\sigma$ be the standard deviation of a population. Let the random variable $\bar{X}$ represent the sample mean of $n$ independently drawn observations (i.e., a random sample of size $n$). The mean, variance, and standard deviation of the variable $\bar{X}$ ("x-bar") are given by the following expressions:
-
 
 $$E(\bar{x}) = \mu_{\bar{x}} = \mu$$
 
