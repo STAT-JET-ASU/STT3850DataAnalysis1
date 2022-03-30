@@ -1,0 +1,221 @@
+---
+title: "MDCH07: Virtual Bowl Sampling Activity"
+subtitle: "Student Worksheet"
+author: "YOUR NAME HERE"
+date: '`r format(Sys.time(), "%A, %B %d, %Y @ %I:%M %p")`'
+output: 
+  html_document: 
+    theme: yeti
+    highlight: textmate
+---
+
+```{r globaloptions, include = FALSE}
+knitr::opts_chunk$set(
+  message = FALSE,
+  warning = FALSE,
+  comment = NA
+)
+```
+***
+
+### Packages
+
+```{r loadpackages}
+library(tidyverse)
+library(moderndive)
+library(gridExtra)
+```
+
+
+### Our Population: The "Bowl"
+
+What proportion of the balls are red? We could count all of them (take a *census*), but that would be a long process.
+
+```{r echo = FALSE, fig.align = "center", fig.cap = "MD Figure 7.1: A bowl filled with red and white balls.", out.width='600'}
+knitr::include_graphics("https://d33wubrfki0l68.cloudfront.net/0868c64eb2998fbe3e3bfccf7ff55e746341baf3/eeab1/images/sampling/balls/sampling_bowl_1.jpg")
+```
+
+
+### Our Sample: The "Shovel"
+
+Instead of counting the entire population (*census*), we can select a random sample to use as an estimate.
+
+```{r echo = FALSE, fig.align = "center", fig.cap = "MD Figure 7.3: Removing 50 balls from the bowl.", out.width = '600'}
+knitr::include_graphics("https://d33wubrfki0l68.cloudfront.net/ee8292df457bd73d7a1a7d75c21be32d6e8659d6/30e62/images/sampling/balls/sampling_bowl_3_cropped.jpg")
+```
+
+
+### Random Sampling
+
+Assuming there are more than 50 red balls and 50 white balls, when we take a random sample of 50 balls from the bowl we *could* get anywhere from 0 to 50 red balls (or a proportion of 0.00 = 0% to 1.00 = 100%). In other words, all proportions are *possible*. But are they all equally *probable*? Why or why not?
+
+**ANSWER:**
+
+
+### Virtual Sampling
+
+We cannot physically replicate this experiment, but we can do so virtually. The `moderndive` package contains a virtual object `bowl` that represents the physical object. Scoop one `virtual_shovel` of balls by running the following code.
+
+```{r}
+virtual_shovel <- bowl %>% 
+  rep_sample_n(size = 50, reps = 1)
+```
+
+The `rep_sample_n()` function is in package the `moderndive`.
+
+    rep_sample_n(tbl, size, replace = FALSE, reps = 1, prob = NULL)
+    
+Defaults are sampling *without* replacement, equal probability of being selected, and one repetition of the chosen size.
+
+
+### Proportion of Red Balls
+
+The proportion of red balls in your sample is an *estimate* of the proportion of red balls in the `bowl`. 
+
+```{r}
+virtual_shovel %>% 
+  mutate(is_red = color == "red") %>% 
+  summarize(num_red  = sum(is_red),
+            prop_red = mean(is_red))
+
+ggplot(virtual_shovel, aes(x = color)) +
+  geom_bar(color = "black", fill = "skyblue")
+```
+
+Note that the code is slightly different than the code found in Modern Dive, Chapter 7. This code is algebraically equivalent, but automatically works for sample sizes other than 50.  
+
+What if we wanted to calculate the count and proportion of white balls in the sample? How would you adapt the code?
+
+```{r}
+# code it here!
+```
+
+
+### Taking Multiple Samples
+
+In the physical scenario described in Modern Dive, there were 33 students in the class, each of whom drew one sample from the physical `bowl`. Their results are shown below. 
+
+```{r}
+class_plot <- ggplot(tactile_prop_red, aes(x = prop_red)) +
+  geom_histogram(binwidth = 0.05, boundary = 0.5, color = "white", fill = "skyblue") +
+  scale_x_continuous(breaks = seq(from = 0, to = 1, by = 0.10),
+                     limits = c(0, 1)) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
+  labs(title = "Distribution of 33 Sample Proportions of Red Balls",
+       subtitle = "tactile sampling",
+       x = "Proportion of Balls That Were Red (sample size n = 50)", 
+       y = "Frequency") +
+  theme_linedraw()
+class_plot
+```
+
+
+### True Proportion of Red
+
+What seems like the most probable value for $p$ = proportion of red balls in the `bowl`, based on the plot of 33 samples? Why?
+
+**ANSWER:**
+
+(We *could* calculate it directly, but in most real-life scenarios we cannot. Exploring cases where the solution is known is how we develop reliable methods for unknown cases.)
+
+
+### Virtually Replicate the 33 Samples
+
+Thanks to the power of computers, you can replicate the class sampling process. Set the `reps` to 33 so you get one sample of size 50 for each virtual student. 
+
+```{r}
+# code it here!
+```
+
+Calculate the count and proportion of red balls in each sample (`replicate`) and store it as an object called `virtual_prop_red`. Print out the results. *Hint: You will need to use `group_by()` to get separate proportions for each sample (`replicate`).
+
+```{r}
+# code it here!
+```
+
+
+### Tactile vs. Virtual Results #1
+
+Tactile results will always be the same. Virtual results will differ unless we `set.seed()` to control our pseudo-random stream. Run the code below to compare your virtual results to the tactile result.
+
+```{r}
+sim_plot <- ggplot(virtual_prop_red, aes(x = prop_red)) +
+  geom_histogram(binwidth = 0.05, 
+                 boundary = 0.5, 
+                 color = "white", 
+                 fill = "skyblue") +
+  scale_x_continuous(breaks = seq(from = 0, to = 1, by = 0.10),
+                     limits = c(0, 1)) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
+  labs(title = "Distribution of 33 Sample Proportions of Red Balls",
+       subtitle = "virtual sampling",
+       x = "Proportion of Balls That Were Red (sample size n = 50)", 
+       y = "Frequency") +
+  theme_linedraw()
+
+grid.arrange(class_plot, sim_plot)
+```
+
+
+### Sampling Distribution
+
+We need to understand the *sampling distribution* of the statistic we are using to estimate a population value. What is the shape, center, and spread (variability)?
+
+Usually we characterize center and spread using mean and SD. Calculate those summary values for the simulated proportions stored in `virtual_prop_red`
+
+```{r}
+# code it here!
+```
+
+Can you tell the shape from the plot?
+
+**ANSWER:**
+
+
+### Taking More Samples!
+
+Our 33 random samples are not very many if we are trying to understand the true variability that can occur from sample to sample. Let's take more samples!
+
+Adapt the code to take 1000 samples of size 50. Summarize the count and proportion of red balls in each sample and save it as the object `virtual_prop_red_1000`. 
+
+```{r}
+
+```
+
+Compute the mean and standard deviation of the sample proportions in `virtual_prop_red_1000`.
+
+```{r}
+
+```
+
+
+### Virtual Results #2
+
+What shape does your distribution of virtual samples appear to have (approximately)? Run the code below.
+
+```{r}
+ggplot(virtual_prop_red_1000, aes(x = prop_red)) +
+  geom_histogram(binwidth = 0.05, 
+                 boundary = 0.5, 
+                 color = "white", 
+                 fill = "skyblue") +
+  scale_x_continuous(breaks = seq(from = 0, to = 1, by = 0.10),
+                     limits = c(0, 1)) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.05))) +
+  labs(title = "Distribution of 1000 Sample Proportions of Red Balls",
+       subtitle = "virtual sampling",
+       x = "Proportion of Balls That Were Red (sample size n = 50)", 
+       y = "Frequency") +
+  theme_linedraw()
+```
+
+
+### Taking *Larger* Samples
+
+What happens if you take samples of sizes smaller or larger than 50? Try it!!!
+
+
+***
+```{r}
+sessionInfo()
+```
