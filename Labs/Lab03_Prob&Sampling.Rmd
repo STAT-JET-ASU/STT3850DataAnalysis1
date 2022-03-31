@@ -1,0 +1,294 @@
+---
+title: "Lab 03: Are you Psychic?" 
+subtitle: "Probability & Sampling"
+author: "YOUR NAME HERE"
+date: 'Last rendered on `r format(Sys.time(), "%A, %B %d, %Y @ %I:%M %p")`'
+output: 
+  html_document: 
+    theme: yeti
+    highlight: textmate
+    code_folding: hide
+---
+
+```{r globaloptions, include = FALSE}
+knitr::opts_chunk$set(
+  message = FALSE,
+  warning = FALSE,
+  comment = NA
+)
+```
+***
+
+Collaborators: *add the names of anyone you worked with here*
+
+## Packages Used
+
+```{r packages}
+
+```
+
+## Zener Card Test
+
+Psychologists Karl Zener (1903-1964) and J.B. Rhine (1895-1980), who worked at Duke University's Parapsychology Laboratory in the early and mid-20th century, designed a deck of cards to use in ESP research.
+
+```{r, echo = FALSE, fig.align="center"}
+knitr::include_graphics("https://stat-jet-asu.github.io/Moodlepics/zenercards.jpg")
+```
+
+The classic Zener card deck has twenty five cards, five of each symbol: a circle, a plus sign, three vertical wavy lines, a square, and a five-pointed star. In a test for ESP, the experimenter draws a card from a shuffled deck and asks the person being tested to identify which of the five symbols is on the card---without showing them the card, of course. 
+
+### Take a Test!
+
+Go to the [Advanced ESP Test](https://psychicscience.org/esp3) and take the test four times. Use the following settings.
+
+* Clairvoyance
+* Open deck
+* Cards seen
+* 25 cards
+
+Record your results below.
+
+```{r}
+Result1 <- 0
+Result2 <- 0
+Result3 <- 0
+Result4 <- 0
+
+Result50 <- Result1 + Result2
+  
+Result100 <- Result1 + Result2 + Result3 + Result4
+```
+
+### Model
+
+Scientifically, since the test is designed to assess psychic ability, we would use a non-psychic person's performance on the test as a basis of comparison. If the experimenter is drawing cards *with replacement* (i.e., putting the card back and shuffling between trials), then we can use a binomial distribution to model these probabilities.
+
+Let X = total number of cards correctly identified on the 25-card test
+
+#### Parameters
+
+Input the parameters $n$ and $p$ for the binomial model.
+
+```{r}
+n <- 0 
+p <- 0
+```
+
+#### E(X) and SD(X)
+
+Calculate the expected value and standard deviation.
+
+```{r}
+
+```
+
+
+#### Distribution Table
+
+Calculate a "table" of the pmf and CDF for this model.
+
+```{r}
+
+```
+
+#### Barplot of the pmf
+
+Create a barplot for the probability mass function (pmf).
+
+```{r}
+
+```
+
+#### Barplot of the CDF
+
+Create a barplot for the cumulative distribution function (CDF).
+
+```{r}
+
+```
+
+## "Significance"
+
+According to the test, if you get “significantly” more cards correct than the value we would expect from random chance (guessing), this indicates *psi-hitting* (ESP). In other words, getting a large number of cards correct provides statistical evidence of ESP. You can calculate probabilities for your results. Alternatively, some similar tests set a threshold or "cutoff" for significance, based on logical criteria for "unusual" results, such as being more than a certain number of standard deviations from the mean.
+
+```{r}
+
+```
+
+### Probability Value
+
+#### Test with 25 Cards
+
+Calculate the probability of getting your Result1 *or more* on a test with 25 cards.
+
+```{r}
+
+```
+
+#### Test with 50 Cards
+
+Calculate the probability of getting your Result50 *or more* on a test with 50 cards.
+
+```{r}
+
+```
+
+#### Test with 100 Cards
+
+Calculate the probability of getting your Result100 *or more* on a test with 100 cards.
+
+```{r}
+
+```
+
+### Cutoff #1: Mean + 2SD
+
+#### Test with 25 Cards
+
+Calculate the statistical threshold/cutoff value of mean + 2SD for a test with 25 cards.
+
+```{r}
+
+```
+
+#### Test with 50 Cards
+
+Calculate the statistical threshold/cutoff value of mean + 2SD for a test with 50 cards.
+
+```{r}
+
+```
+
+#### Test with 100 Cards
+
+Calculate the statistical threshold/cutoff value of mean + 2SD for a test with 100 cards.
+
+```{r}
+
+```
+
+### Cutoff #2: Most Unusual 5%
+
+```{r}
+
+```
+
+#### Test with 25 Cards
+
+Calculate the value that cuts off the top 5% of the distribution for a test with 25 cards.
+
+```{r}
+
+```
+
+#### Test with 50 Cards
+
+Calculate the value that cuts off the top 5% of the distribution for a test with 50 cards.
+
+```{r}
+
+```
+
+#### Test with 100 Cards
+
+Calculate the value that cuts off the top 5% of the distribution for a test with 100 cards.
+
+```{r}
+
+```
+
+## Normal Model
+
+The online test uses a common normal approximation for the binomial distribution. The number correct on the test is converted to a z-score and then the probability is calculated using the standard normal curve rather than the binomial distribution. Whether a normal distribution is a good approximation for a binomial distribution typically depends on the value of $n$ and $p$, because some combinations of parameters produce distributions that are decidedly skewed.
+
+To calculate the z-score...
+
+$$z = \frac{score - E(X)}{SD(X)}$$
+
+Note: Normal approximations were derived in a time before we had computers to calculate exact binomial probabilities for larger values of $n$. They are still widely used in many disciplines and statistical programs. 
+
+### Probability Value
+
+#### Test with 25 Cards
+
+Using the normal approximation, calculate the probability of getting your Result1 *or more* on a test with 25 cards.
+
+```{r}
+
+```
+
+#### Test with 50 Cards
+
+Using the normal approximation, calculate the probability of getting your Result50 *or more* on a test with 50 cards.
+
+```{r}
+
+```
+
+#### Test with 100 Cards
+
+Using the normal approximation, calculate the probability of getting your Result100 *or more* on a test with 100 cards.
+
+```{r}
+
+```
+
+### Test Simulation
+
+We can randomly sample values from a binomial distribution to simulate a larger number of test results than we can generate manually. The larger the number of simulated values, the closer the data will approximate the theoretical models. `R` does not perform simulations quite as fast as some other languages, but it is quick enough for our exploratory purposes. You will use it here to assess the validity of the normal approximation to the binomial.
+
+#### Test with 25 Cards
+
+Simulate results for 1000 tests with 25 cards and store the results as a tibble. Assess your simulated data for normality using a density plot (set `bw = 1`), cumulative distribution plot, normal QQ plot, skewness, and kurtosis.
+
+```{r}
+
+```
+
+#### Test with 50 Cards
+
+Simulate results for 1000 tests with 50 cards and store the results as a tibble. Assess your simulated data for normality using a density plot (set `bw = 1`), cumulative distribution plot, normal QQ plot, skewness, and kurtosis.
+
+```{r}
+
+```
+
+#### Test with 100 Cards
+
+Simulate results for 1000 tests with 100 cards and store the results as a tibble. Assess your simulated data for normality using a density plot (set `bw = 1`), cumulative distribution plot, normal QQ plot, skewness, and kurtosis.
+
+```{r}
+
+```
+
+<hr>
+
+## Questions
+
+Your answers should reference specific tables, plots, and/or quantitative values to support your statements. Avoid vague phrases like "the numbers show". Use appropriate statistical vocabulary.
+
+1) Is there any "significant" statistical evidence that you possess psychic ability/ESP (i.e., that your test results reflect more than guessing)? Discuss your various assessments of your test results.
+
+ANSWER: *erase this and type your answer here*
+
+2) Based on the probabilities you calculated for your test results and the evidence from the various normal assessments, is the normal approximation appropriate for all three test sizes? Discuss.
+
+ANSWER: *erase this and type your answer here*
+
+3) The test website states the following: "You can choose various options for the number of trials in the test (up to a maximum of 1000 individual trials). You should choose at least 50 trials to obtain a reliable indication of your performance." Looking at this from a probability and sampling point of view, why do they make this assertion?
+
+ANSWER: *erase this and type your answer here*
+
+## Reference Materials
+
+* [Bernoulli & Binomial Distributions: The Math](https://stat-jet-asu.github.io/Slides/STT3850/BinomialDistributionTheory.html#1)
+* [Bernoulli & Binomial Distributions: `R` Code](https://stat-jet-asu.github.io/Slides/STT3850/BinomialDistributionRCode.html#1)
+* [Normal Distribution: The Math](https://stat-jet-asu.github.io/Slides/STT3850/BinomialDistributionTheory.html#1)
+* [Normal Distribution: `R` Code](https://stat-jet-asu.github.io/Slides/STT3850/BinomialDistributionRCode.html#1)
+* [Normal Distribution: Assessing](https://stat-jet-asu.github.io/Slides/STT3850/NormalAssessment.html#1)
+
+
+***
+```{r}
+sessionInfo()
+```
