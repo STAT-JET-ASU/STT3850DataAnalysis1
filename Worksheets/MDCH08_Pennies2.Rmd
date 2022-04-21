@@ -1,0 +1,310 @@
+---
+title: "MDCH08: Resampling Pennies & Yawning"
+subtitle: "Student Worksheet"
+author: "YOUR NAME HERE"
+date: '`r format(Sys.time(), "%A, %B %d, %Y @ %I:%M %p")`'
+output: 
+  html_document: 
+    theme: yeti
+    highlight: textmate
+    toc: TRUE
+    toc_depth: 5
+---
+
+```{r globaloptions, include = FALSE}
+knitr::opts_chunk$set(message = FALSE, warning = FALSE, comment = NA)
+```
+***
+
+### Packages
+
+```{r loadpackages}
+library(tidyverse)
+library(moderndive)
+library(infer)
+```
+
+### Sample of Pennies Circulating in 2019
+
+Imagine all the pennies being used in the United States in 2019. What if we're interested in the the average year in which all the pennies were minted? We would *have to* sample...
+
+```{r echo=FALSE, fig.align="center", fig.cap="MD Figure 8.2: 50 US pennies labelled (pennies_sample).", out.width='600'}
+knitr::include_graphics("https://d33wubrfki0l68.cloudfront.net/fe3d13cf8652057fd5ea97fc4d7db1f00b2b1f34/62975/images/sampling/pennies/deliverable/3.jpg")
+```
+
+#### EDA on the `pennies_sample`
+
+What is the shape, center, and spread (variability) of the sample?
+
+* Create a histogram and QQ plot to assess shape
+* Create a boxplot to detect the presence of outliers
+* Compute the sample mean and standard deviation
+* Also, tabulate the frequency (count) of different years 
+
+##### Structure
+
+```{r}
+glimpse(pennies_sample)
+head(pennies_sample)
+```
+
+##### Histogram
+
+```{r}
+ggplot(pennies_sample, aes(x = year)) +
+  geom_histogram(bins = 8, color = "white", fill = "orange") +
+  labs(title = "Distribution of Mint Years in a Sample of 50 Pennies", 
+       x = "mint year")
+```
+
+##### Boxplot
+
+```{r}
+ggplot(pennies_sample, aes(x = year)) +
+  geom_boxplot() +
+  labs(title = "Distribution of Mint Years in a Sample of 50 Pennies", x = "mint year")
+```
+
+##### QQ Plot
+
+```{r}
+ggplot(pennies_sample, aes(sample = year)) +
+  geom_qq() +
+  geom_qq_line(color = "orange")  +
+  labs(title = "Distribution of Mint Years in a Sample of 50 Pennies",
+       x = "standard normal percentiles",
+       y = "data percentiles")
+```
+
+##### Mean and SD
+
+```{r}
+pennies_sample %>% 
+  summarize(xbar = mean(year),
+            s = sd(year))
+```
+
+#### Some Questions...
+
+Q1: Did we sample with or without replacement here?
+
+**ANSWER:** We sampled without replacement. By choosing a whole roll of pennies at once, no penny can be chosen twice (or more). We did not sample a penny, put it back, and sample again (with replacement). So, *tehcnically*, our pennies are not independent.
+
+Q2: What is your best guess about the population size $N$?
+
+**ANSWER:** It's about 130 billion, so our sample is a very small fraction of that. What this means is that taking one penny out of the population has a mininscule impact on the probability of any other penny getting chosen -- 1/130 billion is about 0.So that means, we can treat this sample like one that was sampled with replacement, i.e., iid. You often see an assumption that a sample is less than 10% of a population. This is why.
+
+Q3: Is it reasonable to assume the pennies are independent?
+
+**ANSWER:** We can't prove this, but there probably isn't a lot of reason to think they depend on one another since they were in a bank roller.
+
+We can't prove this, so we just have to kind of logic it out.
+
+Q4: Do you think this sample is representative of pennies in 2019?
+
+**ANSWER:** If we're going to extrapolate to the population, then this sample needs to be *representative*. But what does representative mean? Whatver characteristic or characteristics I'm interested in, the distribution in the sample is similar to the distribution in the pop.
+
+So for this problem, where I'm looking at year, I'm saying the distribution of years in the sample is reasonably similar to the distribution in the population of all pennies.
+
+We can't prove this, so we just have to kind of logic it out.
+
+### Estimating Mean Mint Year with `infer`
+
+[Link to Case Study](https://moderndive.com/8-confidence-intervals.html#ci-build-up)
+
+#### Mean for the Original Sample
+
+Calculate the statistic (*point estimate*) of interest from the original sample.
+
+```{r}
+sample_mean <- pennies_sample %>%  # original sample we'll use to estimate
+  specify(response = year) %>%     # what variable is our measurement/response?
+  calculate(stat = "mean")         # statistic are we estimating from the response
+
+sample_mean
+```
+
+#### Generate Bootstrap Resamples
+
+Generate multiple resamples and calculate the same statistic as above. Notice the similarity in steps. 
+
+```{r}
+bootstrap_distribution <- pennies_sample %>%
+  specify(response = year) %>%                     
+  generate(reps = 1000, type = "bootstrap") %>% 
+  calculate(stat = "mean")  
+
+head(bootstrap_distribution)
+```
+
+What is the shape of the sampling distribution of the statistic?
+
+```{r}
+visualize(bootstrap_distribution, bins = 15) +
+  labs(title = "Sampling Distribution of Bootstrap Resampled Statistic",
+       x = "resampled statistic")  
+```
+
+Is the sampling distribution of the statistic approximately normal?
+
+```{r}
+ggplot(bootstrap_distribution, aes(sample = stat)) +
+  geom_qq() +
+  geom_qq_line() +
+  labs(title = "Sampling Distribution of Bootstrap Resampled Statistic",
+       x = "standard normal percentiles",
+       y = "data percentiles") 
+```
+
+#### Traditional Confidence Interval
+
+ASSUMPTIONS:
+
+* ???
+
+```{r}
+t_test(pennies_sample, response = year) %>% 
+  select(lower_ci, upper_ci)
+```
+
+#### Bootstrap Percentile Interval
+
+ASSUMPTIONS:
+
+* ???
+
+```{r}
+
+```
+
+#### Bootstrap SE Confidence Interval
+
+ASSUMPTIONS:
+
+* ???
+
+```{r}
+
+```
+
+
+### Estimating: Is yawning contagious?
+
+[Link to Case Study](https://moderndive.com/8-confidence-intervals.html#case-study-two-prop-ci) 
+
+### Exploratory Analysis
+
+```{r}
+mythbusters_yawn %>% 
+  group_by(group, yawn) %>% 
+  summarize(count = n())
+```
+
+```{r}
+ggplot(mythbusters_yawn, aes(x = group, fill = yawn)) +
+  geom_bar() +
+  labs(title = "Yawning vs. Not Yawning in the Control and Seed Groups")
+```
+
+```{r}
+mythbusters_yawn %>% 
+  group_by(group) %>% 
+  summarize(proportion = mean(yawn == "yes"))
+```
+
+```{r}
+mythbusters_yawn %>% 
+  group_by(group) %>% 
+  summarize(proportion = mean(yawn == "yes")) %>% 
+  summarize(difference = diff(proportion))
+```
+
+```{r}
+ggplot(mythbusters_yawn, aes(x = group, fill = yawn)) +
+  geom_bar(position = "fill") +
+  labs(title = "Yawning vs. Not Yawning in the Control and Seed Groups",
+       y = "proportion")
+```
+
+#### Proportions for the Original Sample
+
+Calculate the statistic (*point estimate*) of interest from the original sample.
+
+```{r}
+sample_diff_props <- mythbusters_yawn %>% 
+  specify(formula = yawn ~ group, success = "yes") %>% 
+  calculate(stat = "diff in props", order = c("seed", "control"))
+
+sample_diff_props
+```
+
+#### Generate Bootstrap Resamples
+
+Generate multiple resamples and calculate the same statistic as above. Notice the similarity in steps. 
+
+```{r}
+bootstrap_distribution <- mythbusters_yawn %>% 
+  specify(formula = yawn ~ group, success = "yes") %>% 
+  generate(reps = 1000, type = "bootstrap") %>% 
+  calculate(stat = "diff in props", order = c("seed", "control")) 
+
+head(bootstrap_distribution)
+```
+
+What is the shape of the sampling distribution of the statistic?
+
+```{r}
+visualize(bootstrap_distribution, bins = 15) +
+  labs(title = "Sampling Distribution of Bootstrap Resampled Statistic",
+       x = "resampled statistic")  
+```
+
+Is the sampling distribution of the statistic approximately normal?
+
+```{r}
+ggplot(bootstrap_distribution, aes(sample = stat)) +
+  geom_qq() +
+  geom_qq_line() +
+  labs(title = "Sampling Distribution of Bootstrap Resampled Statistic",
+       x = "standard normal percentiles",
+       y = "data percentiles") 
+```
+
+#### Traditional Confidence Interval
+
+ASSUMPTIONS:
+
+* ???
+
+```{r}
+prop_test(mythbusters_yawn, formula = yawn ~ group, success = "yes") %>% 
+  select(lower_ci, upper_ci)
+```
+
+#### Bootstrap Percentile Interval
+
+ASSUMPTIONS:
+
+* ???
+
+```{r}
+
+```
+
+#### Bootstrap SE Confidence Interval
+
+ASSUMPTIONS:
+
+* ???
+
+```{r}
+
+```
+
+
+
+
+***
+```{r}
+sessionInfo()
+```
