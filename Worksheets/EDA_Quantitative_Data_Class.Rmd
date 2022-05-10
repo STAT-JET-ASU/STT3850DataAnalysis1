@@ -1,0 +1,320 @@
+---
+title: "EDA ⯈ Numerical Data Worksheet"
+author: "YOUR NAME HERE"
+date: 'Last rendered on `r format(Sys.time(), "%A, %B %d, %Y @ %I:%M %p")`'
+output: 
+  html_document: 
+    theme: yeti
+    highlight: textmate
+---
+
+```{r globaloptions, include = FALSE}
+knitr::opts_chunk$set(
+  message = FALSE,
+  warning = FALSE,
+  comment = NA
+)
+```
+***
+
+## Packages Used
+
+```{r packages}
+library(tidyverse)
+library(resampledata) # needed for wells dataset
+```
+
+## DataSets Used
+
+### Mileage Data
+
+```{r datasets}
+mileage <- read_csv("https://raw.githubusercontent.com/STAT-JET-ASU/Datasets/master/Instructor/gasmileage.csv")
+glimpse(mileage)
+```
+
+### Geyser Data
+
+This dataset contains information about students in Dr. Thomley’s past STT3850 classes.
+
+```{r}
+geyser <- read_csv("https://raw.githubusercontent.com/STAT-JET-ASU/Datasets/master/Instructor/oldfaithful.csv")
+glimpse(geyser)
+```
+
+### Wells Data
+
+```{r}
+wells <- Bangladesh
+glimpse(wells)
+```
+
+### Happy Face Data
+
+```{r}
+happyf <- read_csv("https://raw.githubusercontent.com/STAT-JET-ASU/Datasets/master/Instructor/happyface.csv")
+glimpse(happyf)
+```
+
+## Exploratory Data Analysis (EDA)
+
+### Mileage Data
+
+#### Plots
+
+Histogram and Frequency Polygon
+
+```{r}
+ggplot(mileage, aes(x = mpg)) +
+  geom_histogram(bins = 15, fill = "orange", color = "white") +
+  geom_freqpoly(bins = 15, color = "blue")
+```
+
+Density Plot
+
+```{r}
+ggplot(mileage, aes(x = mpg)) +
+  geom_density()
+```
+
+#### Summaries
+
+Using Base Code
+
+```{r}
+mean(mileage$mpg)
+sd(mileage$mpg)
+fivenum(mileage$mpg)
+quantile(mileage$mpg, probs = seq(from = 0.1, to = 0.9, by = 0.1))
+```
+
+Using `summarize()` 
+
+Since the data are symmetric, the mean and median are about the same value. Since the data Are roughly bell-shaped, the range is equal to about 6 standard deviations (mean +/- 3SD).
+
+```{r}
+mileage %>%
+  summarize(
+    n = n(),
+    xbar = mean(mpg),
+    s = sd(mpg),
+    xmin = min(mpg),
+    Q1 = quantile(mpg, 0.25),
+    med = median(mpg),
+    Q3 = quantile(mpg, 0.75),
+    xmax = max(mpg),
+    iqr = IQR(mpg),
+    rng = diff(range(mpg)),
+    total = sum(mpg)
+  )
+```
+
+We can use just the stats we need...
+
+```{r}
+mileage %>%
+  summarize(
+    n = n(),
+    xbar = mean(mpg),
+    s = sd(mpg)
+  )
+```
+
+What are the fences for the data?
+
+```{r}
+mileage %>%
+  summarize(
+    LF = quantile(mpg, 0.25) - 1.5 * IQR(mpg),
+    UF = quantile(mpg, 0.75) + 1.5 * IQR(mpg)
+  )
+```
+
+```{r}
+mpg_fences <- mileage %>%
+  summarize(LF = quantile(mpg, 0.25) - 1.5 * IQR(mpg),
+            UF = quantile(mpg, 0.75) + 1.5 * IQR(mpg))
+
+LF <- mpg_fences %>% 
+  pull(LF)
+
+UF <- mpg_fences %>% 
+  pull(UF)
+```
+
+```{r}
+ggplot(mileage, aes(x = mpg)) +
+  geom_boxplot()
+```
+
+What are the values of the outliers? They are the min and max from our descriptive stats.
+
+```{r}
+mileage %>% 
+  filter(mpg < LF | mpg > UF)
+```
+
+
+
+### Geyser Data
+
+#### Plots
+
+```{r}
+geyser <- geyser %>%
+  mutate(group = ifelse(erupt_time < 3.1, "short", "long"))
+
+ggplot(geyser, aes(x = erupt_time, fill = group)) +
+  geom_histogram(color = "white")
+```
+
+```{r}
+ggplot(geyser, aes(x = wait_time)) + 
+  geom_boxplot() +
+  scale_y_continuous(breaks = NULL) +
+  labs(title = "Wait time between Old Faithful eruptions",
+       x = "time in minutes",
+       y = NULL,
+       caption = "source: oldfaithful.csv dataset")
+```
+
+```{r}
+ggplot(geyser, aes(x = erupt_time, y = group)) + 
+  geom_boxplot() +
+  labs(title = "Wait time between Old Faithful eruptions",
+       x = "time in minutes",
+       y = NULL,
+       caption = "source: oldfaithful.csv dataset")
+```
+
+#### Summaries
+
+```{r}
+geyser %>% 
+  summarize(n     = n(),
+            xbar  = mean(erupt_time),
+            s     = sd(erupt_time),
+            xmin  = min(erupt_time),
+            Q1    = quantile(erupt_time, 0.25),
+            med   = median(erupt_time),                  
+            Q3    = quantile(erupt_time, 0.75),
+            xmax  = max(erupt_time),
+            iqr   = IQR(erupt_time),
+            rng   = diff(range(erupt_time)),
+            total = sum(erupt_time))
+```
+
+```{r}
+geyser %>% 
+  group_by(group) %>% 
+  summarize(n     = n(),
+            xbar  = mean(erupt_time),
+            s     = sd(erupt_time),
+            xmin  = min(erupt_time),
+            Q1    = quantile(erupt_time, 0.25),
+            med   = median(erupt_time),                  
+            Q3    = quantile(erupt_time, 0.75),
+            xmax  = max(erupt_time),
+            iqr   = IQR(erupt_time),
+            rng   = diff(range(erupt_time)),
+            total = sum(erupt_time))
+```
+
+
+### Wells Data
+
+#### Plots
+
+```{r}
+ggplot(wells, aes(x = Arsenic)) +
+  geom_histogram(aes(y = ..density..), bins = 25, fill = "orange") +
+  geom_density(color = "blue")
+```
+
+#### Summaries
+
+```{r}
+wells %>% 
+  summarize(n     = n(),
+            xbar  = mean(Arsenic),
+            s     = sd(Arsenic),
+            xmin  = min(Arsenic),
+            Q1    = quantile(Arsenic, 0.25),
+            med   = median(Arsenic),                  
+            Q3    = quantile(Arsenic, 0.75),
+            xmax  = max(Arsenic),
+            iqr   = IQR(Arsenic),
+            rng   = diff(range(Arsenic)),
+            total = sum(Arsenic))
+
+mean(wells$Arsenic, trim = 0.05)  # 5% trimmed mean
+```
+
+```{r}
+wells %>% 
+  summarize(n     = n(),
+            xmed  = median(Chlorine, na.rm = TRUE))
+
+wells %>% 
+  summarize(n     = n(),
+            iqr   = IQR(Chlorine, na.rm = TRUE))
+```
+
+```{r}
+ggplot(wells, aes(x = Arsenic)) + 
+  geom_boxplot() +
+  scale_y_continuous(breaks = NULL) +
+  labs(title = "Arsenic levels in 271 sampled wells in Bangladesh",
+       x = "parts per billion",
+       y = NULL,
+       caption = "source: Bangladesh.csv dataset")
+```
+
+```{r}
+arsenic_fences <- wells %>%
+  summarize(LF = quantile(Arsenic, 0.25) - 1.5 * IQR(Arsenic),
+            UF = quantile(Arsenic, 0.75) + 1.5 * IQR(Arsenic))
+arsenic_fences
+```
+
+```{r}
+LF <- arsenic_fences %>% 
+  pull(LF)
+
+UF <- arsenic_fences %>% 
+  pull(UF)
+
+wells %>% 
+  filter(Arsenic < LF | Arsenic > UF) %>% 
+  arrange(desc(Arsenic))
+```
+
+Remove outliers...filter for points that lie between the fences...greater than or = LF *and* less than or = UF.
+
+```{r}
+wells %>% 
+  filter(Arsenic >= LF & Arsenic <= UF)
+
+wells %>% 
+  filter(Arsenic >= LF, Arsenic <= UF)
+```
+
+
+### Happy Face Data
+
+#### Plots
+
+```{r}
+
+```
+
+#### Summaries
+
+```{r}
+
+```
+
+***
+```{r}
+sessionInfo()
+```

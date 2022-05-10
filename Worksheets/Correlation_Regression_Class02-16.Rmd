@@ -1,0 +1,176 @@
+---
+title: "Correlation & Regression"
+author: "Dr. Thomley"
+date: 'Last rendered on `r format(Sys.time(), "%A, %B %d, %Y @ %I:%M %p")`'
+output: 
+  html_document: 
+    theme: yeti
+    highlight: textmate
+---
+
+```{r globaloptions, include = FALSE}
+knitr::opts_chunk$set(
+  message = FALSE,
+  warning = FALSE,
+  comment = NA
+)
+```
+***
+
+## Packages Used
+
+```{r packages}
+library(tidyverse)
+library(moderndive)
+```
+
+## DataSets Used
+
+### Anscombe Data
+
+```{r}
+glimpse(anscombe)
+```
+
+### Anthropometric Data
+
+You can read about the dataset on its [description page](https://stat-jet-asu.github.io/Datasets/InstructorDescriptions/anthropometric.html).
+
+```{r datasets}
+anthro <- read_csv("https://raw.githubusercontent.com/STAT-JET-ASU/Datasets/master/Instructor/anthropometric.csv")
+glimpse(anthro)
+```
+
+```{r}
+set.seed(1)
+anthro_sample <- sample_n(anthro, 20)
+glimpse(anthro_sample)
+```
+
+### Monopoly Game Data
+
+You can read about the dataset on its [description page](https://stat-jet-asu.github.io/Datasets/InstructorDescriptions/monopoly.html)
+
+```{r}
+monopoly <- read_csv("https://raw.githubusercontent.com/STAT-JET-ASU/Datasets/master/Instructor/monopolygame.csv")
+glimpse(monopoly)
+```
+
+## Examples
+
+### Scatterplot of Ideal Height vs. Height
+
+```{r}
+ggplot(anthro, aes(x = height, y = ideal)) +
+  geom_point()
+```
+
+## Correlation for Ideal vs. Height
+
+```{r}
+anthro %>% 
+  summarize(r = cor(height, ideal, use = "pairwise.complete.obs"))
+```
+
+Is this strong? How large is "strong"? Depends on the discipline.
+
+For this class, we'll divide the values into thirds.
+
+* 0 to about .33 = low or weak (same for negative corrs)
+* about 0.33 to about 0.67 = moderate
+* about 0.67 to 1 = high or strong
+
+### Least Squares Line --- Visualization
+
+```{r}
+ggplot(anthro, aes(x = height, y = ideal)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) # lm is linear model
+```
+
+```{r}
+lm(ideal ~ height, data = anthro) # y ~ x
+```
+
+```{r}
+square_model <- lm(armspan ~ height, data = anthro_sample)
+summary(square_model)
+```
+
+
+### Scatterplot of Cost by Spaces from Go for Monopoly
+
+```{r}
+ggplot(monopoly, aes(x = spaces, y = cost, color = type, shape = type)) +
+  geom_point(size = 4) +
+  labs(title = "Purchase Prices of Properties in the Game of Monopoly",
+       x = "Spaces from Go", 
+       y = "Purchase Price",
+       color = "Property Type",    # sets the legend title for the color
+       shape = "Property Type") +  # sets the legend title for the shape
+  scale_color_brewer(palette = "Dark2")
+```
+
+```{r}
+ggplot(monopoly, aes(x = spaces, y = cost, color = type, shape = type)) +
+  geom_point(size = 4) +
+  labs(title = "Purchase Prices of Properties in the Game of Monopoly",
+       x = "Spaces from Go", 
+       y = "Purchase Price",
+       color = "Property Type",    # sets the legend title for the color
+       shape = "Property Type") +  # sets the legend title for the shape
+  scale_color_brewer(palette = "Dark2") +
+  geom_smooth(method = "lm", se = FALSE)
+```
+
+### Correlation for All Properties
+
+```{r}
+monopoly %>% 
+  summarize(r = cor(spaces, cost))
+```
+
+### Correlation by Property Type
+
+```{r}
+monopoly %>% 
+  group_by(type) %>% 
+  summarize(r = cor(spaces, cost))
+```
+
+The correlation for streets alone is larger than for all properties together. Why? Railroads and utilities are outliers with regard to the pattern established by spaces and streets --- spaces has no relationship with railroad and utility proces.
+
+```{r}
+lm(cost ~ spaces, data = monopoly)
+```
+
+
+
+### Anscombe Data
+
+Covariance is approximately 5.5 for each pair.
+
+```{r}
+anscombe %>% 
+  summarize(cov1 = cov(x1, y1),
+            cov2 = cov(x2, y2),
+            cov3 = cov(x3, y3),
+            cov4 = cov(x4, y4))
+```
+
+Correlation is approximately 0.816 for all pairs.
+
+```{r}
+anscombe %>% 
+  summarize(r1 = cor(x1, y1),
+            r2 = cor(x2, y2),
+            r3 = cor(x3, y3),
+            r4 = cor(x4, y4))
+```
+
+If we relied on only the calculations, we'd say the strength of the *linear* relationshps are the same. BUT...
+
+***
+```{r}
+sessionInfo()
+```

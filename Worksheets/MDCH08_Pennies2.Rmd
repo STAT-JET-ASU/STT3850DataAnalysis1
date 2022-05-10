@@ -1,310 +1,219 @@
 ---
-title: "MDCH08: Resampling Pennies & Yawning"
-subtitle: "Student Worksheet"
-author: "YOUR NAME HERE"
+title: "Project 2B: A Midsummer Light's Dream"
+author: "Maya Renter"
 date: '`r format(Sys.time(), "%A, %B %d, %Y @ %I:%M %p")`'
 output: 
   html_document: 
-    theme: yeti
+    theme: cosmo
     highlight: textmate
-    toc: TRUE
-    toc_depth: 5
 ---
 
 ```{r globaloptions, include = FALSE}
-knitr::opts_chunk$set(message = FALSE, warning = FALSE, comment = NA)
+knitr::opts_chunk$set(
+  message = FALSE,
+  warning = FALSE,
+  comment = NA
+)
 ```
 ***
 
-### Packages
+**Note:** Use tidyverse functions whenever possible for manipulating/summarizing data and for plotting. Except for plots used specifically to assess normality, all plots should have appropriate titles and axis labels. If you have a partial code attempt that prevents your Markdown from compiling to HTML, comment out the code so `R` will not try to compile it but I can still see your efforts. 
+
+**Names of Collaborators**
+
+Names: Breanna Jones
+
+### Setup
+
+#### Packages Used
+
+Load all packages used in this project.
 
 ```{r loadpackages}
 library(tidyverse)
-library(moderndive)
 library(infer)
+library(HistData)
+Michelson
 ```
 
-### Sample of Pennies Circulating in 2019
+### Analysis
 
-Imagine all the pennies being used in the United States in 2019. What if we're interested in the the average year in which all the pennies were minted? We would *have to* sample...
+#### Background
 
-```{r echo=FALSE, fig.align="center", fig.cap="MD Figure 8.2: 50 US pennies labelled (pennies_sample).", out.width='600'}
-knitr::include_graphics("https://d33wubrfki0l68.cloudfront.net/fe3d13cf8652057fd5ea97fc4d7db1f00b2b1f34/62975/images/sampling/pennies/deliverable/3.jpg")
-```
+Albert Michelson (1852–1931) was an American physicist known for his work on measuring the speed of light. He was the first American to win the Nobel Prize for science (1907). The `Michelson` dataset from the HistData package contains experimental measurements of the velocity of light in air, which Michelson gathered from June 5 to July 2, 1879 and reported in [Michelson (1882)](https://www.gutenberg.org/files/11753/11753-h/11753-h.htm). The reported data values plus 299,000 are Michelson's actual experimental measurements in km/sec---he subtracted 299,000 to make his subsequent calculations easier to do by hand. To compensate for refraction due to air temperature when he estimated the speed of light in air, Michelson added 12 km/sec to the data. When further estimating for the speed of light in a vacuum, he added an additional refraction correction of 80 km/sec. Variability in the data observations is assumed to be caused by the experimental equipment and method, so the mean of the measurements is used to estimate the velocity.
 
-#### EDA on the `pennies_sample`
+Currently accepted values for the velocity of light are 299,792.458 km/sec in a vacuum and 299,702.547 km/sec in air. The ratio of these two values is 1.0003, or three ten-thousandths of the velocity of light in a vacuum.
 
-What is the shape, center, and spread (variability) of the sample?
+Reportedly, when asked why he chose to study light, Michelson once said, "because it’s so much fun."
 
-* Create a histogram and QQ plot to assess shape
-* Create a boxplot to detect the presence of outliers
-* Compute the sample mean and standard deviation
-* Also, tabulate the frequency (count) of different years 
+You will estimate the velocity of light from Michelson's experimental data, using interval estimates not yet developed in his time.
 
-##### Structure
+#### **Modify the Dataset**
+
+Use `glimpse()` to visualize the dataset.
 
 ```{r}
-glimpse(pennies_sample)
-head(pennies_sample)
+glimpse(Michelson)
 ```
 
-##### Histogram
+Create new variables in the dataset to represent Michelson's corrections to his data. Then `glimpse()` the revised dataset.
+
+* `vel_air` = add 12 to the observed `velocity` values to get the temperature-corrected velocity in air
+* `vel_vac` = add 80 to the corrected velocity in air to get the refraction-corrected velocity in a vacuum
 
 ```{r}
-ggplot(pennies_sample, aes(x = year)) +
-  geom_histogram(bins = 8, color = "white", fill = "orange") +
-  labs(title = "Distribution of Mint Years in a Sample of 50 Pennies", 
-       x = "mint year")
+michelsonmodified <- Michelson %>%
+  mutate(vel_air = velocity + 12, 
+         vel_vac = vel_air + 80)
+
+glimpse(michelsonmodified)
 ```
-
-##### Boxplot
-
 ```{r}
-ggplot(pennies_sample, aes(x = year)) +
-  geom_boxplot() +
-  labs(title = "Distribution of Mint Years in a Sample of 50 Pennies", x = "mint year")
-```
-
-##### QQ Plot
-
-```{r}
-ggplot(pennies_sample, aes(sample = year)) +
-  geom_qq() +
-  geom_qq_line(color = "orange")  +
-  labs(title = "Distribution of Mint Years in a Sample of 50 Pennies",
-       x = "standard normal percentiles",
-       y = "data percentiles")
-```
-
-##### Mean and SD
-
-```{r}
-pennies_sample %>% 
-  summarize(xbar = mean(year),
-            s = sd(year))
-```
-
-#### Some Questions...
-
-Q1: Did we sample with or without replacement here?
-
-**ANSWER:** We sampled without replacement. By choosing a whole roll of pennies at once, no penny can be chosen twice (or more). We did not sample a penny, put it back, and sample again (with replacement). So, *tehcnically*, our pennies are not independent.
-
-Q2: What is your best guess about the population size $N$?
-
-**ANSWER:** It's about 130 billion, so our sample is a very small fraction of that. What this means is that taking one penny out of the population has a mininscule impact on the probability of any other penny getting chosen -- 1/130 billion is about 0.So that means, we can treat this sample like one that was sampled with replacement, i.e., iid. You often see an assumption that a sample is less than 10% of a population. This is why.
-
-Q3: Is it reasonable to assume the pennies are independent?
-
-**ANSWER:** We can't prove this, but there probably isn't a lot of reason to think they depend on one another since they were in a bank roller.
-
-We can't prove this, so we just have to kind of logic it out.
-
-Q4: Do you think this sample is representative of pennies in 2019?
-
-**ANSWER:** If we're going to extrapolate to the population, then this sample needs to be *representative*. But what does representative mean? Whatver characteristic or characteristics I'm interested in, the distribution in the sample is similar to the distribution in the pop.
-
-So for this problem, where I'm looking at year, I'm saying the distribution of years in the sample is reasonably similar to the distribution in the population of all pennies.
-
-We can't prove this, so we just have to kind of logic it out.
-
-### Estimating Mean Mint Year with `infer`
-
-[Link to Case Study](https://moderndive.com/8-confidence-intervals.html#ci-build-up)
-
-#### Mean for the Original Sample
-
-Calculate the statistic (*point estimate*) of interest from the original sample.
-
-```{r}
-sample_mean <- pennies_sample %>%  # original sample we'll use to estimate
-  specify(response = year) %>%     # what variable is our measurement/response?
-  calculate(stat = "mean")         # statistic are we estimating from the response
-
-sample_mean
-```
-
-#### Generate Bootstrap Resamples
-
-Generate multiple resamples and calculate the same statistic as above. Notice the similarity in steps. 
-
-```{r}
-bootstrap_distribution <- pennies_sample %>%
-  specify(response = year) %>%                     
-  generate(reps = 1000, type = "bootstrap") %>% 
-  calculate(stat = "mean")  
-
-head(bootstrap_distribution)
-```
-
-What is the shape of the sampling distribution of the statistic?
-
-```{r}
-visualize(bootstrap_distribution, bins = 15) +
-  labs(title = "Sampling Distribution of Bootstrap Resampled Statistic",
-       x = "resampled statistic")  
-```
-
-Is the sampling distribution of the statistic approximately normal?
-
-```{r}
-ggplot(bootstrap_distribution, aes(sample = stat)) +
-  geom_qq() +
-  geom_qq_line() +
-  labs(title = "Sampling Distribution of Bootstrap Resampled Statistic",
-       x = "standard normal percentiles",
-       y = "data percentiles") 
-```
-
-#### Traditional Confidence Interval
-
-ASSUMPTIONS:
-
-* ???
-
-```{r}
-t_test(pennies_sample, response = year) %>% 
-  select(lower_ci, upper_ci)
-```
-
-#### Bootstrap Percentile Interval
-
-ASSUMPTIONS:
-
-* ???
-
-```{r}
+#Sample Means
+meanvelair<- mean(michelsonmodified$vel_air)
+meanvelvac <- mean(michelsonmodified$vel_vac)
 
 ```
 
-#### Bootstrap SE Confidence Interval
+#### **Exploration 1: Exploratory Data Analysis**
 
-ASSUMPTIONS:
+The first step before doing any estimation is to conduct exploratory data analysis (EDA). Use the original `velocity` data.
 
-* ???
+##### Calculate the sample mean, standard deviation, skewness, and kurtosis.
 
 ```{r}
+# Sample Mean and Standard Deviation
+xbar <- mean(michelsonmodified$velocity) 
+s <- sd(michelsonmodified$velocity) 
+s
 
 ```
 
 
-### Estimating: Is yawning contagious?
+```{r}
+# Skewness 
+library(moments)
+tibble(statistic = c("Skewness", "Kurtosis", "Excess K"),
+       theory    = c(0, 3, 0),
+       data      = 
+         c(skewness(michelsonmodified$velocity),
+           kurtosis(michelsonmodified$velocity),
+           kurtosis(michelsonmodified$velocity) - 3))
+```
 
-[Link to Case Study](https://moderndive.com/8-confidence-intervals.html#case-study-two-prop-ci) 
-
-### Exploratory Analysis
+##### Create a histogram of the data. Include an appropriate number of bins.
 
 ```{r}
-mythbusters_yawn %>% 
-  group_by(group, yawn) %>% 
-  summarize(count = n())
+ggplot(michelsonmodified, aes(x = velocity)) +
+  geom_histogram(binwidth = 15, color = "white")
+```
+
+##### Create a boxplot of the data. Use `outlier.color =` to highlight outliers.
+
+```{r}
+ggplot(michelsonmodified, aes(x = velocity)) +
+  geom_boxplot(outlier.color ="blue")
+```
+
+##### Create a normal QQ plot of the data a reference line in a different color.
+
+```{r}
+ggplot(michelsonmodified, aes(sample = velocity)) +
+  stat_qq() +
+  stat_qq_line(
+    color = "blue",
+    size = 1.0
+  )
+```
+
+#### **Exploration 2: Traditional 95% Confidence Interval**
+
+Calculate a traditional 95% confidence interval for the velocity of light in air and in vacuum.
+```{r}
+velvac_data <- michelsonmodified %>%
+  select(vel_vac)
+glimpse(velvac_data)
+
 ```
 
 ```{r}
-ggplot(mythbusters_yawn, aes(x = group, fill = yawn)) +
-  geom_bar() +
-  labs(title = "Yawning vs. Not Yawning in the Control and Seed Groups")
+velair_data <- michelsonmodified %>%
+  select(vel_air)
+glimpse(velair_data)
+
 ```
+
+##### Velocity of Light in Air
+
+
 
 ```{r}
-mythbusters_yawn %>% 
-  group_by(group) %>% 
-  summarize(proportion = mean(yawn == "yes"))
+t.test(velair_data, conf.level = .95)
+
 ```
+
+##### Velocity of Light in Vacuum
 
 ```{r}
-mythbusters_yawn %>% 
-  group_by(group) %>% 
-  summarize(proportion = mean(yawn == "yes")) %>% 
-  summarize(difference = diff(proportion))
+t.test(velvac_data, conf.level = .95)
 ```
+
+#### **Exploration 3: Bootstrap 95% Percentile Interval**
+
+Calculate a bootstrap 95% percentile interval for the velocity of light in air and in vacuum.
+
+##### Velocity of Light in Air
 
 ```{r}
-ggplot(mythbusters_yawn, aes(x = group, fill = yawn)) +
-  geom_bar(position = "fill") +
-  labs(title = "Yawning vs. Not Yawning in the Control and Seed Groups",
-       y = "proportion")
+velair_data %>%
+  get_confidence_interval(level = 0.95, type = "percentile")
 ```
 
-#### Proportions for the Original Sample
-
-Calculate the statistic (*point estimate*) of interest from the original sample.
+##### Velocity of Light in Vacuum
 
 ```{r}
-sample_diff_props <- mythbusters_yawn %>% 
-  specify(formula = yawn ~ group, success = "yes") %>% 
-  calculate(stat = "diff in props", order = c("seed", "control"))
-
-sample_diff_props
+velvac_data %>%
+  get_confidence_interval(level = 0.95, type = "percentile")
 ```
 
-#### Generate Bootstrap Resamples
+#### **Exploration 4: Bootstrap 95% Standard Error Interval**
 
-Generate multiple resamples and calculate the same statistic as above. Notice the similarity in steps. 
+Calculate a bootstrap 95% standard error interval for the velocity of light in air and in vacuum.
+
+##### Velocity of Light in Air
 
 ```{r}
-bootstrap_distribution <- mythbusters_yawn %>% 
-  specify(formula = yawn ~ group, success = "yes") %>% 
-  generate(reps = 1000, type = "bootstrap") %>% 
-  calculate(stat = "diff in props", order = c("seed", "control")) 
+velair_data %>% 
+   get_confidence_interval(type = "se", point_estimate = velair_data, level=0.95)
 
-head(bootstrap_distribution)
 ```
 
-What is the shape of the sampling distribution of the statistic?
+##### Velocity of Light in Vacuum
 
 ```{r}
-visualize(bootstrap_distribution, bins = 15) +
-  labs(title = "Sampling Distribution of Bootstrap Resampled Statistic",
-       x = "resampled statistic")  
+velvac_data %>% 
+   get_confidence_interval(type = "se", point_estimate = velvac_data, level=0.95)
 ```
 
-Is the sampling distribution of the statistic approximately normal?
+### Questions
 
-```{r}
-ggplot(bootstrap_distribution, aes(sample = stat)) +
-  geom_qq() +
-  geom_qq_line() +
-  labs(title = "Sampling Distribution of Bootstrap Resampled Statistic",
-       x = "standard normal percentiles",
-       y = "data percentiles") 
-```
+#### **Question 1: Interval Assumptions **
 
-#### Traditional Confidence Interval
+Are all of the necessary assumptions met for each of the three interval estimation methods you used? Discuss using logic and evidence from your exploratory data analysis.
 
-ASSUMPTIONS:
+**ANSWER:** 
+The skewness of the normal distribution is < 0 (-0.01825961). This means that the distribution is moderately skewed to the left. The sample mean of "velocity of light in air" equals 864.4, which is included in each confidence interval. The same applies to the "velocity of light in vaccum" variable. This meets the assumption that the interval estimations contain and correctly represent a "true" value of each variable. 
 
-* ???
+#### **Question 2: The "True" Velocities**
 
-```{r}
-prop_test(mythbusters_yawn, formula = yawn ~ group, success = "yes") %>% 
-  select(lower_ci, upper_ci)
-```
+Do any of the interval estimates you created contain the currently accepted "true" values for the velocity of light in air and in vacuum? If not, why do you think the estimation "failed"? Discuss.
 
-#### Bootstrap Percentile Interval
-
-ASSUMPTIONS:
-
-* ???
-
-```{r}
-
-```
-
-#### Bootstrap SE Confidence Interval
-
-ASSUMPTIONS:
-
-* ???
-
-```{r}
-
-```
-
-
-
+**ANSWER:** 
+For the velocity of light in air data, there are a few values <700 km/sec. All of the above interval estimates have a lower bound greater than 700 km/sec. Like the question says, the calculations are "estimates" which means that the measurements observed the most (values greater than 700 for velair) are more likely to be within the intervals. So, the estimation didn't entirely "fail". Another explanation for the "true" values to not be contained within the intervals, is that there is not enough data to create a precise interval. There is 100 data points within each of the variables, however, this may not be enough in order to create a accurate estimate. 
 
 ***
+Reference: Michelson, A. A. (1882). "Experimental determination of the velocity of light made at the United States Naval Academy, Annapolis". *Astronomical Papers*, 1, 109-145, U. S. Nautical Almanac Office.
+
 ```{r}
 sessionInfo()
 ```

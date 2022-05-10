@@ -1,0 +1,102 @@
+---
+title: "Binomial Skills Quiz"
+subtitle: "--- Problem Worksheet ---"
+author: "YOUR NAME HERE"
+date: "`r format(Sys.time(), '%A, %B %d, %Y @ %I:%M %p')`"
+output: 
+  html_document: 
+    theme: yeti
+    highlight: textmate
+    toc: TRUE
+    toc_depth: 4
+    toc_float: true
+---
+
+```{r globaloptions, include = FALSE}
+knitr::opts_chunk$set(
+  message = FALSE,
+  warning = FALSE,
+  comment = NA
+)
+```
+<hr>
+
+## Packages Used
+
+```{r packagesused}
+library(tidyverse)
+```
+
+## Problem 01
+
+Use `dbinom()` and `pbinom()` to calculate the pmf and CDF for X ~ Bin(10, 0.25).
+
+```{r}
+
+```
+
+## Problem 02
+
+Use `dbinom()` and `pbinom()` to calculate the pmf and CDF for X ~ Bin(10, 0.50).
+
+```{r}
+
+```
+
+## Problem 03
+
+Use `dbinom()` and `pbinom()` to calculate the pmf and CDF for X ~ Bin(10, 0.75).
+
+```{r}
+
+```
+
+## Problem 04
+
+
+
+```{r}
+
+```
+
+## Problem 05
+
+```{r}
+
+```
+
+## Problem 06
+
+```{r}
+
+```
+
+## Problem 07
+
+```{r}
+
+```
+
+## Problem 08
+
+```{r}
+
+```
+
+## Problem 09
+
+```{r}
+
+```
+
+## Problem 10
+
+```{r}
+
+```
+
+<hr>
+```{r}
+sessionInfo()
+```
+
